@@ -66,80 +66,20 @@ export const createStyles = (theme: AppTheme) => {
     },
     baseLine: {
       height: verticalScale(1),
-      backgroundColor: '#EBEBEB',
+      backgroundColor: tokens.colors.gray,
       width: '100%',
     },
     emailcon: {
-      height: moderateScale(16),
-      width: moderateScale(16),
+      height: moderateScale(24),
+      width: moderateScale(24),
     },
     emilBox: {
-      height: moderateScale(30),
-      width: moderateScale(30),
+      height: moderateScale(40),
+      width: moderateScale(40),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'rgba(0, 147, 211, 0.19)',
       borderRadius: tokens.spacing.lg,
-    },
-    personalInfoInner: {
-      alignContent: 'center',
-      backgroundColor: tokens.colors.lightPrimary,
-      padding: tokens.spacing.sm,
-      paddingLeft: tokens.spacing.md,
-      borderTopRightRadius: tokens.radius.sm,
-      borderTopLeftRadius: tokens.radius.sm,
-    },
-    personalInfoText: {
-      fontSize: tokens.fontSize.md,
-      color: tokens.colors.black,
-      fontFamily: Fonts.ManropeSemiBold,
-    },
-    locationCenter: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: tokens.spacing.sm,
-    },
-    locationBnt: {
-      marginBottom: 0,
-      marginTop: tokens.spacing.md,
-    },
-    locationText: {
-      fontSize: tokens.fontSize.xs,
-      color: tokens.colors.lightBlack,
-      fontFamily: Fonts.ManropeMedium,
-      marginLeft: tokens.spacing.sm,
-    },
-    womenText: {
-      color: tokens.colors.black,
-      marginLeft: 0,
-    },
-    personalInformation: {
-      borderRadius: tokens.radius.md,
-      elevation: 10,
-      shadowColor: '#aeaeae',
-      backgroundColor: tokens.colors.white,
-      marginTop: tokens.spacing.md,
-    },
-    innerPerformationBox: {
-      padding: tokens.spacing.smPlus,
-      paddingVertical: tokens.spacing.sm,
-    },
-    bottomSpace: {
-      marginBottom: tokens.spacing.sm,
-    },
-    doctorMedicineBtn: {
-      width: '48%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: tokens.colors.primary,
-      paddingVertical: tokens.spacing.sm,
-      borderRadius: tokens.radius.sm,
-    },
-    doctorText: {
-      fontSize: tokens.fontSize.sm,
-      color: tokens.colors.white,
-      fontFamily: Fonts.ManropeMedium,
     },
   });
 };
