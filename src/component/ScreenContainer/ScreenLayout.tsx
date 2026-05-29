@@ -44,47 +44,54 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
       : tokens.spacing.md;
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={statusBarBgColor} />
+    <>
+      <StatusBar barStyle="light-content" backgroundColor={'#0093D3'} />
 
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      {/* Header */}
+      <SafeAreaView
+        edges={['top']}
+        style={{ backgroundColor: statusBarBgColor }}
       >
-        {/* Header */}
-        <SafeAreaView edges={['top', 'left', 'right']}>{header}</SafeAreaView>
+        {header}
+      </SafeAreaView>
 
-        {/* Content */}
-        {scroll ? (
-          <ScrollView
-            style={styles.flex}
-            contentContainerStyle={[
-              innerContainer,
-              {
-                paddingHorizontal: horizontalPadding,
-              },
-            ]}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="always"
-            nestedScrollEnabled
-          >
-            {children}
-          </ScrollView>
-        ) : (
-          <View
-            style={[
-              styles.flex,
-              innerContainer,
-              {
-                paddingHorizontal: horizontalPadding,
-              },
-            ]}
-          >
-            {children}
-          </View>
-        )}
-      </KeyboardAvoidingView>
-    </View>
+      <View style={styles.container}>
+        <KeyboardAvoidingView
+          style={styles.flex}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          {/* Content */}
+          {scroll ? (
+            <ScrollView
+              style={styles.flex}
+              contentContainerStyle={[
+                innerContainer,
+                {
+                  paddingHorizontal: horizontalPadding,
+                },
+              ]}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="always"
+              nestedScrollEnabled
+            >
+              {children}
+            </ScrollView>
+          ) : (
+            <View
+              style={[
+                styles.flex,
+                innerContainer,
+                {
+                  paddingHorizontal: horizontalPadding,
+                },
+              ]}
+            >
+              {children}
+            </View>
+          )}
+        </KeyboardAvoidingView>
+      </View>
+    </>
   );
 };
 

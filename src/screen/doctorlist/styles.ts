@@ -32,7 +32,7 @@ export const createStyles = (theme: AppTheme) => {
       borderWidth: 1,
       paddingHorizontal: tokens.spacing.xxs,
       paddingVertical: tokens.spacing.smPlus,
-      marginBottom: tokens.spacing.mdPlus,
+      marginBottom: tokens.spacing.md,
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
@@ -73,7 +73,7 @@ export const createStyles = (theme: AppTheme) => {
       shadowColor: '#fff',
     },
     listContainer: {
-      paddingBottom: tokens.spacing.xl,
+      paddingBottom: tokens.spacing.sm,
       paddingTop: tokens.spacing.smPlus,
     },
     searchTop: {

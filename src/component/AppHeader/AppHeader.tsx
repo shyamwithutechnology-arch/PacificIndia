@@ -48,37 +48,40 @@ const AppHeader = ({
       <View style={styles.innerContainer}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {leftIcon && (
-            <Pressable style={styles.customRightIconBox} onPress={onPress}>
+            <Pressable style={styles.leftIcon} onPress={onPress}>
               <Image source={leftIcon} style={styles.drawerIcon} />
             </Pressable>
           )}
+          {!notificationPress && <Text style={styles.title}>{title}</Text>}
         </View>
 
-        <Text style={styles.title}>{title}</Text>
+        {notificationPress && <Text style={styles.title}>{title}</Text>}
 
-        <View style={styles.notificationRow}>
-          <Pressable
-            style={[styles.customRightIconBox, styles.notificaiton]}
-            onPress={notificationPress}
-          >
-            <Image
-              source={Icons.notificationIcon}
-              style={styles.customRightIcon}
-              resizeMode="contain"
-            />
-          </Pressable>
+        {notificationPress && (
+          <View style={styles.notificationRow}>
+            <Pressable
+              style={[styles.customRightIconBox, styles.notificaiton]}
+              onPress={notificationPress}
+            >
+              <Image
+                source={Icons.notificationIcon}
+                style={styles.customRightIcon}
+                resizeMode="contain"
+              />
+            </Pressable>
 
-          <Pressable
-            style={styles.customRightIconBox}
-            onPress={questionMarkPress}
-          >
-            <Image
-              source={Icons.questionMarkIcon}
-              style={styles.customRightIcon}
-              resizeMode="contain"
-            />
-          </Pressable>
-        </View>
+            <Pressable
+              style={styles.customRightIconBox}
+              onPress={questionMarkPress}
+            >
+              <Image
+                source={Icons.questionMarkIcon}
+                style={styles.customRightIcon}
+                resizeMode="contain"
+              />
+            </Pressable>
+          </View>
+        )}
       </View>
 
       {searchStatus && (

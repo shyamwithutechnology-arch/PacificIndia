@@ -7,12 +7,27 @@ import { createStyles } from './styles';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { Icons } from '../../assets/icons';
+import { localStorage, storageKeys } from '../../storage/storage';
 
 const menuItems = [
-  { title: 'My Profile', icon: 'person-outline', route: 'Profile' },
-  { title: 'My Bookings', icon: 'document-text-outline', route: 'Bookings' },
-  { title: 'Services', icon: 'medkit-outline', route: 'Services' },
-  { title: 'About Us', icon: 'information-circle-outline', route: 'AboutUs' },
+  { title: 'Speciality', icon: 'person-outline', route: 'Speciality' },
+  { title: 'DailyVisit', icon: 'person-outline', route: 'DailyVisit' },
+  {
+    title: 'Appointments',
+    icon: 'document-text-outline',
+    route: 'Appointments',
+  },
+  { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
+  {
+    title: 'Support',
+    icon: 'notifications-outline',
+    route: 'SupportTicket',
+  },
+  {
+    title: 'Profile',
+    icon: 'notifications-outline',
+    route: 'Profile',
+  },
   {
     title: 'Terms & Conditions',
     icon: 'document-text-outline',
@@ -24,25 +39,24 @@ const menuItems = [
     route: 'PrivacyPolicy',
   },
   { title: 'Help & Support', icon: 'headset-outline', route: 'HelpAndSupport' },
+
   {
     title: 'Notifications',
     icon: 'notifications-outline',
     route: 'Notification',
   },
-  {
-    title: 'SupportTicketScreen',
-    icon: 'notifications-outline',
-    route: 'SupportTicket',
-  },
-  {
-    title: 'NewTicketScreen',
-    icon: 'notifications-outline',
-    route: 'NewTicket',
-  },
+
+  // { title: 'About Us', icon: 'information-circle-outline', route: 'AboutUs' },
+
+  // {
+  //   title: 'NewTicketScreen',
+  //   icon: 'notifications-outline',
+  //   route: 'NewTicket',
+  // },
 ];
 
 const nestedRoutes = {
-  Profile: { screen: 'ProfileStack', inner: 'Profile' },
+  Speciality: { screen: 'SpecialityStack', inner: 'Speciality' },
   Services: { screen: 'Services', inner: 'Services' },
   Bookings: { screen: 'Bookings', inner: 'Bookings' },
 };
@@ -52,14 +66,31 @@ const CustomDrawerContent = ({ navigation }: any) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
+    await localStorage.removeItem(storageKeys.fcm_token);
+    navigation.getParent()?.replace('AuthStack');
     navigation.closeDrawer();
   };
 
-  const handleNavigate = (item: any) => {
+  // const handleNavigate = (item: any) => {
+  //   const route = nestedRoutes[item.route];
+  //   if (route) {
+  //     navigation.navigate('MainTabs', {
+  //       screen: route.screen,
+  //       params: {
+  //         screen: route.inner,
+  //       },
+  //     });
+  //   } else {
+  //     navigation.navigate(item.route);
+  //   }
+  // };
+
+  const handleNavigate = (item) => {
     const route = nestedRoutes[item.route];
+
     if (route) {
-      navigation.navigate('MainTab', {
+      navigation.navigate('MainTabs', {
         screen: route.screen,
         params: {
           screen: route.inner,
@@ -74,7 +105,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
     <View style={styles.container}>
       {/* HEADER */}
       <LinearGradient
-        colors={[theme.tokens.colors.primary, theme.tokens.colors.black]}
+        colors={[theme.tokens.colors.primary, '#0d74b4']}
         style={styles.header}
       >
         <View style={styles.headerInnerBox}>
@@ -85,7 +116,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
           />
           <View>
             <Text style={styles.name}>Manoj Deshmukh</Text>
-            <Text style={styles.role}>User</Text>
+            <Text style={styles.role}>Medical Representative (MR)</Text>
           </View>
         </View>
         {/* CLOSE BUTTON */}
@@ -129,16 +160,30 @@ const CustomDrawerContent = ({ navigation }: any) => {
         </TouchableOpacity>
 
         {/* HELP CARD */}
-        <View style={styles.helpCard}>
-          <Icon
-            name="headset-outline"
-            size={theme.moderateScale(20)}
-            color="#1FAF9A"
+        <View style={styles.mainBoxSupport}>
+          <Image
+            source={Images.apppointments1}
+            style={styles.earPhone}
+            resizeMode="contain"
           />
-          <Text style={styles.helpText}>
-            Feel free to ask. We are ready to Help
-          </Text>
+          <View style={styles.verticalLine} />
+          <View>
+            <Text style={styles.helpLineTest}>Support</Text>
+            <Text style={styles.supportNuber}>+91 8739990555</Text>
+          </View>
         </View>
+        {
+          // <View style={styles.helpCard}>
+          //   <Icon
+          //     name="headset-outline"
+          //     size={theme.moderateScale(20)}
+          //     color="#1FAF9A"
+          //   />
+          //   <Text style={styles.helpText}>
+          //     Feel free to ask. We are ready to Help
+          //   </Text>
+          // </View>
+        }
       </ScrollView>
     </View>
   );

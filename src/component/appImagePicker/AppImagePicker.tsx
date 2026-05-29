@@ -32,17 +32,17 @@ const AppImagePicker = ({
   const theme = useAppTheme();
   const styles = createStyles(theme);
 
-  // const requestCameraPermission = async () => {
-  //   if (Platform.OS === 'android') {
-  //     const granted = await PermissionsAndroid.request(
-  //       PermissionsAndroid.PERMISSIONS.CAMERA,
-  //     );
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA
+      );
 
-  //     return granted === PermissionsAndroid.RESULTS.GRANTED;
-  //   }
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    }
 
-  //   return true;
-  // };
+    return true;
+  };
 
   const openGallery = async () => {
     const options: ImageLibraryOptions = {
@@ -65,10 +65,10 @@ const AppImagePicker = ({
   };
 
   const openCamera = async () => {
-    // const hasPermission = await requestCameraPermission();
-    // if (!hasPermission) {
-    //   return;
-    // }
+    const hasPermission = await requestCameraPermission();
+    if (!hasPermission) {
+      return;
+    }
 
     const options: CameraOptions = {
       mediaType: 'photo',

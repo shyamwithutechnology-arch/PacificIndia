@@ -12,6 +12,7 @@ export const SearchList = ({
   customStyles,
   filter = false,
   searchRowCustom,
+  searchPlaceHolder = 'Types Services...',
 }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
@@ -27,7 +28,7 @@ export const SearchList = ({
         <TextInput
           value={value}
           onChangeText={onChange}
-          placeholder="Types Services..."
+          placeholder={searchPlaceHolder}
           placeholderTextColor={theme.tokens.colors.lightGray}
           style={styles.textInput}
           ref={ref}

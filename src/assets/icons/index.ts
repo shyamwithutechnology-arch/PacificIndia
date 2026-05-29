@@ -18,11 +18,14 @@ export const Icons = {
   userProfileIcon: require('./user_profile_icon.png'),
   leftIcon: require('./left_icon.png'),
   cancleIcon: require('./cancle_Icon.png'),
+  footerNotificationIcon: require('./footer_notification_icon.png'),
 
   //doctor list
-  mapIcon: require('./map_icon.png'),
   verificationIcon: require('./verification_icon.png'),
   rightVerticalArrow: require('./right_vertical_arrow.png'),
   callFillIcon: require('./call_fill_icon.png'),
   emailIcon: require('./email_icon.png'),
+  dateIcon: require('./date_icon.png'),
+  namecon: require('./name_icon.png'),
+  mapFillIcon: require('./map_fill_icon.png'),
 };

@@ -8,10 +8,20 @@ export const createStyles = (theme: AppTheme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: tokens.colors.black,
+      backgroundColor: tokens.colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     splashBgStyle: {
       flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    logoBox: {
+      height: verticalScale(250),
+      width: scale(250),
+      borderRadius: scale(200),
+      backgroundColor: tokens.colors.white,
       alignItems: 'center',
       justifyContent: 'center',
     },

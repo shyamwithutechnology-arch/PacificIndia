@@ -100,51 +100,58 @@ const DoctorDetailsScreen = () => {
       }
     >
       <View style={styles.card}>
-        <View style={styles.profileRow}>
-          <Image
-            source={Images.doctorImg1}
-            style={styles.docImg}
-            borderRadius={theme.tokens.radius.xxl}
-          />
-          <View>
+        <View style={styles.headerCardInner}>
+          <View style={styles.profileRow}>
+            <Image
+              source={Images.doctorImg1}
+              style={styles.docImg}
+              borderRadius={theme.tokens.radius.xxl}
+            />
             <View>
-              <Text style={styles.titleText}>Dr. Rahul Sharma</Text>
-              <Text style={styles.titleDecText}>Senior Medical Officer</Text>
-              <Text style={[styles.titleDecText, styles.idText]}>
-                ID : DOC125689
-              </Text>
+              <View>
+                <Text style={styles.titleText}>Dr. Rahul Sharma</Text>
+                <Text style={styles.titleDecText}>Senior Medical Officer</Text>
+                <Text style={[styles.titleDecText, styles.idText]}>
+                  ID : DOC125689
+                </Text>
+              </View>
             </View>
           </View>
+
+          <Pressable style={styles.editBtn}>
+            <Text style={styles.editText}>Edit Details</Text>
+          </Pressable>
         </View>
 
-        <Pressable style={styles.editBtn}>
-          <Text style={styles.editText}>Edit Details</Text>
-        </Pressable>
-      </View>
-      <View style={styles.baseLine} />
+        <View style={styles.baseLine} />
 
-      <View style={styles.profileRow}>
-        <View style={styles.emilBox}>
-          <Image
-            source={Icons.emailIcon}
-            resizeMode="contain"
-            style={styles.emailcon}
-          />
+        <View style={[styles.profileRow, { justifyContent: 'space-between' }]}>
+          <View style={[styles.profileRow, styles.mailRow]}>
+            <View style={styles.emilBox}>
+              <Image
+                source={Icons.emailIcon}
+                resizeMode="contain"
+                style={styles.emailcon}
+              />
+            </View>
+
+            <Text style={styles.mailText}>
+              Rahul.sharma@pacificindia.inaaaaa
+            </Text>
+          </View>
+
+          <View style={[styles.profileRow, styles.mailRow]}>
+            <View style={styles.emilBox}>
+              <Image
+                source={Icons.callFillIcon}
+                resizeMode="contain"
+                style={styles.callIcon}
+              />
+            </View>
+
+            <Text style={styles.mailText}>+91-98765-41239</Text>
+          </View>
         </View>
-
-        <Text>Rahul.sharma@pacificindia.inaaaaa</Text>
-      </View>
-
-      <View style={styles.profileRow}>
-        <View style={styles.emilBox}>
-          <Image
-            source={Icons.callFillIcon}
-            resizeMode="contain"
-            style={styles.emailcon}
-          />
-        </View>
-
-        <Text>+91-98765-41239</Text>
       </View>
 
       <View style={styles.personalInformation}>

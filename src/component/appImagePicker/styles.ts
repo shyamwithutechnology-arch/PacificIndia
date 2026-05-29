@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { AppTheme } from '../../hooks/useAppTheme';
-import { fonts } from '../../theme';
+import { Fonts, fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
   const { moderateScale, scale, tokens } = theme;
@@ -20,7 +20,7 @@ export const createStyles = (theme: AppTheme) => {
 
     modalTitle: {
       fontSize: tokens.fontSize.md,
-      fontFamily: fonts.UrbanistBold,
+      fontFamily: Fonts.ManropeBold,
       color: '#111111',
       marginBottom: tokens.spacing.lg,
       textAlign: 'center',
@@ -38,7 +38,7 @@ export const createStyles = (theme: AppTheme) => {
     buttonText: {
       fontSize: tokens.fontSize.md,
       color: tokens.colors.white,
-      fontFamily: fonts.UrbanistSemiBold,
+      fontFamily: Fonts.ManropeSemiBold,
     },
   });
 };

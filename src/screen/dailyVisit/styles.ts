@@ -32,9 +32,9 @@ export const createStyles = (theme: AppTheme) => {
       borderWidth: 1,
       paddingHorizontal: tokens.spacing.xxs,
       paddingVertical: tokens.spacing.smPlus,
-      marginBottom: tokens.spacing.mdPlus,
+      marginBottom: tokens.spacing.md,
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
     },
     titleText: {
       fontSize: tokens.fontSize.xs,
@@ -73,7 +73,7 @@ export const createStyles = (theme: AppTheme) => {
       shadowColor: '#fff',
     },
     listContainer: {
-      paddingBottom: tokens.spacing.xl,
+      paddingBottom: tokens.spacing.sm,
       paddingTop: tokens.spacing.smPlus,
     },
     searchTop: {
@@ -96,6 +96,10 @@ export const createStyles = (theme: AppTheme) => {
       width: moderateScale(14),
       height: moderateScale(14),
     },
+    dateIcon: {
+      width: moderateScale(18),
+      height: moderateScale(18),
+    },
     verifiedText: {
       fontSize: tokens.fontSize.xxs,
       color: tokens.colors.white,
@@ -110,7 +114,7 @@ export const createStyles = (theme: AppTheme) => {
     locationText: {
       color: '#999999',
       marginLeft: tokens.spacing.sm,
-      width: scale(150),
+      width: scale(190),
     },
     rightArrowBox: {
       height: moderateScale(30),
@@ -127,6 +131,9 @@ export const createStyles = (theme: AppTheme) => {
     mapRow: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    dateText: {
+      marginTop: tokens.spacing.sm,
     },
     doctorImgRow: {
       justifyContent: 'space-between',

@@ -87,7 +87,7 @@ const HomeScreen = ({ navigation }) => {
           leftIcon={Icons.drawerIcon}
           setSearch={setSearch}
           searchStatus={true}
-          onPress={() => Alert.alert('', 'sdfasdf')}
+          onPress={() => navigation.openDrawer()}
         />
       }
     >

@@ -3,7 +3,7 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -48,11 +48,14 @@ export const createStyles = (theme: AppTheme) => {
 
     closeBtn: {
       position: 'absolute',
-      right: 15,
-      top: tokens.spacing.xl,
+      right: scale(18),
+      top: tokens.spacing.xxl,
       backgroundColor: tokens.colors.white,
-      borderRadius: tokens.radius.lg,
-      padding: tokens.spacing.xs,
+      borderRadius: tokens.radius.xxl,
+      height: moderateScale(25),
+      width: moderateScale(25),
+      alignItems: 'center',
+      justifyContent: 'center',
     },
 
     menuItem: {
@@ -89,7 +92,7 @@ export const createStyles = (theme: AppTheme) => {
     },
 
     logoutIcon: {
-      backgroundColor: '#FF6B6B',
+      backgroundColor: '#D5302A',
       padding: moderateScale(10),
       borderRadius: tokens.radius.xxl,
       marginRight: tokens.spacing.md,
@@ -97,8 +100,8 @@ export const createStyles = (theme: AppTheme) => {
 
     logoutText: {
       fontSize: tokens.fontSize.md,
-      color: '#272727',
-      fontFamily: Fonts.ManropeBold,
+      color: tokens.colors.black,
+      fontFamily: Fonts.ManropeMedium,
     },
 
     helpCard: {
@@ -115,6 +118,46 @@ export const createStyles = (theme: AppTheme) => {
       marginLeft: tokens.spacing.smPlus,
       fontSize: tokens.fontSize.xs,
       color: tokens.colors.headingColor,
+    },
+
+    //
+    mainBoxSupport: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: tokens.spacing.lg,
+      backgroundColor: 'rgba(0, 147, 211, 0.12)',
+      paddingLeft: tokens.spacing.md,
+      paddingVertical: tokens.spacing.mdPlus,
+    },
+    earPhoneBox: {
+      width: scale(60),
+      aspectRatio: 1,
+      borderRadius: tokens.radius.xl,
+      backgroundColor: tokens.colors.white,
+      alignItems: 'center',
+      justifyContent: 'center',
+      elevation: 5,
+      marginRight: tokens.spacing.md,
+    },
+    earPhone: {
+      width: scale(40),
+      aspectRatio: 1,
+    },
+    helpLineTest: {
+      fontSize: tokens.fontSize.sm,
+      color: tokens.colors.lightBlack,
+      fontFamily: Fonts.ManropeMedium,
+    },
+    supportNuber: {
+      fontSize: normalize(20),
+      color: tokens.colors.headingColor,
+      fontFamily: Fonts.ManropeBold,
+    },
+    verticalLine: {
+      height: verticalScale(30),
+      width: scale(1),
+      backgroundColor: 'rgba(12, 64, 111, 0.24)',
+      marginHorizontal: tokens.spacing.sm,
     },
   });
 };

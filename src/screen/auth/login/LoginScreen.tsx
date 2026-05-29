@@ -16,10 +16,9 @@ const LoginScreen = ({ navigation }) => {
   //   navigation?.replace('AppDrawer');
   // };
   const handleLogin = () => {
-    localStorage.setItem(storageKeys.fcm_token, '1234');
-
-    navigation.getParent()?.replace('AppDrawer');
+    navigation.navigate('OtpRequest');
   };
+
   return (
     <ScreenLayout>
       <View style={styles.logoBox}>

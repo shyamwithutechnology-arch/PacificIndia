@@ -17,7 +17,7 @@ export const createStyles = (theme: AppTheme) => {
       justifyContent: 'space-between',
     },
     title: {
-      fontSize: tokens.fontSize.lg,
+      fontSize: tokens.fontSize.md,
       color: tokens.colors.white,
       fontFamily: Fonts.ManropeBold,
       marginLeft: tokens.spacing.md,
@@ -56,12 +56,18 @@ export const createStyles = (theme: AppTheme) => {
       color: tokens.colors.white,
     },
     customRightIcon: {
-      width: moderateScale(18),
-      height: moderateScale(18),
+      width: moderateScale(16),
+      height: moderateScale(16),
     },
     drawerIcon: {
-      width: moderateScale(15),
-      height: moderateScale(15),
+      width: moderateScale(10),
+      height: moderateScale(10),
+    },
+    leftIcon: {
+      borderColor: tokens.colors.black,
+      padding: scale(10),
+      backgroundColor: tokens.colors.white,
+      borderRadius: tokens.radius.lg,
     },
     customRightIconBox: {
       borderColor: tokens.colors.black,

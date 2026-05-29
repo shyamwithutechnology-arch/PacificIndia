@@ -139,7 +139,7 @@ const DoctorlistScreen = () => {
     <ScreenLayout
       header={
         <AppHeader
-          title="Specialityssssss"
+          title="Doctors Listaa"
           search={seach}
           leftIcon={Icons.leftIcon}
         />
@@ -149,6 +149,7 @@ const DoctorlistScreen = () => {
         value={seach}
         onChange={setSearch}
         searchRowCustom={styles.searchTop}
+        searchPlaceHolder="Search Doctors..."
       />
 
       <FlatList

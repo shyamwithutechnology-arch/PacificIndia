@@ -6,10 +6,10 @@ import { Icons } from '../assets/icons';
 import { Fonts } from '../theme';
 import { useAppTheme } from '../hooks/useAppTheme';
 import SpecialityScreen from '../screen/speciality/SpecialityScreen';
-import SupportListScreen from '../screen/support/supportList/SupportListScreen';
 import NotificationScreen from '../screen/notification/NotificationScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SpecialityStack from './stacks/SpecialityStack';
+import SupportScreen from '../screen/support/SupportScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -84,8 +84,8 @@ const MainTabs = () => {
       />
 
       <Tab.Screen
-        name="SupportList"
-        component={SupportListScreen}
+        name="Support"
+        component={SupportScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon
@@ -118,8 +118,8 @@ const MainTabs = () => {
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              activeIcon={Icons.notificationIcon}
-              inactiveIcon={Icons.notificationIcon}
+              activeIcon={Icons.footerNotificationIcon}
+              inactiveIcon={Icons.footerNotificationIcon}
               label="Notification"
             />
           ),

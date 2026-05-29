@@ -19,8 +19,12 @@ export const createStyles = (theme: AppTheme) => {
       paddingHorizontal: tokens.spacing.sm,
       paddingVertical: tokens.spacing.smPlus,
       marginBottom: tokens.spacing.mdPlus,
+      marginTop: tokens.spacing.mdPlus,
+    },
+    headerCardInner: {
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginBottom: tokens.spacing.md,
     },
     titleText: {
       fontSize: tokens.fontSize.md,
@@ -64,6 +68,15 @@ export const createStyles = (theme: AppTheme) => {
       flexDirection: 'row',
       alignItems: 'center',
     },
+    mailRow: {
+      marginTop: tokens.spacing.smPlus,
+    },
+    mailText: {
+      fontSize: tokens.fontSize.xs,
+      width: scale(160),
+      // borderWidth: 1,
+      marginLeft: tokens.spacing.sm,
+    },
     baseLine: {
       height: verticalScale(1),
       backgroundColor: '#EBEBEB',
@@ -73,9 +86,13 @@ export const createStyles = (theme: AppTheme) => {
       height: moderateScale(16),
       width: moderateScale(16),
     },
+    callIcon: {
+      height: moderateScale(13),
+      width: moderateScale(13),
+    },
     emilBox: {
-      height: moderateScale(30),
-      width: moderateScale(30),
+      height: moderateScale(25),
+      width: moderateScale(25),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'rgba(0, 147, 211, 0.19)',

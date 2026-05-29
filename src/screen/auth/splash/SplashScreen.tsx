@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Image, ImageBackground } from 'react-native';
+import { Image, ImageBackground, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Images } from '../../../assets/images';
 import { useAppTheme } from '../../../hooks/useAppTheme';
@@ -12,7 +12,7 @@ const SplashScreen = ({ navigation }: any) => {
   const styles = createStyles(theme);
   const fcmToken = localStorage.getItem('fcm_token');
   // const appState = useAuthBootstrap();
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!fcmToken) {
@@ -27,13 +27,13 @@ const SplashScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={Images.profileImg} style={styles.splashBgStyle}>
+      <View style={styles.logoBox}>
         <Image
-          source={Images.profileImg}
+          source={Images.logo}
           style={styles.splashLogo}
           resizeMode="contain"
         />
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 };

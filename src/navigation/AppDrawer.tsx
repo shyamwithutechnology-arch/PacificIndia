@@ -8,6 +8,7 @@ import AboutUsScreen from '../screen/aboutus/AboutUsScreen';
 import SubscriptionScreen from '../screen/subscription/SubscriptionScreen';
 import SupportScreen from '../screen/support/SupportScreen';
 import CustomDrawerContent from '../component/DrawerContent/CustomDrawerContent';
+import DailyVisitScreen from '../screen/dailyVisit/DailyVisitScreen';
 
 const Drawer = createDrawerNavigator();
 const { width } = Dimensions.get('window');
@@ -26,7 +27,8 @@ const AppDrawer = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="MainTabs" component={MainTabs} />
-      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="DailyVisit" component={DailyVisitScreen} />
 
       <Drawer.Screen
         name="PrivacyPolicyScreen"
