@@ -1,0 +1,15 @@
+export const colors = {
+  white: '#FFFFFF',
+  black: '#282826',
+  gray: '#838383',
+  primary: '#0093D3',
+  green: '#15A662',
+  borderColor: '#E0E0E0',
+  InputText: '#606060',
+  headingColor: '#1E293A',
+  InputStroke: '#BEBEBE',
+  red: '#D5302A',
+  yellow: 'yellow',
+  lightGray: '#515151',
+  lightPrimary: '#E5F7FF',
+};

@@ -1,0 +1,119 @@
+import React, { useState } from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { ScreenLayout } from '../../component';
+import { Icons } from '../../assets/icons';
+import { useAppTheme } from '../../hooks/useAppTheme';
+import { createStyles } from './styles';
+import AppHeader from '../../component/AppHeader/AppHeader';
+import { Images } from '../../assets/images';
+import HomeBannerSlider from './component/homebanner/HomeBannerSlider';
+
+const HomeScreen = ({ navigation }) => {
+  const theme = useAppTheme();
+  const styles = createStyles(theme);
+  const [seach, setSearch] = useState('');
+
+  const category = [
+    {
+      id: 1,
+      title: 'Specility',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Images.speciality,
+    },
+    {
+      id: 2,
+      title: 'Doctors',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Images.doctor,
+    },
+    {
+      id: 3,
+      title: 'Appointments',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Images.apppointments,
+    },
+    {
+      id: 4,
+      title: 'Daily Visit',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Images.dailyVisit,
+    },
+    {
+      id: 5,
+      title: 'Doctors',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Images.apppointments1,
+    },
+    {
+      id: 6,
+      title: 'Appoitments',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Images.apppointments1,
+    },
+  ];
+
+  const banner = [
+    { id: 1, image: Images.bannerImg },
+    { id: 2, image: Images.bannerImg },
+    { id: 3, image: Images.bannerImg },
+    { id: 4, image: Images.bannerImg },
+  ];
+
+  const renderItem = ({ item }) => {
+    return (
+      <Pressable style={styles.cart}>
+        <View style={styles.categoryBox}>
+          <Image source={item?.img} style={styles.categoryImg} />
+        </View>
+        <Text style={styles.titleText}>{item?.title}</Text>
+        <Text style={styles.titledDecText}>{item?.dec}</Text>
+      </Pressable>
+    );
+  };
+  return (
+    <ScreenLayout
+      header={
+        <AppHeader
+          title="Pacific India"
+          search={seach}
+          leftIcon={Icons.drawerIcon}
+          setSearch={setSearch}
+          searchStatus={true}
+          onPress={() => Alert.alert('', 'sdfasdf')}
+        />
+      }
+    >
+      <HomeBannerSlider banners={banner} />
+
+      <Text
+        style={styles.specialityText}
+        onPress={() => navigation.navigate('Doctorlist')}
+      >
+        Healthcare Solutions
+      </Text>
+      <Text style={styles.specialityDecText}>
+        Manage appointments, consult doctors, access reports, and get complete
+        healthcare support in one place.
+      </Text>
+      <FlatList
+        data={category}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={3}
+        columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContainer}
+      />
+    </ScreenLayout>
+  );
+};
+
+export default HomeScreen;
