@@ -30,19 +30,22 @@ const SupportScreen = ({ navigation }) => {
     <ScreenLayout
       header={<AppHeader title="Support" leftIcon={Icons.leftIcon} />}
       innerContainer={styles.innerContainer}
+      scroll={true}
     >
       <View style={styles.customerCareBox}>
-        <Image
-          source={Images.logo}
-          style={styles.logoImg}
-          resizeMode="contain"
-        />
-        <View>
-          <Text style={styles.pacificText}>Pacific India</Text>
-          <Text style={styles.customerText}>Customer Care</Text>
+        <View style={styles.logoHederRow}>
+          <Image
+            source={Images.logo}
+            style={styles.logoImg}
+            resizeMode="contain"
+          />
+          <View>
+            <Text style={styles.pacificText}>Pacific India</Text>
+            <Text style={styles.customerText}>Customer Care</Text>
+          </View>
         </View>
         <Pressable style={styles.callIcon}>
-          <Image source={Icons.callFillIcon} style={styles.callIcon} />
+          <Image source={Images.apppointments1} style={styles.callIcon} />
         </Pressable>
       </View>
 

@@ -138,9 +138,10 @@ const DailyVisitScreen = () => {
     <ScreenLayout
       header={
         <AppHeader
-          title="Doctors Listss"
+          title="Daily Visit"
           search={seach}
           leftIcon={Icons.leftIcon}
+          notificationPress={() => {}}
         />
       }
     >

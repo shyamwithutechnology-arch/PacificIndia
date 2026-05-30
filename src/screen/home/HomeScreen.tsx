@@ -27,36 +27,43 @@ const HomeScreen = ({ navigation }) => {
       title: 'Specility',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.speciality,
+      tab: 'SpecialityStack',
+      screen: 'Speciality',
     },
     {
       id: 2,
       title: 'Doctors',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.doctor,
+      screen: 'Doctorlist',
     },
     {
       id: 3,
       title: 'Appointments',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.apppointments,
+      screen: 'AppointMents',
     },
     {
       id: 4,
       title: 'Daily Visit',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.dailyVisit,
+      screen: 'DailyVisit',
     },
     {
       id: 5,
       title: 'Doctors',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.apppointments1,
+      screen: 'Specility',
     },
     {
       id: 6,
       title: 'Appoitments',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.apppointments1,
+      screen: 'Specility',
     },
   ];
 
@@ -67,9 +74,16 @@ const HomeScreen = ({ navigation }) => {
     { id: 4, image: Images.bannerImg },
   ];
 
+  const handleNavigate = (item) => {
+    if (item?.tab) {
+      navigation.navigate(item?.tab, { screen: item?.screen });
+    } else {
+      navigation.navigate(item?.screen);
+    }
+  };
   const renderItem = ({ item }) => {
     return (
-      <Pressable style={styles.cart}>
+      <Pressable style={styles.cart} onPress={() => handleNavigate(item)}>
         <View style={styles.categoryBox}>
           <Image source={item?.img} style={styles.categoryImg} />
         </View>

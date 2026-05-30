@@ -13,7 +13,7 @@ import SupportScreen from '../screen/support/SupportScreen';
 
 const Tab = createBottomTabNavigator();
 
-const TabIcon = ({ focused, activeIcon, inactiveIcon, label }) => {
+const TabIcon = ({ focused, activeIcon, inactiveIcon, label, tint = true }) => {
   const theme = useAppTheme();
   return (
     <View style={{ alignItems: 'center', marginTop: theme.moderateScale(10) }}>
@@ -21,11 +21,15 @@ const TabIcon = ({ focused, activeIcon, inactiveIcon, label }) => {
         source={focused ? activeIcon : inactiveIcon}
         resizeMode="contain"
         style={{
-          width: theme.moderateScale(25),
-          height: theme.moderateScale(25),
-          tintColor: focused
-            ? theme.tokens.colors.primary
-            : 'rgba(18, 70, 130,.9)',
+          width: tint ? theme.moderateScale(25) : theme.moderateScale(50),
+          height: tint ? theme.moderateScale(25) : theme.moderateScale(50),
+          marginTop: !tint && theme.tokens.spacing.mdPlus,
+          tintColor: tint
+            ? focused
+              ? theme.tokens.colors.primary
+              : 'rgba(18, 70, 130,.9)'
+            : undefined,
+
           opacity: focused ? 1 : 0.5,
         }}
       />
@@ -107,6 +111,7 @@ const MainTabs = () => {
               focused={focused}
               activeIcon={Icons.homeIcon}
               inactiveIcon={Icons.homeIcon}
+              tint={false} // important
             />
           ),
         }}

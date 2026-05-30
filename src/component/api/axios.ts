@@ -1,10 +1,12 @@
 import axios from 'axios';
 import NetInfo from '@react-native-community/netinfo';
-import { showToast } from '../utils/toast';
+import { showToast } from '../../utils/toast';
+export const baseURL = 'https://www.paperfast.in/api/';
+export const iconUrl = 'https://www.paperfast.in/';
 
 const api = axios.create({
   // baseURL: 'https://www.papers.withupartners.in/api/',
-  baseURL: 'https://thepacificindia.com/api/',
+  baseURL: 'https://www.paperfast.in/api/',
 
   timeout: 60000, // 20 second
   headers: {
@@ -19,6 +21,7 @@ api.interceptors.request.use(
     const net = await NetInfo.fetch();
 
     if (!net.isConnected) {
+      // toast.error('No internet connection', '');
       showToast('error', 'Connection issue', 'No internet connection');
       return Promise.reject({ offline: true });
     }

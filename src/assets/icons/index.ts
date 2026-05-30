@@ -5,7 +5,7 @@ export const Icons = {
 
   passwordicon: require('./password_icon.png'),
   callIcon: require('./call_icon.png'),
-  homeIcon: require('./home_icon.png'),
+  homeIcon: require('./Frame.png'),
   drawerIcon: require('./drawer_icon.png'),
   notificationIcon: require('./notification.png'),
   questionMarkIcon: require('./question_mark_icon.png'),
@@ -28,4 +28,5 @@ export const Icons = {
   dateIcon: require('./date_icon.png'),
   namecon: require('./name_icon.png'),
   mapFillIcon: require('./map_fill_icon.png'),
+  checkIcon: require('./check.png'),
 };

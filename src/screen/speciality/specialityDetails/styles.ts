@@ -8,6 +8,9 @@ export const createStyles = (theme: AppTheme) => {
     container: {
       flex: 1,
     },
+    innerContainer: {
+      backgroundColor: '#e9f5fa',
+    },
     specialityText: {
       fontSize: tokens.fontSize.lg,
       color: tokens.colors.black,
@@ -24,14 +27,13 @@ export const createStyles = (theme: AppTheme) => {
     },
 
     cart: {
-      backgroundColor: '#D9D9D9',
+      backgroundColor: tokens.colors.white,
       elevation: 10,
-      shadowColor: '#fff',
-      borderColor: '#AFE7FF',
-      borderRadius: tokens.radius.sm,
+      shadowColor: '#c1c1c1',
+      borderRadius: tokens.radius.md,
       alignItems: 'center',
       justifyContent: 'center',
-      width: '32%',
+      width: '48%',
       paddingHorizontal: tokens.spacing.xxs,
       paddingVertical: tokens.spacing.sm,
     },
@@ -49,11 +51,12 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: tokens.spacing.xxs,
     },
     categoryImg: {
-      height: moderateScale(70),
-      width: moderateScale(70),
+      height: moderateScale(100),
+      width: moderateScale(100),
     },
     row: {
-      justifyContent: 'space-between',
+      justifyContent: 'flex-start',
+      gap: scale(10),
       marginBottom: tokens.spacing.sm,
     },
     categoryBox: {
@@ -129,6 +132,93 @@ export const createStyles = (theme: AppTheme) => {
     cancleIcon: {
       height: moderateScale(14),
       width: moderateScale(14),
+    },
+
+    // add const name = new type(arguments);
+    checkIconBox: {
+      position: 'absolute',
+      top: tokens.spacing.xs,
+      right: tokens.spacing.xs,
+
+      height: moderateScale(28),
+      width: moderateScale(28),
+
+      borderRadius: tokens.radius.xxl,
+      backgroundColor: 'rgba(80,80,80,.9)',
+
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    checkIcon: {
+      height: moderateScale(16),
+      width: moderateScale(16),
+      tintColor: tokens.colors.white,
+    },
+
+    previewHeader: {
+      position: 'absolute',
+      top: verticalScale(45),
+      right: tokens.spacing.md,
+      zIndex: 10,
+    },
+
+    previewCountText: {
+      fontSize: tokens.fontSize.lg,
+      color: tokens.colors.white,
+      fontFamily: Fonts.ManropeSemiBold,
+    },
+
+    previewCloseBox: {
+      position: 'absolute',
+      top: verticalScale(45),
+      left: tokens.spacing.md,
+
+      height: moderateScale(34),
+      width: moderateScale(34),
+
+      borderRadius: tokens.radius.xxl,
+      backgroundColor: 'rgba(255,255,255,.15)',
+
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 10,
+    },
+
+    previewCloseIcon: {
+      height: moderateScale(16),
+      width: moderateScale(16),
+      tintColor: tokens.colors.white,
+    },
+
+    fullImage: {
+      width: '100%',
+      height: verticalScale(280),
+    },
+
+    selectedBorder: {
+      borderWidth: 1,
+      borderColor: tokens.colors.primary,
+    },
+
+    modalBlackBg: {
+      flex: 1,
+      backgroundColor: '#000',
+    },
+
+    fullPreviewImage: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'stretch',
+    },
+    selectedBox: {
+      backgroundColor: tokens.colors.green,
+    },
+
+    itemNumberText: {
+      fontSize: tokens.fontSize.md,
+      textAlign: 'center',
+      marginTop: tokens.spacing.xxs,
     },
   });
 };

@@ -3,18 +3,21 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize, insets } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
     },
     innerContainer: {
       backgroundColor: '#e9f5fa',
+      paddingBottom: insets.bottom + tokens.spacing.sm,
     },
     logoImg: {
-      height: moderateScale(40),
-      width: moderateScale(40),
+      height: moderateScale(60),
+      width: moderateScale(60),
       alignSelf: 'center',
+      marginRight: tokens.spacing.smPlus,
     },
     customerCareBox: {
       backgroundColor: tokens.colors.white,
@@ -24,6 +27,9 @@ export const createStyles = (theme: AppTheme) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      elevation: 10,
+      shadowColor: '#989898',
+      marginTop: tokens.spacing.mdPlus,
     },
     headerBox: {
       backgroundColor: tokens.colors.white,
@@ -67,6 +73,25 @@ export const createStyles = (theme: AppTheme) => {
     submitBtn: {
       marginTop: tokens.spacing.lg,
       marginBottom: tokens.spacing.sm,
+    },
+    callIcon: {
+      height: moderateScale(35),
+      width: moderateScale(35),
+    },
+    customerText: {
+      fontSize: tokens.fontSize.md,
+      color: tokens.colors.primary,
+      fontFamily: Fonts.ManropeMedium,
+    },
+    pacificText: {
+      fontSize: tokens.fontSize.md,
+      color: tokens.colors.black,
+      fontFamily: Fonts.ManropeMedium,
+    },
+    logoHederRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
   });
 };

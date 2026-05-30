@@ -1,3 +1,3 @@
 export const ApiEndPoint = {
-  LoGIN: 'login',
+  LoGIN: 'login-otp',
 };

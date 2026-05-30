@@ -39,21 +39,24 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: tokens.spacing.sm,
       borderRadius: scale(6),
       borderColor: '#d6d4d4',
+      backgroundColor: 'red',
     },
     selectedItemContainer: {
       backgroundColor: tokens.colors.primary,
     },
     containerDropdown: {
-      backgroundColor: '#e8e8e8',
+      backgroundColor: '#000',
     },
     itemText: {
       fontSize: tokens.fontSize.sm,
       color: tokens.colors.black,
       fontFamily: Fonts.ManropeRegular,
+      backgroundColor: 'green',
     },
     selectedItemText: {
       color: tokens.colors.white,
       fontFamily: Fonts.ManropeSemiBold,
+      backgroundColor: 'green',
     },
   });
 };

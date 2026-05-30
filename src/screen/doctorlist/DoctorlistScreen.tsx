@@ -139,7 +139,7 @@ const DoctorlistScreen = () => {
     <ScreenLayout
       header={
         <AppHeader
-          title="Doctors Listaa"
+          title="Doctors List"
           search={seach}
           leftIcon={Icons.leftIcon}
         />
