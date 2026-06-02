@@ -195,27 +195,34 @@
 // // </AppModal>
 // export default SpecialityDetailsScreen;
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, Pressable, Text, View } from 'react-native';
 
 import ImageView from 'react-native-image-viewing';
 
 import { createStyles } from './styles';
 import { Images } from '../../../assets/images';
-import { ScreenLayout, SearchList } from '../../../component';
+import { Loader, ScreenLayout, SearchList } from '../../../component';
 import AppHeader from '../../../component/AppHeader/AppHeader';
 import { useAppTheme } from '../../../hooks/useAppTheme';
 import { Icons } from '../../../assets/icons';
+import { showToast } from '../../../utils/toast';
+import { ApiEndPoint } from '../../../api/endPoints';
+import { POST_FORM } from '../../../api/request';
 
 const SpecialityDetailsScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const route = useRoute();
+  const { medicine_id } = route?.params || {};
   const numColumns = theme.isTablet ? 3 : 2;
   const [search, setSearch] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [visible, setVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [specialityDetailsList, setSpecialityDetailsList] = useState([]);
 
   const category = [
     {
@@ -307,6 +314,39 @@ const SpecialityDetailsScreen = ({ navigation }) => {
     );
   };
 
+  const medicineBySpecilityId = async (id) => {
+    try {
+      setLoading(true);
+      const params = {
+        ms_id: id,
+      };
+      const response = await POST_FORM(
+        ApiEndPoint.medicineBySpecilityId,
+        params
+      );
+      if (response?.status === '1') {
+        setSpecialityDetailsList(response?.result || []);
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    let get_id = async (medicine_id) => {
+      medicineBySpecilityId(medicine_id);
+    };
+    get_id(medicine_id);
+  }, [medicine_id]);
   return (
     <ScreenLayout
       header={
@@ -319,6 +359,8 @@ const SpecialityDetailsScreen = ({ navigation }) => {
       paddingHorizontal={0}
       innerContainer={styles.innerContainer}
     >
+      <Loader visible={loading} />
+
       <SearchList value={search} onChange={setSearch} />
 
       <FlatList

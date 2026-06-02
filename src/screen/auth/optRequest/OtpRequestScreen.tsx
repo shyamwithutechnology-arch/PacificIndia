@@ -10,11 +10,14 @@ import { useAppTheme } from '../../../hooks/useAppTheme';
 import { Images } from '../../../assets/images';
 import { Icons } from '../../../assets/icons';
 import { localStorage, storageKeys } from '../../../storage/storage';
+import { useRoute } from '@react-navigation/native';
 
 const OtpRequestScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const insets = useSafeAreaInsets();
+  const route = useRoute();
+  const { opt, phone } = route?.params || {};
 
   const handleOtpVerified = () => {
     localStorage.setItem(storageKeys.fcm_token, '1234');
@@ -45,7 +48,7 @@ const OtpRequestScreen = ({ navigation }) => {
             Login to accesss healthcare services
           </Text>
           <OTPInput />
-          <Text style={styles.optSendText}>OTP sent to +91 9874563218</Text>
+          <Text style={styles.optSendText}>OTP sent to +91 {phone}</Text>
 
           <CustomButton
             title="Verify & Login"

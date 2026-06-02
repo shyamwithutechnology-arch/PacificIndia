@@ -31,7 +31,7 @@ export const createStyles = (theme: AppTheme) => {
       marginBottom: tokens.spacing.lg,
     },
     passinput: {
-      marginBottom: verticalScale(13),
+      marginTop: verticalScale(13),
     },
     callIcon: {
       height: moderateScale(17),
@@ -50,7 +50,15 @@ export const createStyles = (theme: AppTheme) => {
       fontFamily: Fonts.ManropeMedium,
       alignSelf: 'center',
       marginTop: 'auto',
-      marginBottom: verticalScale(20),
+      // marginBottom: verticalScale(20),
+    },
+
+    //error
+    errorText: {
+      color: 'red',
+      fontSize: tokens.fontSize.xs,
+      marginTop: tokens.spacing.xxs,
+      // marginLeft: tokens.spacing.lg,
     },
   });
 };
