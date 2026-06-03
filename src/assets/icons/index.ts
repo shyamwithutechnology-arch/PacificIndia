@@ -29,4 +29,5 @@ export const Icons = {
   namecon: require('./name_icon.png'),
   mapFillIcon: require('./map_fill_icon.png'),
   checkIcon: require('./check.png'),
+  clockIcon: require('./clock.png'),
 };
