@@ -27,7 +27,7 @@ export const createStyles = (theme: AppTheme) => {
     },
 
     button: {
-      backgroundColor: '#22C7BE',
+      backgroundColor: tokens.colors.primary,
       paddingVertical: tokens.spacing.smPlus,
       borderRadius: scale(14),
       marginBottom: tokens.spacing.smPlus,

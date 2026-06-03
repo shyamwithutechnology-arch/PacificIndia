@@ -196,10 +196,9 @@
 // export default SpecialityDetailsScreen;
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, Image, Pressable, Text, View } from 'react-native';
-
+import { Alert, FlatList, Image, Pressable, Text, View } from 'react-native';
 import ImageView from 'react-native-image-viewing';
-
+import { useRoute } from '@react-navigation/native';
 import { createStyles } from './styles';
 import { Images } from '../../../assets/images';
 import { Loader, ScreenLayout, SearchList } from '../../../component';
@@ -288,7 +287,9 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item, index }) => {
-    const isSelected = selectedImages.some((image) => image.id === item.id);
+    const isSelected = selectedImages.some(
+      (image) => image.mssub_id === item.id
+    );
 
     return (
       <Pressable
@@ -296,7 +297,7 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         onPress={() => handleOpenPreview(item, index)}
       >
         <Image
-          source={item.img}
+          source={item.ms_image}
           style={styles.categoryImg}
           resizeMode="cover"
         />
@@ -309,7 +310,7 @@ const SpecialityDetailsScreen = ({ navigation }) => {
           <Image source={Icons.checkIcon} style={styles.checkIcon} />
         </Pressable>
 
-        <Text style={styles.itemNumberText}>{item.title}</Text>
+        <Text style={styles.itemNumberText}>{item.ms_name}</Text>
       </Pressable>
     );
   };
@@ -343,10 +344,11 @@ const SpecialityDetailsScreen = ({ navigation }) => {
 
   useEffect(() => {
     let get_id = async (medicine_id) => {
-      medicineBySpecilityId(medicine_id);
+      await medicineBySpecilityId(medicine_id);
     };
     get_id(medicine_id);
   }, [medicine_id]);
+
   return (
     <ScreenLayout
       header={
@@ -364,9 +366,9 @@ const SpecialityDetailsScreen = ({ navigation }) => {
       <SearchList value={search} onChange={setSearch} />
 
       <FlatList
-        data={category}
+        data={specialityDetailsList}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.mssub_id.toString()}
         numColumns={numColumns}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContainer}

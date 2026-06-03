@@ -1,6 +1,11 @@
 import { Alert, Image, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { AppInput, CustomButton, ScreenLayout } from '../../../component';
+import {
+  AppInput,
+  CustomButton,
+  Loader,
+  ScreenLayout,
+} from '../../../component';
 import { Icons } from '../../../assets/icons';
 import { useAppTheme } from '../../../hooks/useAppTheme';
 import { Images } from '../../../assets/images';
@@ -13,7 +18,7 @@ import { localStorage, storageKeys } from '../../../storage/storage';
 const LoginScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     number: '',
     password: '',
@@ -81,8 +86,12 @@ const LoginScreen = ({ navigation }) => {
       if (response?.status === '1') {
         showToast('success', 'Success', response?.msg || 'Login successful');
         localStorage.setItem(storageKeys.fcm_token, '1234');
+        localStorage.setItem(
+          storageKeys.member_id,
+          response?.result[0]?.member_id
+        );
         navigation?.navigate('OtpRequest', {
-          opt: response?.result?.otp,
+          opt: response?.result[0]?.otp,
           phone: input.number,
         });
       }
@@ -108,7 +117,7 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.logoBox}>
         <Image source={Images.logo} style={styles.logo} />
       </View>
-
+      <Loader visible={loading} />
       <AppInput
         leftIcon={Icons.callIcon}
         placeholderText={'Please enter mobile number'}

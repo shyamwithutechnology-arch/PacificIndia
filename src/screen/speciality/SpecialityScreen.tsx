@@ -32,8 +32,8 @@ const SpecialityScreen = () => {
     navigation.goBack();
   }, [navigation]);
 
-  const handleNavigate = () => {
-    navigation.navigate('SpecialityStack', { screen: 'SpecialityDetails' });
+  const handleNavigate = (item) => {
+    navigation.navigate('SpecialityDetails', { medicine_id: item?.ms_id });
   };
 
   const category = [
@@ -82,9 +82,10 @@ const SpecialityScreen = () => {
       setLoading(false);
     }
   };
+
   const renderItem = ({ item }) => {
     return (
-      <Pressable style={styles.cart} onPress={handleNavigate}>
+      <Pressable style={styles.cart} onPress={() => handleNavigate(item)}>
         <View style={styles.categoryBox}>
           <Image source={{ uri: item?.ms_image }} style={styles.categoryImg} />
         </View>

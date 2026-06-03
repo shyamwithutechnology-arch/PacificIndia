@@ -56,7 +56,8 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: tokens.fontSize.sm,
       color: tokens.colors.black,
       fontFamily: Fonts.ManropeBold,
-      marginLeft: tokens.spacing.xs,
+      marginBottom: tokens.spacing.xxs,
+      // marginLeft: tokens.spacing.xs,
     },
     nameError: {
       fontSize: moderateScale(11),
@@ -83,6 +84,9 @@ export const createStyles = (theme: AppTheme) => {
       flexDirection: 'row',
       alignItems: 'center',
     },
+    marrizedStyle: {
+      marginLeft: tokens.spacing.lg,
+    },
     maritalBoxMain: {
       marginTop: tokens.spacing.xxs,
       marginBottom: tokens.spacing.lg,
@@ -99,6 +103,10 @@ export const createStyles = (theme: AppTheme) => {
       borderColor: tokens.colors.primary,
       borderRadius: scale(4),
       marginTop: tokens.spacing.xs,
+    },
+    cityDropDown: {
+      borderWidth: 0.6,
+      marginBottom: tokens.spacing.sm,
     },
     cityText: {
       marginTop: tokens.spacing.smPlus,
