@@ -1,202 +1,282 @@
-// import React, { useState } from 'react';
+// import React, { useEffect, useMemo, useState } from 'react';
 // import {
 //   Alert,
 //   FlatList,
 //   Image,
 //   Pressable,
-//   StyleSheet,
 //   Text,
+//   useWindowDimensions,
 //   View,
 // } from 'react-native';
+// import ImageView from 'react-native-image-viewing';
+// import { useRoute } from '@react-navigation/native';
 // import { createStyles } from './styles';
 // import { Images } from '../../../assets/images';
-// import { ScreenLayout, SearchList, AppModal } from '../../../component';
+// import { Loader, ScreenLayout, SearchList } from '../../../component';
 // import AppHeader from '../../../component/AppHeader/AppHeader';
 // import { useAppTheme } from '../../../hooks/useAppTheme';
 // import { Icons } from '../../../assets/icons';
-// import { Modal } from 'react-native/types_generated/index';
+// import { showToast } from '../../../utils/toast';
+// import { ApiEndPoint } from '../../../api/endPoints';
+// import { POST_FORM } from '../../../api/request';
+// import { baseURL } from '../../../component/api/axios';
 
 // const SpecialityDetailsScreen = ({ navigation }) => {
 //   const theme = useAppTheme();
 //   const styles = createStyles(theme);
-//   const [seach, setSearch] = useState('');
-//   const [selected, setSelected] = useState('all');
+//   const route = useRoute();
+//   const { medicine_id } = route?.params || {};
+//   const { width, height } = useWindowDimensions();
+//   const isLandscape = width > height;
+//   const numColumns = theme.isTablet
+//     ? isLandscape
+//       ? 5
+//       : 3
+//     : isLandscape
+//     ? 4
+//     : 2;
+//   const [search, setSearch] = useState('');
+//   const [selectedImages, setSelectedImages] = useState([]);
+//   const [previewImages, setPreviewImages] = useState([]);
 //   const [visible, setVisible] = useState(false);
-//   const [img, setImg] = useState('');
-
+//   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [loading, setLoading] = useState(false);
+//   const [specialityDetailsList, setSpecialityDetailsList] = useState([]);
+//   const [imageError, setImageError] = useState({});
+//   const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
+//   const cardWidth =
+//     (width - theme.tokens.spacing.lg * (numColumns + 1)) / numColumns;
 //   const category = [
 //     {
 //       id: 1,
-//       title: 'Obstetrics & Gynaecology',
-//       img: Images.madicinImg,
+//       title: '1',
+//       img: Images.bannerImg,
 //     },
 //     {
 //       id: 2,
-//       title: 'Orthopaedics',
+//       title: '2',
 //       img: Images.madicinImg,
 //     },
 //     {
 //       id: 3,
-//       title: 'General Physician',
+//       title: '3',
 //       img: Images.madicinImg,
 //     },
 //     {
 //       id: 4,
-//       title: 'General & Laparoscopic Surgeon',
+//       title: '4',
 //       img: Images.madicinImg,
 //     },
 //     {
 //       id: 5,
-//       title: 'Nephrology',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 6,
-//       title: 'Paediatrics',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 7,
-//       title: 'Ophthalmology',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 8,
-//       title: 'Diabetology',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 19,
-//       title: 'Endocrinology',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 20,
-//       title: 'Cardiology',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 21,
-//       title: 'Urology',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 20,
-//       title: 'Pulmonology/ Respiratory Medicine',
+//       title: '5',
 //       img: Images.madicinImg,
 //     },
 //   ];
 
-//   const specialityData = [
-//     { id: 'all', title: 'All' },
-//     { id: 'ortho', title: 'Ortho' },
-//     { id: 'gynae', title: 'Gynaec' },
-//     { id: 'paid', title: 'Paid' },
-//     { id: 'general', title: 'General Physician' },
-//   ];
-//   const banner = [
-//     { id: 1, image: Images.madicinImg },
-//     { id: 2, image: Images.madicinImg },
-//     { id: 3, image: Images.madicinImg },
-//     { id: 4, image: Images.madicinImg },
-//   ];
+//   // image select / unselect
+// const handleSelect = (item) => {
+//   const exists = selectedImages.some((image) => image.ms_id === item.ms_id);
 
-//   const handleClose = () => {
-//     setVisible(false);
-//   };
-//   const handleSetImg = async (img) => {
-//     setImg(img);
-//     await handleOpenModal();
-//   };
+//   if (exists) {
+//     setSelectedImages((prev) =>
+//       prev.filter((image) => image.ms_id !== item.ms_id)
+//     );
+//   } else {
+//     setSelectedImages((prev) => [...prev, item]);
+//   }
+// };
 
-//   const handleOpenModal = () => {
+//   const handleOpenPreview = (item) => {
+//     const isSelected = selectedImages.some(
+//       (image) => image.mssub_id === item.mssub_id
+//     );
+
+//     const imagesToPreview = isSelected
+//       ? selectedImages
+//       : specialityDetailsList.filter(
+//           (image) =>
+//             !selectedImages.some(
+//               (selected) => selected.mssub_id === image.mssub_id
+//             )
+//         );
+
+//     const imageIndex = imagesToPreview.findIndex(
+//       (image) => image.mssub_id === item.mssub_id
+//     );
+
+//     setPreviewImages(
+//       imagesToPreview.map((image) => ({
+//         uri: image?.mssub_image
+//           ? `${baseURL}/uploads/medicine/${image.mssub_image}`
+//           : DUMMY_IMAGE,
+//       }))
+//     );
+
+//     setCurrentIndex(imageIndex >= 0 ? imageIndex : 0);
 //     setVisible(true);
 //   };
-//   const handerItemRender = ({ item }) => {
-//     const isSelected = selected === item?.id;
+
+//   const renderItem = ({ item, index }) => {
+//     const isSelected = selectedImages.some(
+//       (image) => image.mssub_id === item.mssub_id
+//     );
+//     const imageUrl = item?.mssub_image
+//       ? `${baseURL}/uploads/medicine/${item.mssub_image}`
+//       : DUMMY_IMAGE;
+
 //     return (
 //       <Pressable
-//         onPress={() => setSelected(item?.id)}
-//         style={[styles.headerItemBox, isSelected && styles.headerSelectBox]}
+//         style={[
+//           styles.cart,
+//           { width: cardWidth },
+//           isSelected && styles.selectedBorder,
+//         ]}
+//         onPress={() => handleOpenPreview(item, index)}
 //       >
-//         <Text
-//           style={[
-//             styles.headerTitleText,
-//             isSelected && styles.headerSelectTitle,
-//           ]}
+//         <Image
+//           source={{
+//             uri: imageError[item.mssub_id] ? DUMMY_IMAGE : imageUrl,
+//           }}
+//           style={styles.categoryImg}
+//           resizeMode="cover"
+//           onError={() => {
+//             setImageError((prev) => ({
+//               ...prev,
+//               [item.mssub_id]: true,
+//             }));
+//           }}
+//         />
+
+//         {/* check icon */}
+//         <Pressable
+//           style={[styles.checkIconBox, isSelected && styles.selectedBox]}
+//           onPress={() => handleSelect(item)}
 //         >
-//           {item?.title}
-//         </Text>
+//           <Image source={Icons.checkIcon} style={styles.checkIcon} />
+//         </Pressable>
+
+//         <Text style={styles.itemNumberText}>{item.title}</Text>
 //       </Pressable>
 //     );
 //   };
-//   // <View style={styles.categoryBox}>
-//   // </View>
-//   const renderItem = ({ item }) => {
-//     return (
-//       <Pressable style={styles.cart} onPress={() => handleSetImg(item?.img)}>
-//         <Image source={item?.img} style={styles.categoryImg} />
-//       </Pressable>
-//     );
+
+//   const medicineBySpecilityId = async (id) => {
+//     try {
+//       setLoading(true);
+//       const params = {
+//         ms_id: id,
+//       };
+//       const response = await POST_FORM(
+//         ApiEndPoint.medicineBySpecilityId,
+//         params
+//       );
+//       if (response?.status === '1') {
+//         setSpecialityDetailsList(response?.result || []);
+//       }
+//     } catch (error) {
+//       if (error?.offline) {
+//         return;
+//       }
+//       showToast(
+//         'error',
+//         'Error',
+//         error?.msg || 'Something went wrong. Please try again.'
+//       );
+//     } finally {
+//       setLoading(false);
+//     }
 //   };
+
+//   useEffect(() => {
+//     let get_id = async (medicine_id) => {
+//       await medicineBySpecilityId(medicine_id);
+//     };
+//     get_id(medicine_id);
+//   }, [medicine_id]);
+
 //   return (
 //     <ScreenLayout
 //       header={
 //         <AppHeader
 //           title="Speciality Detail"
-//           search={seach}
 //           leftIcon={Icons.leftIcon}
+//           onPress={() => navigation.goBack()}
 //         />
 //       }
+//       paddingHorizontal={0}
+//       innerContainer={styles.innerContainer}
 //     >
-//       <SearchList
-//         value={seach}
-//         onChange={setSearch}
-//         searchRowCustom={styles.searchTop}
+//       <Loader visible={loading} />
+
+//       <SearchList value={search} onChange={setSearch} />
+
+//       <FlatList
+//         key={`${width}-${height}`}
+//         data={specialityDetailsList}
+//         renderItem={renderItem}
+//         keyExtractor={(item) => item.ms_id.toString()}
+//         numColumns={numColumns}
+//         columnWrapperStyle={styles.row}
+//         contentContainerStyle={styles.listContainer}
+//         showVerticalScrollIndicator={false}
 //       />
 
-//       <View>
-//         <FlatList
-//           horizontal
-//           data={specialityData}
-//           keyExtractor={(item) => item}
-//           showsHorizontalScrollIndicator={false}
-//           horizontal
-//           contentContainerStyle={styles.headerListContainer}
-//           renderItem={handerItemRender}
-//         />
+//       <ImageView
+//         images={previewImages}
+//         imageIndex={currentIndex}
+//         visible={visible}
+//         onRequestClose={() => setVisible(false)}
+//         swipeToCloseEnabled
+//         presentationStyle="fullScreen"
+//         backgroundColor="#000000EE"
+//         renderImage={({ source }) => (
+//           <Image source={source} style={styles.fullPreviewImage} />
+//         )}
+//         HeaderComponent={({ imageIndex }) => (
+//           <>
+//             <View style={styles.previewHeader}>
+//               <Text style={styles.previewCountText}>
+//                 {imageIndex + 1}/{previewImages.length}
+//               </Text>
+//             </View>
 
-// <FlatList
-//   data={category}
-//   renderItem={renderItem}
-//   keyExtractor={(item) => item.id}
-//   numColumns={3}
-//   columnWrapperStyle={styles.row}
-//   showsVerticalScrollIndicator={false}
-//   contentContainerStyle={styles.listContainer}
-// />
-//       </View>
+//             <Pressable
+//               onPress={() => setVisible(false)}
+//               style={styles.previewCloseBox}
+//             >
+//               <Image source={Icons.leftIcon} style={styles.previewCloseIcon} />
+//             </Pressable>
+//           </>
+//         )}
+//       />
 //     </ScreenLayout>
 //   );
 // };
 
-// // <AppModal
-// //   visible={visible}
-// //   onClose={handleClose}
-// //   contentStyle={styles.modalContainer}
-// // >
-// //   <View style={styles.imgBox}>
-// //     <Image source={img} style={styles.madicinImg} resizeMode="contain" />
-// //   </View>
-
-// //   <Pressable style={styles.cancelBox} onPress={handleClose}>
-// //     <Image source={Icons.cancleIcon} style={styles.cancleIcon} />
-// //   </Pressable>
-// // </AppModal>
 // export default SpecialityDetailsScreen;
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { Alert, FlatList, Image, Pressable, Text, View } from 'react-native';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+} from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  Pressable,
+  Text,
+  useWindowDimensions,
+  View,
+  Dimensions,
+  StatusBar,
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import { useRoute } from '@react-navigation/native';
 import { createStyles } from './styles';
@@ -208,13 +288,40 @@ import { Icons } from '../../../assets/icons';
 import { showToast } from '../../../utils/toast';
 import { ApiEndPoint } from '../../../api/endPoints';
 import { POST_FORM } from '../../../api/request';
+import { baseURL } from '../../../component/api/axios';
 
 const SpecialityDetailsScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const route = useRoute();
   const { medicine_id } = route?.params || {};
-  const numColumns = theme.isTablet ? 3 : 2;
+  const { width, height } = useWindowDimensions();
+  const [orientation, setOrientation] = useState('PORTRAIT');
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const controlsTimeoutRef = useRef(null);
+
+  // Detect orientation changes
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      if (window.width > window.height) {
+        setOrientation('LANDSCAPE');
+      } else {
+        setOrientation('PORTRAIT');
+      }
+    });
+    return () => subscription?.remove();
+  }, []);
+
+  const isLandscape = width > height;
+
+  // Dynamic column calculation based on orientation and device
+  const numColumns = useMemo(() => {
+    if (theme.isTablet) {
+      return isLandscape ? 4 : 3;
+    }
+    return isLandscape ? 3 : 2;
+  }, [isLandscape, theme.isTablet]);
+
   const [search, setSearch] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -222,100 +329,239 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [specialityDetailsList, setSpecialityDetailsList] = useState([]);
+  const [imageError, setImageError] = useState({});
+  const [previewMode, setPreviewMode] = useState('all'); // 'selected' or 'unselected'
 
-  const category = [
-    {
-      id: 1,
-      title: '1',
-      img: Images.bannerImg,
-    },
-    {
-      id: 2,
-      title: '2',
-      img: Images.madicinImg,
-    },
-    {
-      id: 3,
-      title: '3',
-      img: Images.madicinImg,
-    },
-    {
-      id: 4,
-      title: '4',
-      img: Images.madicinImg,
-    },
-    {
-      id: 5,
-      title: '5',
-      img: Images.madicinImg,
-    },
-  ];
+  const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
 
-  // image select / unselect
-  const handleSelect = (item) => {
-    const exists = selectedImages.some((image) => image.id === item.id);
+  // Dynamic card width calculation
+  const cardWidth = useMemo(() => {
+    const spacing = theme.tokens.spacing.md;
+    const totalSpacing = spacing * (numColumns + 1);
+    return (width - totalSpacing) / numColumns;
+  }, [width, numColumns, theme.tokens.spacing.md]);
 
-    if (exists) {
-      setSelectedImages((prev) => prev.filter((image) => image.id !== item.id));
-    } else {
-      setSelectedImages((prev) => [...prev, item]);
+  // Handle image selection
+  const handleSelect = useCallback((item) => {
+    setSelectedImages((prev) => {
+      const exists = prev.some((image) => image.mssub_id === item.mssub_id);
+      if (exists) {
+        return prev.filter((image) => image.mssub_id !== item.mssub_id);
+      } else {
+        return [...prev, item];
+      }
+    });
+  }, []);
+
+  // Auto-hide controls after 3 seconds
+  const handleControlsAutoHide = useCallback(() => {
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
     }
-  };
+    controlsTimeoutRef.current = setTimeout(() => {
+      setControlsVisible(false);
+    }, 3000);
+  }, []);
 
-  const handleOpenPreview = (item) => {
-    const isSelected = selectedImages.some((image) => image.id === item.id);
+  const toggleControls = useCallback(() => {
+    setControlsVisible((prev) => !prev);
+    if (!controlsVisible) {
+      handleControlsAutoHide();
+    }
+  }, [controlsVisible, handleControlsAutoHide]);
 
-    const imagesToPreview = isSelected
-      ? selectedImages
-      : category.filter(
-          (image) =>
-            !selectedImages.some((selected) => selected.id === image.id)
+  // Handle preview opening based on selection state
+  const handleOpenPreview = useCallback(
+    (item) => {
+      let imagesToPreview = [];
+      let imageIndex = 0;
+      const isItemSelected = selectedImages.some(
+        (image) => image.mssub_id === item.mssub_id
+      );
+
+      if (isItemSelected) {
+        // Pressed on SELECTED image -> Show ONLY selected images
+        setPreviewMode('selected');
+        imagesToPreview = selectedImages;
+        imageIndex = selectedImages.findIndex(
+          (image) => image.mssub_id === item.mssub_id
         );
 
-    const imageIndex = imagesToPreview.findIndex(
-      (image) => image.id === item.id
-    );
+        if (imagesToPreview.length === 0) {
+          showToast('info', 'Info', 'No selected images to preview');
+          return;
+        }
+      } else {
+        // Pressed on UNSELECTED image -> Show ONLY unselected images
+        setPreviewMode('unselected');
+        imagesToPreview = specialityDetailsList.filter(
+          (image) =>
+            !selectedImages.some(
+              (selected) => selected.mssub_id === image.mssub_id
+            )
+        );
+        imageIndex = imagesToPreview.findIndex(
+          (image) => image.mssub_id === item.mssub_id
+        );
 
-    setPreviewImages(
-      imagesToPreview.map((image) => ({
-        uri: Image.resolveAssetSource(image.img).uri,
-      }))
-    );
+        if (imagesToPreview.length === 0) {
+          showToast('info', 'Info', 'No unselected images to preview');
+          return;
+        }
+      }
 
-    setCurrentIndex(imageIndex);
-    setVisible(true);
-  };
+      setPreviewImages(
+        imagesToPreview.map((image) => ({
+          uri: image?.mssub_image
+            ? `${baseURL}/uploads/medicine/${image.mssub_image}`
+            : DUMMY_IMAGE,
+          title: image?.title || '',
+          id: image?.mssub_id,
+        }))
+      );
 
-  const renderItem = ({ item, index }) => {
-    const isSelected = selectedImages.some(
-      (image) => image.mssub_id === item.id
-    );
+      setCurrentIndex(imageIndex >= 0 ? imageIndex : 0);
+      setVisible(true);
+      setControlsVisible(true);
+      handleControlsAutoHide();
+    },
+    [specialityDetailsList, selectedImages, DUMMY_IMAGE, handleControlsAutoHide]
+  );
 
-    return (
-      <Pressable
-        style={[styles.cart, isSelected && styles.selectedBorder]}
-        onPress={() => handleOpenPreview(item, index)}
-      >
-        <Image
-          source={item.ms_image}
-          style={styles.categoryImg}
-          resizeMode="cover"
-        />
+  // Custom header for image viewer
+  const ImageViewerHeader = useCallback(
+    ({ imageIndex }) => {
+      if (!controlsVisible) return null;
 
-        {/* check icon */}
-        <Pressable
-          style={[styles.checkIconBox, isSelected && styles.selectedBox]}
-          onPress={() => handleSelect(item)}
+      return (
+        <>
+          <View
+            style={[
+              styles.previewHeader,
+              isLandscape && styles.landscapePreviewHeader,
+            ]}
+          >
+            <Text style={styles.previewCountText}>
+              {imageIndex + 1}/{previewImages.length}
+            </Text>
+          </View>
+
+          <Pressable
+            onPress={() => {
+              setVisible(false);
+              if (controlsTimeoutRef.current) {
+                clearTimeout(controlsTimeoutRef.current);
+              }
+            }}
+            style={[
+              styles.previewCloseBox,
+              isLandscape && styles.landscapePreviewCloseBox,
+            ]}
+          >
+            <Image
+              source={Icons.closeIcon || Icons.leftIcon}
+              style={styles.previewCloseIcon}
+            />
+          </Pressable>
+        </>
+      );
+    },
+    [
+      controlsVisible,
+      previewImages.length,
+      previewMode,
+      selectedImages.length,
+      specialityDetailsList.length,
+      isLandscape,
+      styles,
+    ]
+  );
+
+  // Custom footer for image viewer
+  const ImageViewerFooter = useCallback(
+    ({ imageIndex }) => {
+      if (!controlsVisible) return null;
+
+      const item = previewImages[imageIndex];
+      if (!item?.title) return null;
+
+      return (
+        <View
+          style={[
+            styles.previewFooter,
+            isLandscape && styles.landscapePreviewFooter,
+          ]}
         >
-          <Image source={Icons.checkIcon} style={styles.checkIcon} />
+          <Text style={styles.previewFooterText}>{item.title}</Text>
+        </View>
+      );
+    },
+    [controlsVisible, previewImages, isLandscape, styles]
+  );
+
+  // Render individual item
+  const renderItem = useCallback(
+    ({ item, index }) => {
+      const isSelected = selectedImages.some(
+        (image) => image.mssub_id === item.mssub_id
+      );
+      const imageUrl = item?.mssub_image
+        ? `${baseURL}/uploads/medicine/${item.mssub_image}`
+        : DUMMY_IMAGE;
+
+      return (
+        <Pressable
+          style={[
+            styles.cart,
+            { width: cardWidth },
+            isSelected && styles.selectedBorder,
+          ]}
+          onPress={() => handleOpenPreview(item, index)}
+        >
+          <Image
+            source={{
+              uri: imageError[item.mssub_id] ? DUMMY_IMAGE : imageUrl,
+            }}
+            style={[
+              styles.categoryImg,
+              { width: cardWidth * 0.8, height: cardWidth * 0.8 },
+            ]}
+            resizeMode="cover"
+            onError={() => {
+              setImageError((prev) => ({
+                ...prev,
+                [item.mssub_id]: true,
+              }));
+            }}
+          />
+
+          {/* Check icon */}
+          <Pressable
+            style={[styles.checkIconBox, isSelected && styles.selectedBox]}
+            onPress={() => handleSelect(item)}
+          >
+            <Image source={Icons.checkIcon} style={styles.checkIcon} />
+          </Pressable>
+
+          <Text style={styles.itemNumberText} numberOfLines={1}>
+            {item.title || `Item ${index + 1}`}
+          </Text>
         </Pressable>
+      );
+    },
+    [
+      cardWidth,
+      selectedImages,
+      imageError,
+      DUMMY_IMAGE,
+      handleOpenPreview,
+      handleSelect,
+      styles,
+    ]
+  );
 
-        <Text style={styles.itemNumberText}>{item.ms_name}</Text>
-      </Pressable>
-    );
-  };
-
-  const medicineBySpecilityId = async (id) => {
+  // Fetch medicine data
+  const medicineBySpecilityId = useCallback(async (id) => {
     try {
       setLoading(true);
       const params = {
@@ -327,6 +573,8 @@ const SpecialityDetailsScreen = ({ navigation }) => {
       );
       if (response?.status === '1') {
         setSpecialityDetailsList(response?.result || []);
+      } else {
+        setSpecialityDetailsList([]);
       }
     } catch (error) {
       if (error?.offline) {
@@ -340,14 +588,27 @@ const SpecialityDetailsScreen = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    let get_id = async (medicine_id) => {
-      await medicineBySpecilityId(medicine_id);
-    };
-    get_id(medicine_id);
-  }, [medicine_id]);
+    if (medicine_id) {
+      medicineBySpecilityId(medicine_id);
+    }
+  }, [medicine_id, medicineBySpecilityId]);
+
+  // Filter data based on search
+  const filteredData = useMemo(() => {
+    if (!search.trim()) return specialityDetailsList;
+    return specialityDetailsList.filter((item) =>
+      item.mssub_name?.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search, specialityDetailsList]);
+
+  // Key extractor
+  const keyExtractor = useCallback(
+    (item) => item.ms_id?.toString() || item.mssub_id?.toString(),
+    []
+  );
 
   return (
     <ScreenLayout
@@ -366,42 +627,78 @@ const SpecialityDetailsScreen = ({ navigation }) => {
       <SearchList value={search} onChange={setSearch} />
 
       <FlatList
-        data={specialityDetailsList}
+        key={`flatlist-${numColumns}-${orientation}`}
+        data={filteredData}
         renderItem={renderItem}
-        keyExtractor={(item) => item.mssub_id.toString()}
+        keyExtractor={keyExtractor}
         numColumns={numColumns}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContainer}
+        showsVerticalScrollIndicator={false}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews={true}
       />
 
-      <ImageView
-        images={previewImages}
-        imageIndex={currentIndex}
+      {/* Custom Full-Screen Image Viewer */}
+      <Modal
         visible={visible}
-        onRequestClose={() => setVisible(false)}
-        swipeToCloseEnabled
-        presentationStyle="fullScreen"
-        backgroundColor="#000000EE"
-        renderImage={({ source }) => (
-          <Image source={source} style={styles.fullPreviewImage} />
-        )}
-        HeaderComponent={({ imageIndex }) => (
-          <>
-            <View style={styles.previewHeader}>
-              <Text style={styles.previewCountText}>
-                {imageIndex + 1}/{previewImages.length}
-              </Text>
-            </View>
+        transparent={false}
+        animationType="fade"
+        statusBarTranslucent={true}
+        onRequestClose={() => {
+          setVisible(false);
+          if (controlsTimeoutRef.current) {
+            clearTimeout(controlsTimeoutRef.current);
+          }
+        }}
+      >
+        <StatusBar hidden={true} />
+        <View style={styles.modalFullScreen}>
+          <View style={styles.imageContainer}>
+            <ImageViewerHeader imageIndex={currentIndex} />
 
-            <Pressable
-              onPress={() => setVisible(false)}
-              style={styles.previewCloseBox}
-            >
-              <Image source={Icons.leftIcon} style={styles.previewCloseIcon} />
-            </Pressable>
-          </>
-        )}
-      />
+            <FlatList
+              data={previewImages}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              initialScrollIndex={currentIndex}
+              getItemLayout={(data, index) => ({
+                length: Dimensions.get('window').width,
+                offset: Dimensions.get('window').width * index,
+                index,
+              })}
+              onScroll={(event) => {
+                const newIndex = Math.round(
+                  event.nativeEvent.contentOffset.x /
+                    Dimensions.get('window').width
+                );
+                if (newIndex !== currentIndex) {
+                  setCurrentIndex(newIndex);
+                  setControlsVisible(true);
+                  handleControlsAutoHide();
+                }
+              }}
+              renderItem={({ item }) => (
+                <TouchableWithoutFeedback onPress={toggleControls}>
+                  <View style={styles.fullScreenImageWrapper}>
+                    <Image
+                      source={{ uri: item.uri }}
+                      style={styles.fullScreenImage}
+                      resizeMode="contain"
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+
+            <ImageViewerFooter imageIndex={currentIndex} />
+          </View>
+        </View>
+      </Modal>
     </ScreenLayout>
   );
 };

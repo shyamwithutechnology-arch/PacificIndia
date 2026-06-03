@@ -5,4 +5,5 @@ export const ApiEndPoint = {
   getProfile: 'get-profile',
   stateList: 'state-list',
   cityList: 'city-list',
+  dailyVisit: 'list-daily-visit-by-member-id',
 };

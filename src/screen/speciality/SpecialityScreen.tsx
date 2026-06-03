@@ -19,14 +19,17 @@ import { useNavigation } from '@react-navigation/native';
 import { GET, POST_FORM } from '../../api/request';
 import { ApiEndPoint } from '../../api/endPoints';
 import { showToast } from '../../utils/toast';
+import { baseURL } from '../../component/api/axios';
 
 const SpecialityScreen = () => {
+  const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [speciality, setSpeciality] = useState([]);
   const navigation = useNavigation();
+  const [imageError, setImageError] = useState({});
 
   const handleBack = useCallback(() => {
     navigation.goBack();
@@ -84,10 +87,28 @@ const SpecialityScreen = () => {
   };
 
   const renderItem = ({ item }) => {
+    const imageUrl =
+      item?.ms_image && item.ms_image.startsWith('http')
+        ? item.ms_image
+        : item?.ms_image
+        ? `${baseURL}/uploads/doctor/${item.ms_image}`
+        : DUMMY_IMAGE;
+
     return (
       <Pressable style={styles.cart} onPress={() => handleNavigate(item)}>
         <View style={styles.categoryBox}>
-          <Image source={{ uri: item?.ms_image }} style={styles.categoryImg} />
+          <Image
+            source={{
+              uri: imageError[item.id] ? DUMMY_IMAGE : imageUrl,
+            }}
+            style={styles.categoryImg}
+            onError={() => {
+              setImageError((prev) => ({
+                ...prev,
+                [item.id]: true,
+              }));
+            }}
+          />
         </View>
         <Text style={styles.titleText}>{item?.ms_name}</Text>
       </Pressable>
@@ -97,6 +118,7 @@ const SpecialityScreen = () => {
   useEffect(() => {
     specialityList();
   }, []);
+
   return (
     <ScreenLayout
       header={
@@ -127,5 +149,4 @@ const SpecialityScreen = () => {
     </ScreenLayout>
   );
 };
-
 export default SpecialityScreen;

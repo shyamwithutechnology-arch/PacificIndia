@@ -1,12 +1,11 @@
 import axios from 'axios';
 import NetInfo from '@react-native-community/netinfo';
 import { showToast } from '../../utils/toast';
-export const baseURL = 'https://www.paperfast.in/api/';
-export const iconUrl = 'https://www.paperfast.in/';
+export const baseURL = 'https://thepacificindia.com';
 
 const api = axios.create({
   // baseURL: 'https://www.papers.withupartners.in/api/',
-  baseURL: 'https://www.paperfast.in/api/',
+  baseURL: 'https://thepacificindia.com/api/',
 
   timeout: 60000, // 20 second
   headers: {

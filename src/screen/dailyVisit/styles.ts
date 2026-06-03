@@ -34,15 +34,14 @@ export const createStyles = (theme: AppTheme) => {
       paddingVertical: tokens.spacing.smPlus,
       marginBottom: tokens.spacing.md,
       flexDirection: 'row',
-      // justifyContent: 'space-between',
     },
     titleText: {
       fontSize: tokens.fontSize.xs,
       color: tokens.colors.headingColor,
       fontFamily: Fonts.ManropeExtraBold,
-      textAlign: 'center',
       marginBottom: tokens.spacing.xs,
       width: scale(118),
+      marginLeft: tokens.spacing.xxs,
     },
     titledDecText: {
       fontSize: normalize(9),
@@ -78,7 +77,6 @@ export const createStyles = (theme: AppTheme) => {
     },
     searchTop: {
       marginTop: tokens.spacing.md,
-      // marginBottom: tokens.spacing.xs,
     },
 
     verificationBox: {
@@ -93,12 +91,16 @@ export const createStyles = (theme: AppTheme) => {
       marginLeft: tokens.spacing.md,
     },
     verificationImg: {
-      width: moderateScale(14),
-      height: moderateScale(14),
+      width: moderateScale(15),
+      height: moderateScale(15),
     },
     dateIcon: {
-      width: moderateScale(18),
-      height: moderateScale(18),
+      width: moderateScale(20),
+      height: moderateScale(20),
+    },
+    timeIcon: {
+      width: moderateScale(16.5),
+      height: moderateScale(16.5),
     },
     verifiedText: {
       fontSize: tokens.fontSize.xxs,
@@ -113,7 +115,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     locationText: {
       color: '#999999',
-      marginLeft: tokens.spacing.sm,
+      marginLeft: tokens.spacing.xs,
       width: scale(190),
     },
     rightArrowBox: {
@@ -134,6 +136,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     dateText: {
       marginTop: tokens.spacing.sm,
+      width: '40%',
     },
     doctorImgRow: {
       justifyContent: 'space-between',
@@ -145,15 +148,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     decLength: {
       width: scale(160),
-      // borderWidth: 1,
       marginTop: tokens.spacing.xxs,
     },
   });
 };
-// export const styles = StyleSheet.create({
-//   drawerIcon: {
-//     height: moderateScale(20),
-//     width: moderateScale(20),
-//   },
-//   categoryBox: {},
-// });
