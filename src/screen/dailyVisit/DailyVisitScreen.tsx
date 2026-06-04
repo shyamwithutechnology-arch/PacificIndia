@@ -28,6 +28,7 @@ const DailyVisitScreen = () => {
   const [seach, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [dailyVisit, setDailyVisit] = useState([]);
+  const [memberId, setMemberId] = useState([]);
   const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
 
   const navigation = useNavigation();
@@ -109,16 +110,6 @@ const DailyVisitScreen = () => {
     }
   };
 
-  useEffect(() => {
-    const getId = async () => {
-      const id = await localStorage.getItem(storageKeys.member_id);
-      if (id) {
-        specialityList(id);
-      }
-    };
-    getId();
-  }, []);
-
   const renderItem = ({ item }) => {
     // dailyr_comment
     return (
@@ -184,6 +175,23 @@ const DailyVisitScreen = () => {
     );
   }, [dailyVisit, seach]);
 
+  // useEffect(() => {
+  //   const getMemberId = async () => {
+  //     const Id = await localStorage.getItem(storageKeys.member_id);
+
+  //   };
+  //   getMemberId();
+  // }, []);
+  useEffect(() => {
+    const getId = async () => {
+      const id = await localStorage.getItem(storageKeys.member_id);
+      if (id) {
+        specialityList(id);
+        setMemberId(id);
+      }
+    };
+    getId();
+  }, []);
   return (
     <ScreenLayout
       header={
@@ -196,12 +204,17 @@ const DailyVisitScreen = () => {
       }
     >
       <Loader visible={loading} />
-      <SearchList
-        value={seach}
-        onChange={setSearch}
-        searchRowCustom={styles.searchTop}
-        searchPlaceHolder={'Add Your New Visit....'}
-      />
+      <View style={styles.rowSerach}>
+        <SearchList
+          value={seach}
+          onChange={setSearch}
+          searchRowCustom={styles.searchTop}
+          searchPlaceHolder={'Add Your New Visit....'}
+        />
+        <Pressable style={styles.addBox}>
+          <Text style={styles.addText}>Add</Text>
+        </Pressable>
+      </View>
 
       <FlatList
         data={filteredList}

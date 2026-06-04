@@ -6,4 +6,7 @@ export const ApiEndPoint = {
   stateList: 'state-list',
   cityList: 'city-list',
   dailyVisit: 'list-daily-visit-by-member-id',
+  listDoctor: 'list-doctor',
+  addDoctor: 'add-doctor',
+  detailsDoctor: 'details-doctor',
 };

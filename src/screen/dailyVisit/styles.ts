@@ -76,7 +76,9 @@ export const createStyles = (theme: AppTheme) => {
       paddingTop: tokens.spacing.smPlus,
     },
     searchTop: {
-      marginTop: tokens.spacing.md,
+      // marginTop: tokens.spacing.md,
+      width: '80%',
+      marginTop: 0,
     },
 
     verificationBox: {
@@ -99,8 +101,8 @@ export const createStyles = (theme: AppTheme) => {
       height: moderateScale(20),
     },
     timeIcon: {
-      width: moderateScale(16.5),
-      height: moderateScale(16.5),
+      width: moderateScale(14.2),
+      height: moderateScale(14.2),
     },
     verifiedText: {
       fontSize: tokens.fontSize.xxs,
@@ -134,6 +136,7 @@ export const createStyles = (theme: AppTheme) => {
       flexDirection: 'row',
       alignItems: 'center',
     },
+
     dateText: {
       marginTop: tokens.spacing.sm,
       width: '40%',
@@ -149,6 +152,25 @@ export const createStyles = (theme: AppTheme) => {
     decLength: {
       width: scale(160),
       marginTop: tokens.spacing.xxs,
+    },
+    addBox: {
+      height: verticalScale(30),
+      width: scale(50),
+      backgroundColor: tokens.colors.primary,
+      borderRadius: tokens.radius.sm,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: tokens.spacing.sm,
+    },
+    rowSerach: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      // borderWidth: 1,
+      marginTop: tokens.spacing.smPlus,
+    },
+    addText: {
+      fontSize: tokens.fontSize.md,
+      color: tokens.colors.white,
     },
   });
 };

@@ -8,12 +8,15 @@ import { Provider } from 'react-redux';
 import RootNavigator from './src/navigation/stacks/RootStack';
 import HomeScreen from './src/screen/home/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/utils/toastConfig';
 
 const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <RootNavigator />
+        <Toast config={toastConfig} />
       </NavigationContainer>
     </SafeAreaProvider>
     // <SafeAreaProvider style={styles.container}>

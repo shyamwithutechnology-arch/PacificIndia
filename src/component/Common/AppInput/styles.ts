@@ -3,18 +3,26 @@ import { AppTheme } from '../../../hooks/useAppTheme';
 import { Fonts, fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { tokens, scale, moderateScale } = theme;
+  const { tokens, scale, moderateScale, verticalScale } = theme;
   return StyleSheet.create({
     inputBox: {
-      paddingVertical: tokens.spacing.xxs,
+      // paddingVertical: tokens.spacing.xxs,
+      // width: '100%',
+      // borderWidth: 0.5,
+      // borderColor: tokens.colors.primary,
+      // alignSelf: 'center',
+      // borderRadius: tokens.spacing.smPlus,
+      // flexDirection: 'row',
+      // alignItems: 'center',
+      // justifyContent: 'space-between',
+      // paddingHorizontal: tokens.spacing.sm,
+      height: verticalScale(40),
       width: '100%',
       borderWidth: 0.5,
       borderColor: tokens.colors.primary,
-      alignSelf: 'center',
       borderRadius: tokens.spacing.smPlus,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
       paddingHorizontal: tokens.spacing.sm,
     },
     inputContainer: {
@@ -25,12 +33,13 @@ export const createStyles = (theme: AppTheme) => {
       flex: 1,
     },
     leftIcon: {
-      height: moderateScale(20),
-      width: moderateScale(20),
+      height: moderateScale(1),
+      width: moderateScale(1),
     },
     leftContent: {
       flexDirection: 'row',
       alignItems: 'center',
+      // borderWidth: 1,
     },
   });
 };

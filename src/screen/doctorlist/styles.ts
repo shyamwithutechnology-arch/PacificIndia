@@ -31,16 +31,16 @@ export const createStyles = (theme: AppTheme) => {
       borderRadius: tokens.radius.md,
       borderWidth: 1,
       paddingHorizontal: tokens.spacing.xxs,
-      paddingVertical: tokens.spacing.smPlus,
+      paddingVertical: tokens.spacing.sm,
       marginBottom: tokens.spacing.md,
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'space-around',
     },
     titleText: {
       fontSize: tokens.fontSize.xs,
       color: tokens.colors.headingColor,
       fontFamily: Fonts.ManropeExtraBold,
-      textAlign: 'center',
+      // textAlign: 'center',
       marginBottom: tokens.spacing.xs,
       width: scale(118),
     },
@@ -52,8 +52,8 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: tokens.spacing.xxs,
     },
     categoryImg: {
-      height: moderateScale(100),
-      width: moderateScale(100),
+      height: moderateScale(60),
+      width: moderateScale(60),
       marginLeft: tokens.spacing.sm,
     },
     row: {
@@ -77,7 +77,8 @@ export const createStyles = (theme: AppTheme) => {
       paddingTop: tokens.spacing.smPlus,
     },
     searchTop: {
-      marginTop: tokens.spacing.md,
+      marginTop: 0,
+      width: '75.5%',
       // marginBottom: tokens.spacing.xs,
     },
 
@@ -126,20 +127,50 @@ export const createStyles = (theme: AppTheme) => {
     },
     mapRow: {
       flexDirection: 'row',
+      // borderWidth: 1,
       alignItems: 'center',
     },
     doctorImgRow: {
       justifyContent: 'space-between',
       marginRight: tokens.spacing.md,
-      marginTop: tokens.spacing.mdPlus,
+      marginTop: tokens.spacing.xs,
     },
     mainCardInner: {
+      // marginHorizontal: 0,
       marginHorizontal: tokens.spacing.sm,
+      // borderWidth: 1,
     },
     decLength: {
       width: scale(160),
       // borderWidth: 1,
       marginTop: tokens.spacing.xxs,
+    },
+
+    addBox: {
+      height: verticalScale(33),
+      width: scale(80),
+      backgroundColor: tokens.colors.primary,
+      borderRadius: tokens.radius.lg,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: tokens.spacing.sm,
+      flexDirection: 'row',
+      paddingHorizontal: tokens.spacing.sm,
+    },
+    rowSerach: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      // borderWidth: 1,
+      marginTop: tokens.spacing.smPlus,
+    },
+    addText: {
+      fontSize: tokens.fontSize.md,
+      color: tokens.colors.white,
+      fontFamily: Fonts.ManropeBold,
+    },
+    addIcon: {
+      height: moderateScale(16),
+      width: moderateScale(16),
     },
   });
 };

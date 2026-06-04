@@ -25,9 +25,13 @@ export const Icons = {
   rightVerticalArrow: require('./right_vertical_arrow.png'),
   callFillIcon: require('./call_fill_icon.png'),
   emailIcon: require('./email_icon.png'),
+  emailOutlineIcon: require('./email_outline_icon.png'),
   dateIcon: require('./date_icon.png'),
   namecon: require('./name_icon.png'),
   mapFillIcon: require('./map_fill_icon.png'),
+  mapIcon: require('./map_icon.png'),
   checkIcon: require('./check.png'),
   clockIcon: require('./clock.png'),
+  addIcon: require('./add_icon.png'),
+  hospitalIcon: require('./hospital_icon.png'),
 };
