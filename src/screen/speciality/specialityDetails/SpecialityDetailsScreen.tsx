@@ -298,6 +298,7 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   const { width, height } = useWindowDimensions();
   const [orientation, setOrientation] = useState('PORTRAIT');
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [selected, setSelected] = useState('all');
   const controlsTimeoutRef = useRef(null);
 
   // Detect orientation changes
@@ -333,6 +334,14 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   const [previewMode, setPreviewMode] = useState('all'); // 'selected' or 'unselected'
 
   const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
+
+  const specialityData = [
+    { id: 'all', title: 'All' },
+    { id: 'ortho', title: 'Ortho' },
+    { id: 'gynae', title: 'Gynaec' },
+    { id: 'paid', title: 'Paid' },
+    { id: 'general', title: 'General Physician' },
+  ];
 
   // Dynamic card width calculation
   const cardWidth = useMemo(() => {
@@ -536,16 +545,20 @@ const SpecialityDetailsScreen = ({ navigation }) => {
           />
 
           {/* Check icon */}
-          <Pressable
-            style={[styles.checkIconBox, isSelected && styles.selectedBox]}
-            onPress={() => handleSelect(item)}
-          >
-            <Image source={Icons.checkIcon} style={styles.checkIcon} />
-          </Pressable>
+          <View style={[styles.checkBoxBg, isSelected && styles.selectedCheck]}>
+            <Pressable
+              style={[styles.checkIconBox, isSelected && styles.selectedBox]}
+              onPress={() => handleSelect(item)}
+            >
+              <Image source={Icons.checkIcon} style={styles.checkIcon} />
+            </Pressable>
+          </View>
 
-          <Text style={styles.itemNumberText} numberOfLines={1}>
-            {item.title || `Item ${index + 1}`}
-          </Text>
+          <View style={styles.itemBox}>
+            <Text style={styles.itemNumberText} numberOfLines={1}>
+              {item.title || `Item ${index + 1}`}
+            </Text>
+          </View>
         </Pressable>
       );
     },
@@ -590,6 +603,25 @@ const SpecialityDetailsScreen = ({ navigation }) => {
     }
   }, []);
 
+  const handerItemRender = ({ item }) => {
+    const isSelected = selected === item?.id;
+    return (
+      <Pressable
+        onPress={() => setSelected(item?.id)}
+        style={[styles.headerItemBox, isSelected && styles.headerSelectBox]}
+      >
+        <Text
+          style={[
+            styles.headerTitleText,
+            isSelected && styles.headerSelectTitle,
+          ]}
+        >
+          {item?.title}
+        </Text>
+      </Pressable>
+    );
+  };
+
   useEffect(() => {
     if (medicine_id) {
       medicineBySpecilityId(medicine_id);
@@ -633,6 +665,16 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         keyExtractor={keyExtractor}
         numColumns={numColumns}
         columnWrapperStyle={styles.row}
+        ListHeaderComponent={() => (
+          <FlatList
+            horizontal
+            data={specialityData}
+            keyExtractor={(item) => item?.id.toString()}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.headerListContainer}
+            renderItem={handerItemRender}
+          />
+        )}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}

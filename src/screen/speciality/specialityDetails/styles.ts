@@ -271,8 +271,8 @@ export const createStyles = (theme: AppTheme) => {
       borderRadius: tokens.radius.md,
       alignItems: 'center',
       justifyContent: 'center',
-      paddingHorizontal: tokens.spacing.xxs,
-      paddingVertical: tokens.spacing.sm,
+      paddingHorizontal: scale(1),
+      paddingTop: tokens.spacing.sm,
       marginBottom: tokens.spacing.md,
     },
     titleText: {
@@ -321,14 +321,15 @@ export const createStyles = (theme: AppTheme) => {
       width: moderateScale(270),
     },
     headerItemBox: {
+      minHeight: verticalScale(30),
       paddingHorizontal: tokens.spacing.mdPlus,
-      paddingVertical: tokens.spacing.xs,
-      alignSelf: 'flex-start',
       borderRadius: scale(5),
       marginRight: tokens.spacing.md,
       borderWidth: 1,
-      backgroundColor: '#e3e3e3',
-      borderColor: '#DDDDDD',
+      borderColor: tokens.colors.gray,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: tokens.spacing.md,
     },
     headerListContainer: {
       alignSelf: 'flex-start',
@@ -336,9 +337,11 @@ export const createStyles = (theme: AppTheme) => {
     },
     headerSelectBox: {
       backgroundColor: tokens.colors.primary,
+      borderColor: tokens.colors.primary,
     },
     headerTitleText: {
       fontSize: tokens.fontSize.sm,
+      lineHeight: moderateScale(24),
       color: '#676767',
       fontFamily: Fonts.ManropeMedium,
     },
@@ -375,7 +378,7 @@ export const createStyles = (theme: AppTheme) => {
     checkIconBox: {
       position: 'absolute',
       top: tokens.spacing.xs,
-      right: tokens.spacing.xs,
+      left: tokens.spacing.sm,
       height: moderateScale(24),
       width: moderateScale(24),
       borderRadius: tokens.radius.sm,
@@ -383,11 +386,28 @@ export const createStyles = (theme: AppTheme) => {
       alignItems: 'center',
       justifyContent: 'center',
     },
-
+    checkBoxBg: {
+      height: tokens.spacing.xl,
+      width: scale(90),
+      backgroundColor: '#3ab4e9',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      borderBottomRightRadius: tokens.radius.mdPlus,
+      borderTopLeftRadius: tokens.radius.md,
+    },
     checkIcon: {
       height: moderateScale(16),
       width: moderateScale(16),
       tintColor: tokens.colors.white,
+    },
+    itemBox: {
+      backgroundColor: '#f1f1f1',
+      width: '100%',
+      borderBottomLeftRadius: tokens.radius.md,
+      borderBottomRightRadius: tokens.radius.md,
+      elevation: 10,
+      shadowColor: '#909090',
     },
 
     // Full-screen modal styles
@@ -492,11 +512,17 @@ export const createStyles = (theme: AppTheme) => {
       backgroundColor: tokens.colors.green,
     },
 
+    selectedCheck: {
+      borderTopLeftRadius: tokens.radius.sm,
+    },
+
     itemNumberText: {
       fontSize: tokens.fontSize.sm,
       textAlign: 'center',
       marginTop: tokens.spacing.xxs,
       marginBottom: tokens.spacing.xxs,
+      color: '#424141',
+      fontFamily: Fonts.ManropeSemiBold,
     },
 
     // Footer styles
