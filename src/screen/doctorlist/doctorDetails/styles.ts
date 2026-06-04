@@ -40,8 +40,8 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: tokens.spacing.xxs,
     },
     idText: {
-      color: '#999999',
-      fontSize: normalize(8),
+      color: '#676565',
+      fontSize: normalize(10),
     },
     docImg: {
       height: moderateScale(55),

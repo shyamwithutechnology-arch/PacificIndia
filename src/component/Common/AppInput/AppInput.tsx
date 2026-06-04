@@ -15,6 +15,7 @@ const AppInput = ({
   handleChange,
   keyboardType = 'default',
   maxLength = null,
+  leftIcontintColor,
 }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
@@ -27,6 +28,7 @@ const AppInput = ({
             source={leftIcon}
             style={[styles.leftIcon, leftIconStyle]}
             resizeMode="contain"
+            tintColor={leftIcontintColor}
           />
         )}
         <TextInput
@@ -39,7 +41,7 @@ const AppInput = ({
           onChangeText={handleChange}
           placeholderTextColor={theme.tokens.colors.InputText}
           multiline={multiline}
-          keyboardType={'number-pad'}
+          keyboardType={keyboardType}
           maxLength={maxLength}
         />
         {rightIcon && (

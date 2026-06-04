@@ -14,6 +14,7 @@ const CustomDropDown = ({
   dropDownContainer,
   leftIconStyle,
   optionStyle,
+  dropdownPosition,
 }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
@@ -57,6 +58,7 @@ const CustomDropDown = ({
         placeholderStyle={styles.placeholder}
         selectedTextStyle={styles.selectedText}
         containerStyle={styles.containerDropdown}
+        dropdownPosition={dropdownPosition}
       />
     </View>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -8,17 +8,33 @@ import {
   Text,
   View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { createStyles } from './styles';
 import { useAppTheme } from '../../../hooks/useAppTheme';
-import { ScreenLayout, AppHeader } from '../../../component';
+import { ScreenLayout, AppHeader, Loader } from '../../../component';
 import { Icons } from '../../../assets/icons';
 import { Images } from '../../../assets/images';
+import { showToast } from '../../../utils/toast';
+import { localStorage, storageKeys } from '../../../storage/storage';
+import { POST_FORM } from '../../../api/request';
+import { ApiEndPoint } from '../../../api/endPoints';
 
-const DoctorDetailsScreen = () => {
+const DoctorDetailsScreen = ({ navigation }) => {
+  const route = useRoute();
+  const { dr_id } = route?.params;
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [seach, setSearch] = useState('');
+  const [doctorList, setDoctorList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleGoback = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const handleNotification = useCallback(() => {
+    showToast('success', 'Success', 'Comming soon');
+  }, []);
 
   const information = [
     {
@@ -89,6 +105,39 @@ const DoctorDetailsScreen = () => {
       </View>
     );
   };
+
+  const doctorDetails = async (id: string) => {
+    try {
+      setLoading(true);
+      const response = await POST_FORM(ApiEndPoint.detailsDoctor, {
+        dr_id: id,
+      });
+      if (response?.status === '1') {
+        setDoctorList(response?.result[0] || []);
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const getId = async () => {
+      if (dr_id) {
+        doctorDetails(dr_id);
+      }
+    };
+    getId();
+  }, [route.params]);
+
   return (
     <ScreenLayout
       header={
@@ -96,9 +145,12 @@ const DoctorDetailsScreen = () => {
           title="Doctor Details"
           search={seach}
           leftIcon={Icons.leftIcon}
+          onPress={handleGoback}
+          notificationPress={handleNotification}
         />
       }
     >
+      <Loader visible={loading} />
       <View style={styles.card}>
         <View style={styles.headerCardInner}>
           <View style={styles.profileRow}>
@@ -109,10 +161,10 @@ const DoctorDetailsScreen = () => {
             />
             <View>
               <View>
-                <Text style={styles.titleText}>Dr. Rahul Sharma</Text>
+                <Text style={styles.titleText}>{doctorList?.dr_name}</Text>
                 <Text style={styles.titleDecText}>Senior Medical Officer</Text>
                 <Text style={[styles.titleDecText, styles.idText]}>
-                  ID : DOC125689
+                  ID : {doctorList?.dr_id}
                 </Text>
               </View>
             </View>
@@ -135,9 +187,7 @@ const DoctorDetailsScreen = () => {
               />
             </View>
 
-            <Text style={styles.mailText}>
-              Rahul.sharma@pacificindia.inaaaaa
-            </Text>
+            <Text style={styles.mailText}>{doctorList?.dr_email}</Text>
           </View>
 
           <View style={[styles.profileRow, styles.mailRow]}>
@@ -149,7 +199,7 @@ const DoctorDetailsScreen = () => {
               />
             </View>
 
-            <Text style={styles.mailText}>+91-98765-41239</Text>
+            <Text style={styles.mailText}>+91-{doctorList?.dr_phone}</Text>
           </View>
         </View>
       </View>
@@ -186,6 +236,7 @@ const DoctorDetailsScreen = () => {
         <Pressable style={styles.doctorMedicineBtn}>
           <Text style={styles.doctorText}>Doctor Medicine</Text>
         </Pressable>
+
         <Pressable style={styles.doctorMedicineBtn}>
           <Text style={styles.doctorText}> Medicine</Text>
         </Pressable>

@@ -9,10 +9,10 @@ export const createStyles = (theme: AppTheme) => {
       width: '100%',
     },
     dropdown: {
-      height: verticalScale(43),
+      height: verticalScale(39),
       borderColor: tokens.colors.lightPrimary,
-      borderWidth: 1,
-      borderRadius: tokens.radius.md,
+      borderWidth: 0.5,
+      borderRadius: tokens.radius.lg,
       paddingHorizontal: tokens.spacing.sm,
     },
     placeholder: {
@@ -36,7 +36,7 @@ export const createStyles = (theme: AppTheme) => {
       paddingVertical: tokens.spacing.sm,
       paddingHorizontal: tokens.spacing.md,
       borderWidth: 1,
-      marginTop: tokens.spacing.sm,
+      marginVertical: tokens.spacing.xsPlus,
       borderRadius: scale(6),
       borderColor: '#d6d4d4',
       // backgroundColor: 'red',
@@ -45,7 +45,7 @@ export const createStyles = (theme: AppTheme) => {
       backgroundColor: tokens.colors.primary,
     },
     containerDropdown: {
-      backgroundColor: '#fff',
+      backgroundColor: '#e1e1e1',
     },
     itemText: {
       fontSize: tokens.fontSize.sm,

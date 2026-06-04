@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ScreenLayout } from '../../component';
+import { Loader, ScreenLayout } from '../../component';
 import { Icons } from '../../assets/icons';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import AppHeader from '../../component/AppHeader/AppHeader';
@@ -16,19 +16,24 @@ import { Images } from '../../assets/images';
 import { SearchList } from '../../component/searchList/SearchList';
 import { useNavigation } from '@react-navigation/native';
 import { createStyles } from './styles';
+import { POST_FORM } from '../../api/request';
+import { ApiEndPoint } from '../../api/endPoints';
+import { showToast } from '../../utils/toast';
+import { localStorage, storageKeys } from '../../storage/storage';
 
-const DoctorlistScreen = () => {
+const DoctorlistScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [seach, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [doctorList, setDoctorList] = useState([]);
 
   // const handleNavigate = () => {
   //   navigation.navigate('SpecialityStack', { screen: 'SpecialityDetails' });
   // };
-  const navigation = useNavigation();
 
-  const handleNavigate = () => {
-    navigation.navigate('DoctorDetails');
+  const handleNavigate = (id) => {
+    navigation.navigate('DoctorDetails', { dr_id: id });
   };
 
   const category = [
@@ -83,18 +88,25 @@ const DoctorlistScreen = () => {
     { id: 4, image: Images.bannerImg },
   ];
 
+  const handleGoback = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   const renderItem = ({ item }) => {
     return (
-      <Pressable style={styles.cart} onPress={handleNavigate}>
+      <Pressable
+        style={styles.cart}
+        onPress={() => handleNavigate(item?.dr_id)}
+      >
         <Image
-          source={item?.img}
+          source={{ uri: item?.dr_hospital_image }}
           style={styles.categoryImg}
           borderRadius={theme.tokens.radius.md}
         />
         <View style={styles.mainCardInner}>
           <View>
             <View style={styles.mapRow}>
-              <Text style={styles.titleText}>{item?.name}</Text>
+              <Text style={styles.titleText}>{item?.dr_name}</Text>
               <View style={styles.verificationBox}>
                 <Image
                   source={Icons.verificationIcon}
@@ -106,7 +118,7 @@ const DoctorlistScreen = () => {
             </View>
 
             <Text style={[styles.titleDecText, styles.decLength]}>
-              {item?.dec}
+              {item?.dr_speciality_name}
             </Text>
           </View>
 
@@ -118,7 +130,7 @@ const DoctorlistScreen = () => {
                 resizeMode="contain"
               />
               <Text style={[styles.titleDecText, styles.locationText]}>
-                {item?.location}
+                {item?.dr_address}
               </Text>
             </View>
 
@@ -135,6 +147,39 @@ const DoctorlistScreen = () => {
     );
   };
 
+  const fetchDoctorList = async (id: string) => {
+    try {
+      setLoading(true);
+      const response = await POST_FORM(ApiEndPoint.listDoctor, {
+        member_id: id,
+      });
+      if (response?.status === '1') {
+        setDoctorList(response?.result || []);
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const getId = async () => {
+      const id = await localStorage.getItem(storageKeys.member_id);
+      if (id) {
+        fetchDoctorList(id);
+      }
+    };
+    getId();
+  }, []);
+
   return (
     <ScreenLayout
       header={
@@ -142,18 +187,33 @@ const DoctorlistScreen = () => {
           title="Doctors List"
           search={seach}
           leftIcon={Icons.leftIcon}
+          onPress={handleGoback}
         />
       }
     >
-      <SearchList
-        value={seach}
-        onChange={setSearch}
-        searchRowCustom={styles.searchTop}
-        searchPlaceHolder="Search Doctors..."
-      />
+      <View style={styles.rowSerach}>
+        <SearchList
+          value={seach}
+          onChange={setSearch}
+          searchRowCustom={styles.searchTop}
+          searchPlaceHolder={'Add Your New Visit....'}
+        />
+        <Pressable
+          style={styles.addBox}
+          onPress={() => navigation.navigate('AddDoctor')}
+        >
+          <Image
+            source={Icons.addIcon}
+            style={styles.addIcon}
+            resizeMode="contain"
+          />
+          <Text style={styles.addText}> Add</Text>
+        </Pressable>
+      </View>
 
+      <Loader visible={loading} />
       <FlatList
-        data={category}
+        data={doctorList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}

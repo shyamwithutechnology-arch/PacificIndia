@@ -134,7 +134,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import CheckIcon from 'react-native-vector-icons/FontAwesome6';
 import CrossIcon from 'react-native-vector-icons/Entypo';
-import { useAppTheme } from '../hooks/useAppTheme';
+import { AppTheme, useAppTheme } from '../hooks/useAppTheme';
 import { Fonts } from '../theme';
 
 interface ToastProps {
@@ -222,7 +222,7 @@ export const toastConfig = {
   ),
 };
 
-const createStyles = (theme: any) => {
+const createStyles = (theme: AppTheme) => {
   const { moderateScale, tokens } = theme;
   return StyleSheet.create({
     toast: {
@@ -277,7 +277,7 @@ const createStyles = (theme: any) => {
 
     text1: {
       fontFamily: Fonts.ManropeBold,
-      color: tokens.Colors.green,
+      color: tokens.colors.green,
       fontSize: tokens.fontSize.lg,
     },
 
@@ -291,7 +291,7 @@ const createStyles = (theme: any) => {
     crossBox: {
       height: moderateScale(26),
       width: moderateScale(26),
-      backgroundColor: tokens.Colors.white,
+      backgroundColor: tokens.colors.white,
       borderRadius: moderateScale(4),
       alignItems: 'center',
       justifyContent: 'center',
