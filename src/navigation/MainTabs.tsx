@@ -10,6 +10,11 @@ import NotificationScreen from '../screen/notification/NotificationScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SpecialityStack from './stacks/SpecialityStack';
 import SupportScreen from '../screen/support/SupportScreen';
+import DailyVisitScreen from '../screen/dailyVisit/DailyVisitScreen';
+import DoctorDetailsScreen from '../screen/doctorlist/doctorDetails/DoctorDetailsScreen';
+import DoctorlistScreen from '../screen/doctorlist/DoctorlistScreen';
+import DoctorsStack from './stacks/DoctorsStack';
+import DailyVisitStack from './stacks/DailyVisitStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,6 +61,7 @@ const MainTabs = () => {
 
   return (
     <Tab.Navigator
+      initialRouteName="HomeTab"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -88,15 +94,15 @@ const MainTabs = () => {
       />
 
       <Tab.Screen
-        name="Support"
-        component={SupportScreen}
+        name="DailyVisitStack"
+        component={DailyVisitStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              activeIcon={Icons.supportIcon}
-              inactiveIcon={Icons.supportIcon}
-              label="Support"
+              activeIcon={Icons.healthcareIcon}
+              inactiveIcon={Icons.healthcareIcon}
+              label="DailyVisit"
             />
           ),
         }}
@@ -117,15 +123,15 @@ const MainTabs = () => {
         }}
       />
       <Tab.Screen
-        name="Notification"
-        component={NotificationScreen}
+        name="Doctorlist"
+        component={DoctorsStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              activeIcon={Icons.footerNotificationIcon}
-              inactiveIcon={Icons.footerNotificationIcon}
-              label="Notification"
+              activeIcon={Icons.doctorListIcon}
+              inactiveIcon={Icons.doctorListIcon}
+              label="Doctorlist"
             />
           ),
         }}

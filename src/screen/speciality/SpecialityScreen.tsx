@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -20,6 +20,7 @@ import { GET, POST_FORM } from '../../api/request';
 import { ApiEndPoint } from '../../api/endPoints';
 import { showToast } from '../../utils/toast';
 import { baseURL } from '../../component/api/axios';
+import AppBackHandler from '../../component/backhandler/AppBackHandler';
 
 const SpecialityScreen = () => {
   const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
@@ -32,11 +33,14 @@ const SpecialityScreen = () => {
   const [imageError, setImageError] = useState({});
 
   const handleBack = useCallback(() => {
-    navigation.goBack();
+    navigation.navigate('HomeTab', { screen: 'Home' });
   }, [navigation]);
 
   const handleNavigate = (item) => {
-    navigation.navigate('SpecialityDetails', { medicine_id: item?.ms_id });
+    navigation.navigate('SpecialityDetails', {
+      medicine_id: item?.ms_id,
+      specialityName: item?.ms_name,
+    });
   };
 
   const category = [
@@ -115,6 +119,15 @@ const SpecialityScreen = () => {
     );
   };
 
+  const filteredData = useMemo(() => {
+    if (!search?.trim()) {
+      return speciality;
+    }
+    return speciality?.filter((item) =>
+      item?.ms_name?.toLowerCase().includes(search?.toLocaleLowerCase())
+    );
+  }, [search, speciality]);
+
   useEffect(() => {
     specialityList();
   }, []);
@@ -131,6 +144,8 @@ const SpecialityScreen = () => {
       }
     >
       <Loader visible={loading} />
+      <AppBackHandler screenName={'HomeTab'} nestedScreen="Home" />
+
       <SearchList
         value={search}
         onChange={setSearch}
@@ -138,9 +153,9 @@ const SpecialityScreen = () => {
       />
 
       <FlatList
-        data={speciality}
+        data={filteredData}
         renderItem={renderItem}
-        keyExtractor={(item) => item.ms_id.toString()} // Good practice: Convert ID to a string
+        keyExtractor={(item) => item.ms_id.toString()}
         numColumns={3}
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}

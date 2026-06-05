@@ -1,261 +1,3 @@
-// import React, { useEffect, useMemo, useState } from 'react';
-// import {
-//   Alert,
-//   FlatList,
-//   Image,
-//   Pressable,
-//   Text,
-//   useWindowDimensions,
-//   View,
-// } from 'react-native';
-// import ImageView from 'react-native-image-viewing';
-// import { useRoute } from '@react-navigation/native';
-// import { createStyles } from './styles';
-// import { Images } from '../../../assets/images';
-// import { Loader, ScreenLayout, SearchList } from '../../../component';
-// import AppHeader from '../../../component/AppHeader/AppHeader';
-// import { useAppTheme } from '../../../hooks/useAppTheme';
-// import { Icons } from '../../../assets/icons';
-// import { showToast } from '../../../utils/toast';
-// import { ApiEndPoint } from '../../../api/endPoints';
-// import { POST_FORM } from '../../../api/request';
-// import { baseURL } from '../../../component/api/axios';
-
-// const SpecialityDetailsScreen = ({ navigation }) => {
-//   const theme = useAppTheme();
-//   const styles = createStyles(theme);
-//   const route = useRoute();
-//   const { medicine_id } = route?.params || {};
-//   const { width, height } = useWindowDimensions();
-//   const isLandscape = width > height;
-//   const numColumns = theme.isTablet
-//     ? isLandscape
-//       ? 5
-//       : 3
-//     : isLandscape
-//     ? 4
-//     : 2;
-//   const [search, setSearch] = useState('');
-//   const [selectedImages, setSelectedImages] = useState([]);
-//   const [previewImages, setPreviewImages] = useState([]);
-//   const [visible, setVisible] = useState(false);
-//   const [currentIndex, setCurrentIndex] = useState(0);
-//   const [loading, setLoading] = useState(false);
-//   const [specialityDetailsList, setSpecialityDetailsList] = useState([]);
-//   const [imageError, setImageError] = useState({});
-//   const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
-//   const cardWidth =
-//     (width - theme.tokens.spacing.lg * (numColumns + 1)) / numColumns;
-//   const category = [
-//     {
-//       id: 1,
-//       title: '1',
-//       img: Images.bannerImg,
-//     },
-//     {
-//       id: 2,
-//       title: '2',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 3,
-//       title: '3',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 4,
-//       title: '4',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 5,
-//       title: '5',
-//       img: Images.madicinImg,
-//     },
-//   ];
-
-//   // image select / unselect
-// const handleSelect = (item) => {
-//   const exists = selectedImages.some((image) => image.ms_id === item.ms_id);
-
-//   if (exists) {
-//     setSelectedImages((prev) =>
-//       prev.filter((image) => image.ms_id !== item.ms_id)
-//     );
-//   } else {
-//     setSelectedImages((prev) => [...prev, item]);
-//   }
-// };
-
-//   const handleOpenPreview = (item) => {
-//     const isSelected = selectedImages.some(
-//       (image) => image.mssub_id === item.mssub_id
-//     );
-
-//     const imagesToPreview = isSelected
-//       ? selectedImages
-//       : specialityDetailsList.filter(
-//           (image) =>
-//             !selectedImages.some(
-//               (selected) => selected.mssub_id === image.mssub_id
-//             )
-//         );
-
-//     const imageIndex = imagesToPreview.findIndex(
-//       (image) => image.mssub_id === item.mssub_id
-//     );
-
-//     setPreviewImages(
-//       imagesToPreview.map((image) => ({
-//         uri: image?.mssub_image
-//           ? `${baseURL}/uploads/medicine/${image.mssub_image}`
-//           : DUMMY_IMAGE,
-//       }))
-//     );
-
-//     setCurrentIndex(imageIndex >= 0 ? imageIndex : 0);
-//     setVisible(true);
-//   };
-
-//   const renderItem = ({ item, index }) => {
-//     const isSelected = selectedImages.some(
-//       (image) => image.mssub_id === item.mssub_id
-//     );
-//     const imageUrl = item?.mssub_image
-//       ? `${baseURL}/uploads/medicine/${item.mssub_image}`
-//       : DUMMY_IMAGE;
-
-//     return (
-//       <Pressable
-//         style={[
-//           styles.cart,
-//           { width: cardWidth },
-//           isSelected && styles.selectedBorder,
-//         ]}
-//         onPress={() => handleOpenPreview(item, index)}
-//       >
-//         <Image
-//           source={{
-//             uri: imageError[item.mssub_id] ? DUMMY_IMAGE : imageUrl,
-//           }}
-//           style={styles.categoryImg}
-//           resizeMode="cover"
-//           onError={() => {
-//             setImageError((prev) => ({
-//               ...prev,
-//               [item.mssub_id]: true,
-//             }));
-//           }}
-//         />
-
-//         {/* check icon */}
-//         <Pressable
-//           style={[styles.checkIconBox, isSelected && styles.selectedBox]}
-//           onPress={() => handleSelect(item)}
-//         >
-//           <Image source={Icons.checkIcon} style={styles.checkIcon} />
-//         </Pressable>
-
-//         <Text style={styles.itemNumberText}>{item.title}</Text>
-//       </Pressable>
-//     );
-//   };
-
-//   const medicineBySpecilityId = async (id) => {
-//     try {
-//       setLoading(true);
-//       const params = {
-//         ms_id: id,
-//       };
-//       const response = await POST_FORM(
-//         ApiEndPoint.medicineBySpecilityId,
-//         params
-//       );
-//       if (response?.status === '1') {
-//         setSpecialityDetailsList(response?.result || []);
-//       }
-//     } catch (error) {
-//       if (error?.offline) {
-//         return;
-//       }
-//       showToast(
-//         'error',
-//         'Error',
-//         error?.msg || 'Something went wrong. Please try again.'
-//       );
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     let get_id = async (medicine_id) => {
-//       await medicineBySpecilityId(medicine_id);
-//     };
-//     get_id(medicine_id);
-//   }, [medicine_id]);
-
-//   return (
-//     <ScreenLayout
-//       header={
-//         <AppHeader
-//           title="Speciality Detail"
-//           leftIcon={Icons.leftIcon}
-//           onPress={() => navigation.goBack()}
-//         />
-//       }
-//       paddingHorizontal={0}
-//       innerContainer={styles.innerContainer}
-//     >
-//       <Loader visible={loading} />
-
-//       <SearchList value={search} onChange={setSearch} />
-
-//       <FlatList
-//         key={`${width}-${height}`}
-//         data={specialityDetailsList}
-//         renderItem={renderItem}
-//         keyExtractor={(item) => item.ms_id.toString()}
-//         numColumns={numColumns}
-//         columnWrapperStyle={styles.row}
-//         contentContainerStyle={styles.listContainer}
-//         showVerticalScrollIndicator={false}
-//       />
-
-//       <ImageView
-//         images={previewImages}
-//         imageIndex={currentIndex}
-//         visible={visible}
-//         onRequestClose={() => setVisible(false)}
-//         swipeToCloseEnabled
-//         presentationStyle="fullScreen"
-//         backgroundColor="#000000EE"
-//         renderImage={({ source }) => (
-//           <Image source={source} style={styles.fullPreviewImage} />
-//         )}
-//         HeaderComponent={({ imageIndex }) => (
-//           <>
-//             <View style={styles.previewHeader}>
-//               <Text style={styles.previewCountText}>
-//                 {imageIndex + 1}/{previewImages.length}
-//               </Text>
-//             </View>
-
-//             <Pressable
-//               onPress={() => setVisible(false)}
-//               style={styles.previewCloseBox}
-//             >
-//               <Image source={Icons.leftIcon} style={styles.previewCloseIcon} />
-//             </Pressable>
-//           </>
-//         )}
-//       />
-//     </ScreenLayout>
-//   );
-// };
-
-// export default SpecialityDetailsScreen;
-
 import React, {
   useEffect,
   useMemo,
@@ -289,8 +31,10 @@ import { showToast } from '../../../utils/toast';
 import { ApiEndPoint } from '../../../api/endPoints';
 import { GET, POST_FORM } from '../../../api/request';
 import { baseURL } from '../../../component/api/axios';
+import { styles } from '../../aboutus/styles';
+import { localStorage, storageKeys } from '../../../storage/storage';
 
-const SpecialityDetailsScreen = ({ navigation }) => {
+const MedicenListScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const route = useRoute();
@@ -309,6 +53,9 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [specialityDetailsList, setSpecialityDetailsList] = useState([]);
   const [speciality, setSpeciality] = useState([]);
+  console.log('speciality');
+  Alert.alert('vvvvvv', JSON.stringify(speciality));
+
   const [imageError, setImageError] = useState({});
   const [previewMode, setPreviewMode] = useState('all'); // 'selected' or 'unselected'
 
@@ -612,29 +359,11 @@ const SpecialityDetailsScreen = ({ navigation }) => {
     }
   }, []);
 
-  const handerItemRender = ({ item }) => {
-    const isSelected = selected === item?.ms_id;
-    return (
-      <Pressable
-        onPress={() => handleIdByList(item?.ms_id)}
-        style={[styles.headerItemBox, isSelected && styles.headerSelectBox]}
-      >
-        <Text
-          style={[
-            styles.headerTitleText,
-            isSelected && styles.headerSelectTitle,
-          ]}
-        >
-          {item?.ms_name}
-        </Text>
-      </Pressable>
-    );
-  };
-
   const specialityList = async () => {
     try {
       setLoading(true);
       const response = await GET(ApiEndPoint.listSpeciality);
+      Alert.alert('aaaaaaaaaaaa', JSON.stringify(response));
       if (response?.status === '1') {
         setSpeciality(response?.result || []);
       }
@@ -653,10 +382,12 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (medicine_id) {
-      medicineBySpecilityId(medicine_id);
-    }
-  }, [medicine_id, medicineBySpecilityId]);
+    let getId = async () => {
+      const medicineId = await localStorage.getItem(storageKeys.member_id);
+      await medicineBySpecilityId(medicineId);
+    };
+    getId();
+  }, []);
 
   // Filter data based on search
   const filteredData = useMemo(() => {
@@ -675,11 +406,12 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   useEffect(() => {
     specialityList();
   }, []);
+
   return (
     <ScreenLayout
       header={
         <AppHeader
-          title={`${specialityName}  Detail`}
+          title={'Medicen List'}
           leftIcon={Icons.leftIcon}
           onPress={() => navigation.goBack()}
         />
@@ -696,16 +428,6 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         keyExtractor={keyExtractor}
         numColumns={numColumns}
         columnWrapperStyle={styles.row}
-        ListHeaderComponent={() => (
-          <FlatList
-            horizontal
-            data={speciality}
-            keyExtractor={(item) => item?.ms_id.toString()}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.headerListContainer}
-            renderItem={handerItemRender}
-          />
-        )}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}
@@ -776,4 +498,4 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   );
 };
 
-export default SpecialityDetailsScreen;
+export default MedicenListScreen;

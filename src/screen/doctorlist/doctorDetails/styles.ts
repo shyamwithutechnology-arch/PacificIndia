@@ -42,6 +42,7 @@ export const createStyles = (theme: AppTheme) => {
     idText: {
       color: '#676565',
       fontSize: normalize(10),
+      fontFamily: Fonts.ManropeBold,
     },
     docImg: {
       height: moderateScale(55),
@@ -157,6 +158,9 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: tokens.fontSize.sm,
       color: tokens.colors.white,
       fontFamily: Fonts.ManropeMedium,
+    },
+    medecinBox: {
+      backgroundColor: '#0074D3',
     },
   });
 };

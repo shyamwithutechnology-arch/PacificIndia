@@ -498,22 +498,6 @@ const AddDoctorScreen = ({ navigation }) => {
         <View style={styles.bottomSpace} />
       )}
 
-      <Text style={styles.addressText1}>Address </Text>
-      <AppInput
-        placeholderText={'Please enter address'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.address}
-        leftIcontintColor={theme.tokens.colors.primary}
-        leftIcon={Icons.mapIcon}
-        handleChange={(value) => handleChange('address', value)}
-      />
-      {errors.address ? (
-        <Text style={styles.nameError}>{errors.address}</Text>
-      ) : (
-        <View style={styles.bottomSpace} />
-      )}
-
       <Text style={styles.addressText1}>Locality </Text>
       <AppInput
         placeholderText={'Please enter locality'}
@@ -526,6 +510,22 @@ const AddDoctorScreen = ({ navigation }) => {
       />
       {errors.locality ? (
         <Text style={styles.nameError}>{errors.locality}</Text>
+      ) : (
+        <View style={styles.bottomSpace} />
+      )}
+
+      <Text style={styles.addressText1}>Address </Text>
+      <AppInput
+        placeholderText={'Please enter address'}
+        leftIconStyle={styles.passIcon}
+        inputBoxStyle={styles.inputBoxStyle}
+        value={input.address}
+        leftIcontintColor={theme.tokens.colors.primary}
+        leftIcon={Icons.mapIcon}
+        handleChange={(value) => handleChange('address', value)}
+      />
+      {errors.address ? (
+        <Text style={styles.nameError}>{errors.address}</Text>
       ) : (
         <View style={styles.bottomSpace} />
       )}
@@ -597,7 +597,9 @@ const AddDoctorScreen = ({ navigation }) => {
       {errors.state ? (
         <Text style={styles.nameError}>{errors.state}</Text>
       ) : undefined}
-      <Text style={[styles.addressText1, styles.cityText]}>City </Text>
+      <Text style={[styles.addressText1, !errors.state && styles.cityText]}>
+        City{' '}
+      </Text>
 
       <CustomDropDown
         data={cityList}

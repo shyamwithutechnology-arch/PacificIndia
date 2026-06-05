@@ -9,4 +9,5 @@ export const ApiEndPoint = {
   listDoctor: 'list-doctor',
   addDoctor: 'add-doctor',
   detailsDoctor: 'details-doctor',
+  addDailyVisitByMemberId: 'add-daily-visit-by-member-id',
 };

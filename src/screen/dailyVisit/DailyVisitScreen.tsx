@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Loader, ScreenLayout } from '../../component';
+import { AppInput, AppModal, Loader, ScreenLayout } from '../../component';
 import { Icons } from '../../assets/icons';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import AppHeader from '../../component/AppHeader/AppHeader';
@@ -21,22 +21,22 @@ import { ApiEndPoint } from '../../api/endPoints';
 import { showToast } from '../../utils/toast';
 import { localStorage, storageKeys } from '../../storage/storage';
 import { baseURL } from '../../component/api/axios';
+import { DUMMY_IMAGE } from '../../api/axios';
+import { Modal } from 'react-native/types_generated/index';
 
 const DailyVisitScreen = () => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
-  const [seach, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [dailyVisit, setDailyVisit] = useState([]);
   const [memberId, setMemberId] = useState([]);
-  const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
 
   const navigation = useNavigation();
 
   const handleNavigate = () => {
-    // navigation.navigate('DoctorDetails');
+    navigation.navigate('DoctorDetails');
   };
-
   const category = [
     {
       id: 1,
@@ -113,7 +113,7 @@ const DailyVisitScreen = () => {
   const renderItem = ({ item }) => {
     // dailyr_comment
     return (
-      <Pressable style={styles.cart} onPress={handleNavigate}>
+      <Pressable style={styles.cart}>
         <Image
           source={{ uri: DUMMY_IMAGE }}
           style={styles.categoryImg}
@@ -164,16 +164,16 @@ const DailyVisitScreen = () => {
   };
 
   const filteredList = useMemo(() => {
-    if (!seach.trim()) {
+    if (!search.trim()) {
       return dailyVisit;
     }
 
     return dailyVisit?.filter((item) =>
       item?.dailyr_doctor_name
         ?.toLowerCase()
-        .includes(seach.toLocaleLowerCase())
+        .includes(search.toLocaleLowerCase())
     );
-  }, [dailyVisit, seach]);
+  }, [dailyVisit, search]);
 
   // useEffect(() => {
   //   const getMemberId = async () => {
@@ -197,7 +197,7 @@ const DailyVisitScreen = () => {
       header={
         <AppHeader
           title="Daily Visit"
-          search={seach}
+          search={search}
           leftIcon={Icons.leftIcon}
           notificationPress={() => {}}
         />
@@ -205,15 +205,23 @@ const DailyVisitScreen = () => {
     >
       <Loader visible={loading} />
       <View style={styles.rowSerach}>
-        <SearchList
-          value={seach}
-          onChange={setSearch}
-          searchRowCustom={styles.searchTop}
-          searchPlaceHolder={'Add Your New Visit....'}
-        />
-        <Pressable style={styles.addBox}>
-          <Text style={styles.addText}>Add</Text>
-        </Pressable>
+        {
+          // <SearchList
+          //   value={seach}
+          //   onChange={setSearch}
+          //   searchRowCustom={styles.searchTop}
+          //   searchPlaceHolder={'Add Your New Visit....'}
+          // />
+        }
+        <View style={styles.addNewVisitBox}>
+          <Text style={styles.addNewText}>Add Your New Visit....</Text>
+          <Pressable
+            style={styles.addBox}
+            onPress={() => navigation.navigate('SelectDoctor')}
+          >
+            <Text style={styles.addText}>Add</Text>
+          </Pressable>
+        </View>
       </View>
 
       <FlatList

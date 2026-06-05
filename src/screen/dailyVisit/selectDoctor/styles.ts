@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { AppTheme } from '../../hooks/useAppTheme';
-import { Fonts } from '../../theme';
+import { AppTheme } from '../../../hooks/useAppTheme';
+import { Fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
   const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
@@ -9,12 +9,11 @@ export const createStyles = (theme: AppTheme) => {
       flex: 1,
     },
     specialityText: {
-      fontSize: tokens.fontSize.lg,
-      color: tokens.colors.black,
+      fontSize: tokens.fontSize.sm,
+      color: tokens.colors.primary,
       fontFamily: Fonts.ManropeMedium,
-      alignSelf: 'center',
       justifyContent: 'center',
-      marginTop: tokens.spacing.sm,
+      marginBottom: tokens.spacing.xs,
     },
     specialityDecText: {
       fontSize: tokens.fontSize.xxs,
@@ -39,7 +38,6 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: tokens.fontSize.xs,
       color: tokens.colors.headingColor,
       fontFamily: Fonts.ManropeExtraBold,
-      marginBottom: tokens.spacing.xs,
       width: scale(118),
       marginLeft: tokens.spacing.xxs,
     },
@@ -76,9 +74,7 @@ export const createStyles = (theme: AppTheme) => {
       paddingTop: tokens.spacing.smPlus,
     },
     searchTop: {
-      // marginTop: tokens.spacing.md,
-      width: '80%',
-      marginTop: 0,
+      width: '100%',
     },
 
     verificationBox: {
@@ -116,9 +112,10 @@ export const createStyles = (theme: AppTheme) => {
       fontFamily: Fonts.ManropeMedium,
     },
     locationText: {
-      color: '#999999',
+      color: '#555555',
       marginLeft: tokens.spacing.xs,
       width: scale(190),
+      fontFamily: Fonts.ManropeSemiBold,
     },
     rightArrowBox: {
       height: moderateScale(30),
@@ -127,6 +124,18 @@ export const createStyles = (theme: AppTheme) => {
       backgroundColor: tokens.colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    addressText1: {
+      fontSize: tokens.fontSize.sm,
+      color: tokens.colors.black,
+      fontFamily: Fonts.ManropeSemiBold,
+      // marginLeft: tokens.spacing.xs,
+      marginBottom: tokens.spacing.xs,
+    },
+    dateText: {
+      marginTop: tokens.spacing.md,
+      marginBottom: 0,
+      // marginBottom: tokens.spacing.xs,
     },
     rightArrowImg: {
       height: moderateScale(18),
@@ -153,35 +162,33 @@ export const createStyles = (theme: AppTheme) => {
       width: scale(160),
       marginTop: tokens.spacing.xxs,
     },
-    addNewVisitBox: {
-      width: '100%',
-      backgroundColor: '#f3f3f3',
-      paddingVertical: tokens.spacing.xs,
-      borderRadius: tokens.radius.xxl,
-      paddingHorizontal: tokens.spacing.sm,
-      elevation: 20,
-      shadowColor: '#000',
-      borderWidth: 1,
-      borderColor: '#d8d8d8',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      flexDirection: 'row',
-    },
-    addBox: {
-      height: verticalScale(32),
-      width: scale(70),
-      backgroundColor: tokens.colors.primary,
-      borderRadius: tokens.radius.xxl,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginLeft: tokens.spacing.sm,
-      alignSelf: 'flex-end',
-    },
+    // addBox: {
+    //   height: verticalScale(30),
+    //   width: scale(70),
+    //   backgroundColor: tokens.colors.primary,
+    //   borderRadius: tokens.radius.xxl,
+    //   alignItems: 'center',
+    //   justifyContent: 'center',
+    //   marginLeft: tokens.spacing.sm,
+    //   alignSelf: 'flex-end',
+    // },
     addNewText: {
       fontSize: tokens.fontSize.md,
       color: tokens.colors.black,
       fontFamily: Fonts.ManropeSemiBold,
       marginRight: tokens.spacing.smPlus,
+    },
+
+    addBox: {
+      height: verticalScale(33),
+      width: scale(80),
+      backgroundColor: tokens.colors.primary,
+      borderRadius: tokens.radius.lg,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: tokens.spacing.sm,
+      flexDirection: 'row',
+      paddingHorizontal: tokens.spacing.sm,
     },
     rowSerach: {
       flexDirection: 'row',
@@ -192,6 +199,93 @@ export const createStyles = (theme: AppTheme) => {
     addText: {
       fontSize: tokens.fontSize.md,
       color: tokens.colors.white,
+      fontFamily: Fonts.ManropeBold,
+    },
+    addIcon: {
+      height: moderateScale(16),
+      width: moderateScale(16),
+    },
+
+    //check box
+    checkBoxContainer: {
+      position: 'absolute',
+      right: scale(20),
+      top: verticalScale(40),
+      alignItems: 'center',
+      justifyContent: 'center',
+      // padding: moderateScale(3),
+      height: verticalScale(22),
+      aspectRatio: 1,
+      borderRadius: scale(4),
+      // backgroundColor: '#b4b4b4',
+      borderWidth: 1,
+    },
+
+    checkBox: {
+      width: 24,
+      height: 24,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 4,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    checkBoxSelected: {
+      backgroundColor: theme.tokens.colors.primary,
+      borderColor: theme.tokens.colors.primary,
+    },
+
+    checkMark: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    checkIcon: {
+      height: moderateScale(16),
+      width: moderateScale(16),
+    },
+    selectedCheck: {
+      backgroundColor: tokens.colors.green,
+      borderWidth: 0,
+    },
+    submitBtn: {
+      width: '60%',
+      marginTop: tokens.spacing.lg,
+    },
+    commentBox: {
+      // height: verticalScale(60),
+      textAlignVertical: 'top',
+      borderWidth: 0,
+    },
+    appInputBox: {
+      borderWidth: 1,
+      height: verticalScale(90),
+      borderRadius: tokens.radius.md,
+      borderColor: '#D9D9D9',
+      paddingHorizontal: tokens.spacing.sm,
+    },
+
+    dateInputBox: {
+      height: verticalScale(45),
+      borderWidth: 1,
+      borderColor: '#D9D9D9',
+      borderRadius: scale(8),
+      paddingHorizontal: scale(12),
+      justifyContent: 'center',
+      // marginTop: tokens.spacing.sm
+      backgroundColor: '#FFF',
+    },
+
+    datePlaceholder: {
+      fontSize: tokens.fontSize.sm,
+      color: tokens.colors.InputText,
+      fontFamily: Fonts.ManropeMedium,
+    },
+    nameError: {
+      fontSize: moderateScale(11),
+      color: tokens.colors.red,
+      fontFamily: Fonts.ManropeBold,
     },
   });
 };

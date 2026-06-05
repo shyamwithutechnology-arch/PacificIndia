@@ -18,6 +18,7 @@ import { showToast } from '../../../utils/toast';
 import { localStorage, storageKeys } from '../../../storage/storage';
 import { POST_FORM } from '../../../api/request';
 import { ApiEndPoint } from '../../../api/endPoints';
+import { formatDateDDMMYYYY } from '../../../utils/date';
 
 const DoctorDetailsScreen = ({ navigation }) => {
   const route = useRoute();
@@ -40,22 +41,27 @@ const DoctorDetailsScreen = ({ navigation }) => {
     {
       id: 1,
       title: 'Location',
-      dec: 'Women & Heart Clinic, Malviya Nagar',
-      img: Icons.emailIcon,
+      dec: doctorList?.dr_address,
+      img: Icons.mapFillIcon,
     },
-    { id: 2, title: 'D.O.B', dec: '23 May 1990', img: Icons.emailIcon },
+    { id: 2, title: 'D.O.B', dec: doctorList?.dr_dob, img: Icons.calendarIcon },
     {
       id: 3,
       title: 'Married Status',
-      dec: 'Married',
-      img: Icons.emailIcon,
+      dec: doctorList?.dr_marital,
+      img: Icons.marritalStatusIcon,
     },
-    { id: 4, title: 'Speciality', dec: 'Cardiology', img: Icons.emailIcon },
+    {
+      id: 4,
+      title: 'Speciality',
+      dec: doctorList?.dr_speciality_name,
+      img: Icons.specialityIcon,
+    },
     {
       id: 5,
       title: 'Branch',
-      dec: 'Pacific India Jaipur',
-      img: Icons.emailIcon,
+      dec: doctorList?.dr_speciality_name,
+      img: Icons.branchIcon,
     },
   ];
 
@@ -155,14 +161,20 @@ const DoctorDetailsScreen = ({ navigation }) => {
         <View style={styles.headerCardInner}>
           <View style={styles.profileRow}>
             <Image
-              source={Images.doctorImg1}
+              source={
+                doctorList?.dr_hospital_image
+                  ? { uri: doctorList?.dr_hospital_image }
+                  : Images.doctorImg1
+              }
               style={styles.docImg}
               borderRadius={theme.tokens.radius.xxl}
             />
             <View>
               <View>
                 <Text style={styles.titleText}>{doctorList?.dr_name}</Text>
-                <Text style={styles.titleDecText}>Senior Medical Officer</Text>
+                <Text style={styles.titleDecText}>
+                  {doctorList?.dr_speciality_name}
+                </Text>
                 <Text style={[styles.titleDecText, styles.idText]}>
                   ID : {doctorList?.dr_id}
                 </Text>
@@ -176,32 +188,35 @@ const DoctorDetailsScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.baseLine} />
-
-        <View style={[styles.profileRow, { justifyContent: 'space-between' }]}>
-          <View style={[styles.profileRow, styles.mailRow]}>
-            <View style={styles.emilBox}>
-              <Image
-                source={Icons.emailIcon}
-                resizeMode="contain"
-                style={styles.emailcon}
-              />
-            </View>
-
-            <Text style={styles.mailText}>{doctorList?.dr_email}</Text>
+        {
+          // <View style={[styles.profileRow, { justifyContent: 'space-between' }]}>
+        }
+        <View style={[styles.profileRow, styles.mailRow]}>
+          <View style={styles.emilBox}>
+            <Image
+              source={Icons.emailIcon}
+              resizeMode="contain"
+              style={styles.emailcon}
+            />
           </View>
 
-          <View style={[styles.profileRow, styles.mailRow]}>
-            <View style={styles.emilBox}>
-              <Image
-                source={Icons.callFillIcon}
-                resizeMode="contain"
-                style={styles.callIcon}
-              />
-            </View>
-
-            <Text style={styles.mailText}>+91-{doctorList?.dr_phone}</Text>
-          </View>
+          <Text style={styles.mailText}>{doctorList?.dr_email}</Text>
         </View>
+
+        <View style={[styles.profileRow, styles.mailRow]}>
+          <View style={styles.emilBox}>
+            <Image
+              source={Icons.callFillIcon}
+              resizeMode="contain"
+              style={styles.callIcon}
+            />
+          </View>
+
+          <Text style={styles.mailText}>+91-{doctorList?.dr_phone}</Text>
+        </View>
+        {
+          // </View>
+        }
       </View>
 
       <View style={styles.personalInformation}>
@@ -233,11 +248,14 @@ const DoctorDetailsScreen = ({ navigation }) => {
       </View>
 
       <View style={[styles.locationCenter, styles.locationBnt]}>
-        <Pressable style={styles.doctorMedicineBtn}>
+        <Pressable
+          style={styles.doctorMedicineBtn}
+          onPress={() => navigation.navigate('MedicenList')}
+        >
           <Text style={styles.doctorText}>Doctor Medicine</Text>
         </Pressable>
 
-        <Pressable style={styles.doctorMedicineBtn}>
+        <Pressable style={[styles.doctorMedicineBtn, styles.medecinBox]}>
           <Text style={styles.doctorText}> Medicine</Text>
         </Pressable>
       </View>
