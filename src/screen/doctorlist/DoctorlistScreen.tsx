@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -35,6 +35,16 @@ const DoctorlistScreen = ({ navigation }) => {
   const handleNavigate = (id) => {
     navigation.navigate('DoctorDetails', { dr_id: id });
   };
+
+  const filteredList = useMemo(() => {
+    if (!seach.trim()) {
+      return doctorList;
+    }
+
+    return doctorList?.filter((item) =>
+      item?.dr_name?.toLowerCase().includes(seach.toLocaleLowerCase())
+    );
+  }, [doctorList, seach]);
 
   const category = [
     {
@@ -185,7 +195,6 @@ const DoctorlistScreen = ({ navigation }) => {
       header={
         <AppHeader
           title="Doctors List"
-          search={seach}
           leftIcon={Icons.leftIcon}
           onPress={handleGoback}
         />
@@ -196,7 +205,7 @@ const DoctorlistScreen = ({ navigation }) => {
           value={seach}
           onChange={setSearch}
           searchRowCustom={styles.searchTop}
-          searchPlaceHolder={'Add Your New Visit....'}
+          searchPlaceHolder={'Search Doctor....'}
         />
         <Pressable
           style={styles.addBox}
@@ -213,7 +222,7 @@ const DoctorlistScreen = ({ navigation }) => {
 
       <Loader visible={loading} />
       <FlatList
-        data={doctorList}
+        data={filteredList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
