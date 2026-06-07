@@ -31,18 +31,16 @@ import { showToast } from '../../../utils/toast';
 import { ApiEndPoint } from '../../../api/endPoints';
 import { GET, POST_FORM } from '../../../api/request';
 import { baseURL } from '../../../component/api/axios';
-import { styles } from '../../aboutus/styles';
-import { localStorage, storageKeys } from '../../../storage/storage';
 
 const MedicenListScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const route = useRoute();
-  const { medicine_id, specialityName } = route?.params || {};
+  const { dr_id, specialityName } = route?.params || {};
   const { width, height } = useWindowDimensions();
   const [orientation, setOrientation] = useState('PORTRAIT');
   const [controlsVisible, setControlsVisible] = useState(true);
-  const [selected, setSelected] = useState(medicine_id || '');
+  const [selected, setSelected] = useState(dr_id || '');
   const controlsTimeoutRef = useRef(null);
 
   const [search, setSearch] = useState('');
@@ -52,10 +50,8 @@ const MedicenListScreen = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [specialityDetailsList, setSpecialityDetailsList] = useState([]);
+  // Alert.alert('specialityDetailsList', JSON.stringify(specialityDetailsList));
   const [speciality, setSpeciality] = useState([]);
-  console.log('speciality');
-  Alert.alert('vvvvvv', JSON.stringify(speciality));
-
   const [imageError, setImageError] = useState({});
   const [previewMode, setPreviewMode] = useState('all'); // 'selected' or 'unselected'
 
@@ -334,12 +330,12 @@ const MedicenListScreen = ({ navigation }) => {
     try {
       setLoading(true);
       const params = {
-        ms_id: id,
+        doctor_id: id,
       };
-      const response = await POST_FORM(
-        ApiEndPoint.medicineBySpecilityId,
-        params
-      );
+
+      Alert.alert('specialityDetailsListEES', JSON.stringify(params));
+      showToast('error', 'eRROR', JSON.stringify(params));
+      const response = await POST_FORM(ApiEndPoint.doctorMedicine, params);
       if (response?.status === '1') {
         setSpecialityDetailsList(response?.result || []);
       } else {
@@ -359,11 +355,29 @@ const MedicenListScreen = ({ navigation }) => {
     }
   }, []);
 
+  const handerItemRender = ({ item }) => {
+    const isSelected = selected === item?.ms_id;
+    return (
+      <Pressable
+        onPress={() => handleIdByList(item?.ms_id)}
+        style={[styles.headerItemBox, isSelected && styles.headerSelectBox]}
+      >
+        <Text
+          style={[
+            styles.headerTitleText,
+            isSelected && styles.headerSelectTitle,
+          ]}
+        >
+          {item?.ms_name}
+        </Text>
+      </Pressable>
+    );
+  };
+
   const specialityList = async () => {
     try {
       setLoading(true);
       const response = await GET(ApiEndPoint.listSpeciality);
-      Alert.alert('aaaaaaaaaaaa', JSON.stringify(response));
       if (response?.status === '1') {
         setSpeciality(response?.result || []);
       }
@@ -382,12 +396,10 @@ const MedicenListScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    let getId = async () => {
-      const medicineId = await localStorage.getItem(storageKeys.member_id);
-      await medicineBySpecilityId(medicineId);
-    };
-    getId();
-  }, []);
+    if (dr_id) {
+      medicineBySpecilityId(dr_id);
+    }
+  }, [route?.params, medicineBySpecilityId]);
 
   // Filter data based on search
   const filteredData = useMemo(() => {
@@ -407,11 +419,15 @@ const MedicenListScreen = ({ navigation }) => {
     specialityList();
   }, []);
 
+  useEffect(() => {
+    Alert.alert('dr_idddddd', JSON.stringify(dr_id));
+  }, [dr_id]);
+
   return (
     <ScreenLayout
       header={
         <AppHeader
-          title={'Medicen List'}
+          title="Medicine Detail"
           leftIcon={Icons.leftIcon}
           onPress={() => navigation.goBack()}
         />
@@ -428,6 +444,16 @@ const MedicenListScreen = ({ navigation }) => {
         keyExtractor={keyExtractor}
         numColumns={numColumns}
         columnWrapperStyle={styles.row}
+        ListHeaderComponent={() => (
+          <FlatList
+            horizontal
+            data={speciality}
+            keyExtractor={(item) => item?.ms_id.toString()}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.headerListContainer}
+            renderItem={handerItemRender}
+          />
+        )}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}

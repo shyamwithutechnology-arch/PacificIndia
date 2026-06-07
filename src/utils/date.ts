@@ -7,3 +7,14 @@ export const formatDateDDMMYYYY = (date?: Date | null): string => {
 
   return `${day}/${month}/${year}`;
 };
+
+// 20 oct 2003
+export const formatDateDayMonthShortYear = (date) => {
+  if (!date) return '';
+
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+};

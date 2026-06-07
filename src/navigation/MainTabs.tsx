@@ -82,6 +82,7 @@ const MainTabs = () => {
         name="SpecialityStack"
         component={SpecialityStack}
         options={{
+          popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
@@ -97,6 +98,7 @@ const MainTabs = () => {
         name="DailyVisitStack"
         component={DailyVisitStack}
         options={{
+          popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
@@ -112,6 +114,7 @@ const MainTabs = () => {
         name="HomeTab"
         component={HomeStack}
         options={{
+          popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
@@ -126,6 +129,7 @@ const MainTabs = () => {
         name="Doctorlist"
         component={DoctorsStack}
         options={{
+          popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
@@ -140,6 +144,7 @@ const MainTabs = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
+          popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}

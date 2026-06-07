@@ -26,7 +26,7 @@ const DoctorDetailsScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [seach, setSearch] = useState('');
-  const [doctorList, setDoctorList] = useState([]);
+  const [doctorList, setDoctorList] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleGoback = useCallback(() => {
@@ -64,29 +64,6 @@ const DoctorDetailsScreen = ({ navigation }) => {
       img: Icons.branchIcon,
     },
   ];
-
-  // const informationCard = ({ title, value, img }) => {
-  //   return (
-  //     <View>
-  //       <View style={styles.locationCenter}>
-  //         <View style={styles.profileRow}>
-  //           <View style={styles.emilBox}>
-  //             <Image
-  //               source={Icons.emailIcon}
-  //               resizeMode="contain"
-  //               style={styles.emailcon}
-  //             />
-  //           </View>
-  //           <Text style={styles.locationText}>Location</Text>
-  //         </View>
-  //         <Text style={[styles.locationText, styles.womenText]}>
-  //           Women & Heart Clinic, Malviya Nagar
-  //         </Text>
-  //       </View>
-  //       <View style={styles.baseLine} />
-  //     </View>
-  //   );
-  // };
 
   const InformationCard = ({ title, dec, img }) => {
     return (
@@ -144,6 +121,18 @@ const DoctorDetailsScreen = ({ navigation }) => {
     getId();
   }, [route.params]);
 
+  // useEffect(() => {
+  //   console.log('doctorList =>', doctorList);
+  //   console.log('member_id =>', doctorList?.member_id);
+
+  //   Alert.alert(
+  //     'Debug',
+  //     JSON.stringify({
+  //       member_id: doctorList?.member_id,
+  //       dr_id: doctorList?.dr_id,
+  //     })
+  //   );
+  // }, [doctorList]);
   return (
     <ScreenLayout
       header={
@@ -182,7 +171,15 @@ const DoctorDetailsScreen = ({ navigation }) => {
             </View>
           </View>
 
-          <Pressable style={styles.editBtn}>
+          <Pressable
+            style={styles.editBtn}
+            onPress={() =>
+              navigation.navigate('AddDoctor', {
+                title: 'Edit Doctor',
+                doctorId: doctorList?.dr_id,
+              })
+            }
+          >
             <Text style={styles.editText}>Edit Details</Text>
           </Pressable>
         </View>
@@ -250,12 +247,19 @@ const DoctorDetailsScreen = ({ navigation }) => {
       <View style={[styles.locationCenter, styles.locationBnt]}>
         <Pressable
           style={styles.doctorMedicineBtn}
-          onPress={() => navigation.navigate('MedicenList')}
+          onPress={() =>
+            navigation.navigate('MedicenList', { dr_id: doctorList?.member_id })
+          }
         >
           <Text style={styles.doctorText}>Doctor Medicine</Text>
         </Pressable>
 
-        <Pressable style={[styles.doctorMedicineBtn, styles.medecinBox]}>
+        <Pressable
+          style={[styles.doctorMedicineBtn, styles.medecinBox]}
+          onPress={() =>
+            navigation.navigate('SpecialityStack', { screen: 'SpecialityList' })
+          }
+        >
           <Text style={styles.doctorText}> Medicine</Text>
         </Pressable>
       </View>

@@ -19,14 +19,21 @@ import { GET, POST_FORM } from '../../../api/request';
 import { ApiEndPoint } from '../../../api/endPoints';
 import { localStorage, storageKeys } from '../../../storage/storage';
 import AppDatePicker from '../../../component/appDatePicker/AppDatePicker';
-import { formatDateDDMMYYYY } from '../../../utils/date';
+import {
+  formatDateDayMonthShortYear,
+  formatDateDDMMYYYY,
+} from '../../../utils/date';
+import { useRoute } from '@react-navigation/native';
 
 const AddDoctorScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const route = useRoute();
+  const { title, doctorId } = route?.params;
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
+  // Alert.alert('image', );
   const [memberId, setMemberId] = useState(null);
   const [single, setSingle] = useState('');
   const [state, setState] = useState('');
@@ -36,9 +43,11 @@ const AddDoctorScreen = ({ navigation }) => {
   const [city, setCity] = useState('');
   const [userData, setuserData] = useState({});
   const [speciality, setSpeciality] = useState([]);
+  const [doctorDetails, setDoctorDetails] = useState({});
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
-  const formatedDate = formatDateDDMMYYYY(date);
+  const formatedDate = formatDateDayMonthShortYear(date);
+  console.log('stateList', stateList);
 
   const [input, setInput] = useState({
     name: '',
@@ -53,6 +62,7 @@ const AddDoctorScreen = ({ navigation }) => {
     city: '',
     hospitalName: '',
   });
+  // Alert.alert('name', JSON.stringify(input?.name));
 
   const [errors, setErrors] = useState({
     // name: '',
@@ -72,10 +82,8 @@ const AddDoctorScreen = ({ navigation }) => {
     address: '',
     locality: '',
     maritalStatus: '',
-    surgeon: '',
     state: '',
     city: '',
-    image: '',
   });
 
   const handleGoback = useCallback(() => {
@@ -87,6 +95,7 @@ const AddDoctorScreen = ({ navigation }) => {
     setErrors((prev) => ({ ...prev, state: '' }));
     await cityListApi(val);
   };
+
   const handleSpecility = async (val) => {
     setSelectedSpecility(val);
     setErrors((prev) => ({ ...prev, surgeon: '' }));
@@ -188,7 +197,7 @@ const AddDoctorScreen = ({ navigation }) => {
     }
 
     if (!selectedSpecility) {
-      newErrors.speciality = 'Please select surgeon';
+      newErrors.speciality = 'Please select speciality';
     }
 
     if (!state) {
@@ -199,12 +208,11 @@ const AddDoctorScreen = ({ navigation }) => {
       newErrors.city = 'Please select city';
     }
 
-    if (!image?.uri) {
+    if (!image || (typeof image === 'object' && !image?.uri)) {
       newErrors.image = 'Please upload hospital image';
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
@@ -236,11 +244,61 @@ const AddDoctorScreen = ({ navigation }) => {
         dr_hospital_name: input?.hospitalName,
       };
 
-      console.log('params', params);
       const res = await POST_FORM(ApiEndPoint.addDoctor, params);
-
       if (res?.status === '1') {
         showToast('success', 'Success', res?.msg || 'Doctor Add Successfully');
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+      // Alert.alert('resssssssssssssssss', JSON.stringify(error));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateDoctor = async () => {
+    const isValid = validateForm();
+    if (!isValid) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const params = {
+        member_id: memberId,
+        dr_speciality_id: selectedSpecility,
+        dr_state_id: state,
+        dr_city_id: city,
+        dr_locality: input?.locality,
+        dr_name: input?.name,
+        dr_address: input?.address,
+        dr_email: input?.email,
+        dr_phone: input?.mobileNumber,
+        dr_marital: single !== 1 ? 'Married' : 'Single',
+        dr_dob: formatDateDDMMYYYY(date),
+        dr_hospital_image:
+          typeof image === 'object'
+            ? {
+                uri: image?.uri,
+                type: image?.type || 'image/jpeg',
+                name: image?.fileName || 'hospital.jpg',
+              }
+            : image,
+        dr_hospital_name: input?.hospitalName,
+      };
+      Alert.alert('ffffffffff', JSON.stringify(params));
+      console.log('params2222', JSON.stringify(params));
+      const res = await POST_FORM(ApiEndPoint.updateDoctor, params);
+
+      Alert.alert('resres', JSON.stringify(res));
+      if (res?.status === '1') {
+        showToast('success', 'Success', res?.msg || 'Doctor Edit Successfully');
       }
     } catch (error) {
       if (error?.offline) {
@@ -330,6 +388,29 @@ const AddDoctorScreen = ({ navigation }) => {
     }
   };
 
+  const fetchDoctorDetails = async (id: string) => {
+    try {
+      setLoading(true);
+      const response = await POST_FORM(ApiEndPoint.detailsDoctor, {
+        dr_id: id,
+      });
+      if (response?.status === '1') {
+        setDoctorDetails(response?.result[0] || []);
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const get_member_id = async () => {
       const member_id = await localStorage.getItem(storageKeys.member_id);
@@ -344,11 +425,60 @@ const AddDoctorScreen = ({ navigation }) => {
     get_member_id();
   }, []);
 
+  useEffect(() => {
+    const getId = async () => {
+      if (doctorId) {
+        fetchDoctorDetails(doctorId);
+      }
+    };
+    getId();
+  }, [doctorId]);
+
+  useEffect(() => {
+    if (!doctorDetails) return;
+
+    setInput({
+      name: doctorDetails?.dr_name || '',
+      fatherName: '',
+      motherName: '',
+      mobileNumber: doctorDetails?.dr_phone || '',
+      email: doctorDetails?.dr_email || '',
+      maritalStatus: '',
+      address: doctorDetails?.dr_address,
+      locality: doctorDetails?.dr_locality,
+      state: '',
+      city: '',
+      hospitalName: '',
+    });
+
+    if (doctorDetails?.dr_dob) {
+      const [day, month, year] = doctorDetails?.dr_dob.split('-');
+      setDate(new Date(year, month - 1, day));
+    }
+    if (doctorDetails?.dr_state_id) {
+      handleState(doctorDetails?.dr_state_id);
+    }
+    if (doctorDetails?.dr_city_id) {
+      setCity(doctorDetails?.dr_city_id);
+    }
+
+    if (doctorDetails?.dr_image) {
+      setImage(doctorDetails?.dr_image);
+    }
+
+    if (doctorDetails?.dr_marital) {
+      setSingle(doctorDetails?.dr_marital === 'married' ? 2 : 1);
+    }
+    if (doctorDetails?.dr_speciality_id) {
+      setSelectedSpecility(doctorDetails?.dr_speciality_id);
+    }
+  }, [doctorDetails]);
+
   return (
     <ScreenLayout
       header={
         <AppHeader
-          title="Add Doctor"
+          title={!title ? 'Add Doctor' : title}
           leftIcon={Icons.leftIcon}
           onPress={handleGoback}
         />
@@ -359,19 +489,28 @@ const AddDoctorScreen = ({ navigation }) => {
       <Loader visible={loading} />
 
       <Pressable style={styles.logoBox} onPress={handleImgOpen}>
-        {image?.uri ? (
-          <Image
-            source={{ uri: image?.uri }}
-            style={styles.splashLogo}
-            resizeMode="contain"
-          />
-        ) : (
-          <Image
-            source={Images.logo}
-            style={styles.splashLogo}
-            resizeMode="contain"
-          />
-        )}
+        {
+          // {image ? (
+        }
+        <Image
+          source={
+            image
+              ? { uri: typeof image === 'string' ? image : image.uri }
+              : Images.logo
+          }
+          style={styles.splashLogo}
+          borderRadius={theme.tokens.radius.xxl}
+          resizeMode="contain"
+        />
+        {
+          // ) : (
+          //   <Image
+          //     source={Images.logo}
+          //     style={styles.splashLogo}
+          //     resizeMode="contain"
+          //   />
+          // )}
+        }
 
         <View style={styles.editProfileBtn}>
           <EditIcon
@@ -394,6 +533,7 @@ const AddDoctorScreen = ({ navigation }) => {
           leftIcon={Icons.userProfileIcon}
           inputBoxStyle={styles.inputBoxStyle}
           leftIcontintColor={theme.tokens.colors.primary}
+          value={input.name}
           handleChange={(value) => handleChange('name', value)}
         />
         {errors.name ? (
@@ -482,20 +622,26 @@ const AddDoctorScreen = ({ navigation }) => {
         onClose={handleDateClose}
       />
 
-      <Text style={styles.addressText1}>Hospital Name </Text>
-      <AppInput
-        placeholderText={'Please enter Hospital name'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.hospitalName}
-        leftIcontintColor={theme.tokens.colors.primary}
-        leftIcon={Icons.hospitalIcon}
-        handleChange={(value) => handleChange('hospitalName', value)}
-      />
-      {errors.hospitalName ? (
-        <Text style={styles.nameError}>{errors.hospitalName}</Text>
-      ) : (
-        <View style={styles.bottomSpace} />
+      {!title && (
+        <>
+          <Text style={styles.addressText1}>Hospital Name</Text>
+
+          <AppInput
+            placeholderText="Please enter Hospital name"
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.hospitalName}
+            leftIcontintColor={theme.tokens.colors.primary}
+            leftIcon={Icons.hospitalIcon}
+            handleChange={(value) => handleChange('hospitalName', value)}
+          />
+
+          {errors.hospitalName ? (
+            <Text style={styles.nameError}>{errors.hospitalName}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </>
       )}
 
       <Text style={styles.addressText1}>Locality </Text>
@@ -575,17 +721,18 @@ const AddDoctorScreen = ({ navigation }) => {
         <View style={styles.bottomSpace} />
       )}
 
-      <Text style={styles.addressText1}>General Surgeon </Text>
+      <Text style={styles.addressText1}>Select Speciality </Text>
       <CustomDropDown
         data={speciality}
         onChange={handleSpecility}
         value={selectedSpecility}
-        placeholder={'Select surgeon'}
+        placeholder={'Select Speciality'}
         dropDownContainer={styles.stateDropDown}
       />
-      {errors.surgeon ? (
-        <Text style={styles.nameError}>{errors.surgeon}</Text>
+      {errors.speciality ? (
+        <Text style={styles.nameError}>{errors.speciality}</Text>
       ) : undefined}
+
       <Text style={[styles.addressText1, styles.stateText]}>State </Text>
       <CustomDropDown
         data={stateList}
@@ -615,7 +762,7 @@ const AddDoctorScreen = ({ navigation }) => {
       <CustomButton
         title="Submit"
         style={styles.btnStyle}
-        onPress={addDoctor}
+        onPress={doctorId ? updateDoctor : addDoctor}
       />
 
       <AppImagePicker
