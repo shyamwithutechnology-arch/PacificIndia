@@ -20,6 +20,7 @@ import { POST_FORM } from '../../api/request';
 import { ApiEndPoint } from '../../api/endPoints';
 import { showToast } from '../../utils/toast';
 import { localStorage, storageKeys } from '../../storage/storage';
+import AppBackHandler from '../../component/backhandler/AppBackHandler';
 
 const DoctorlistScreen = ({ navigation }) => {
   const theme = useAppTheme();
@@ -200,6 +201,7 @@ const DoctorlistScreen = ({ navigation }) => {
         />
       }
     >
+      <AppBackHandler screenName="HomeTab" nestedScreen="HomeScreen" />
       <View style={styles.rowSerach}>
         <SearchList
           value={seach}
@@ -207,6 +209,7 @@ const DoctorlistScreen = ({ navigation }) => {
           searchRowCustom={styles.searchTop}
           searchPlaceHolder={'Search Doctor....'}
         />
+
         <Pressable
           style={styles.addBox}
           onPress={() => navigation.navigate('AddDoctor')}
@@ -219,7 +222,6 @@ const DoctorlistScreen = ({ navigation }) => {
           <Text style={styles.addText}> Add</Text>
         </Pressable>
       </View>
-
       <Loader visible={loading} />
       <FlatList
         data={filteredList}

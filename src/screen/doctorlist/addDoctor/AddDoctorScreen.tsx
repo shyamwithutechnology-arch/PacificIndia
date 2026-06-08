@@ -29,7 +29,8 @@ const AddDoctorScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const route = useRoute();
-  const { title, doctorId } = route?.params;
+  // const { title, doctorId } = route?.params;
+  const { title = 'Add Doctor', doctorId = '' } = route?.params || {};
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
@@ -39,7 +40,7 @@ const AddDoctorScreen = ({ navigation }) => {
   const [state, setState] = useState('');
   const [selectedSpecility, setSelectedSpecility] = useState('');
   const [dateVisible, setDateVisible] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState('');
   const [city, setCity] = useState('');
   const [userData, setuserData] = useState({});
   const [speciality, setSpeciality] = useState([]);
@@ -47,19 +48,15 @@ const AddDoctorScreen = ({ navigation }) => {
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
   const formatedDate = formatDateDayMonthShortYear(date);
-  console.log('stateList', stateList);
+  console.log('doctorDetails', doctorDetails);
 
   const [input, setInput] = useState({
     name: '',
-    fatherName: '',
-    motherName: '',
     mobileNumber: '',
     email: '',
     maritalStatus: '',
     address: '',
     locality: '',
-    state: '',
-    city: '',
     hospitalName: '',
   });
   // Alert.alert('name', JSON.stringify(input?.name));
@@ -85,6 +82,7 @@ const AddDoctorScreen = ({ navigation }) => {
     state: '',
     city: '',
   });
+  console.log('eraa', errors);
 
   const handleGoback = useCallback(() => {
     navigation.goBack();
@@ -98,7 +96,7 @@ const AddDoctorScreen = ({ navigation }) => {
 
   const handleSpecility = async (val) => {
     setSelectedSpecility(val);
-    setErrors((prev) => ({ ...prev, surgeon: '' }));
+    setErrors((prev) => ({ ...prev, speciality: '' }));
   };
   const handleVisibleDate = () => {
     setDateVisible(true);
@@ -106,6 +104,15 @@ const AddDoctorScreen = ({ navigation }) => {
 
   const handleDateClose = () => {
     setDateVisible(false);
+  };
+
+  const handleDateChange = (selectedDate) => {
+    setDate(selectedDate);
+
+    setErrors((prev) => ({
+      ...prev,
+      date: '',
+    }));
   };
 
   const handleCity = (val) => {
@@ -132,6 +139,9 @@ const AddDoctorScreen = ({ navigation }) => {
   };
 
   const handleChange = (key: string, value: any) => {
+    if (key === 'mobileNumber') {
+      value = value.replace(/[^0-9]/g, '').slice(0, 10);
+    }
     setInput((pre) => ({ ...pre, [key]: value }));
     setErrors((pre) => ({ ...pre, [key]: '' }));
   };
@@ -264,43 +274,46 @@ const AddDoctorScreen = ({ navigation }) => {
   };
 
   const updateDoctor = async () => {
+    console.log('updateDoctor called');
+
     const isValid = validateForm();
     if (!isValid) {
+      console.log('validation failed');
       return;
     }
+    console.log('validation passed');
+
     setLoading(true);
     try {
       const params = {
-        member_id: memberId,
-        dr_speciality_id: selectedSpecility,
-        dr_state_id: state,
-        dr_city_id: city,
-        dr_locality: input?.locality,
+        dr_id: doctorId,
         dr_name: input?.name,
-        dr_address: input?.address,
-        dr_email: input?.email,
+        dr_locality: input?.locality,
         dr_phone: input?.mobileNumber,
+        dr_email: input?.email,
+        dr_speciality: speciality,
+        dr_dob: date,
         dr_marital: single !== 1 ? 'Married' : 'Single',
-        dr_dob: formatDateDDMMYYYY(date),
-        dr_hospital_image:
-          typeof image === 'object'
-            ? {
-                uri: image?.uri,
-                type: image?.type || 'image/jpeg',
-                name: image?.fileName || 'hospital.jpg',
-              }
-            : image,
-        dr_hospital_name: input?.hospitalName,
+        dr_address: input?.address,
+        state_id: state,
+        city_id: city,
+        dr_himage: {
+          uri: image?.uri,
+          type: image?.type || 'image/jpeg',
+          name: image?.fileName || 'hospital.jpg',
+        },
       };
-      Alert.alert('ffffffffff', JSON.stringify(params));
-      console.log('params2222', JSON.stringify(params));
+      // Alert.alert('ffffffffff', JSON.stringify(params));
+      console.log('params2222', params);
       const res = await POST_FORM(ApiEndPoint.updateDoctor, params);
+      console.log('resssssss', res);
 
-      Alert.alert('resres', JSON.stringify(res));
       if (res?.status === '1') {
         showToast('success', 'Success', res?.msg || 'Doctor Edit Successfully');
       }
     } catch (error) {
+      console.log('errrrqqqqqqqqq', error);
+
       if (error?.offline) {
         return;
       }
@@ -439,16 +452,12 @@ const AddDoctorScreen = ({ navigation }) => {
 
     setInput({
       name: doctorDetails?.dr_name || '',
-      fatherName: '',
-      motherName: '',
       mobileNumber: doctorDetails?.dr_phone || '',
       email: doctorDetails?.dr_email || '',
       maritalStatus: '',
       address: doctorDetails?.dr_address,
       locality: doctorDetails?.dr_locality,
-      state: '',
-      city: '',
-      hospitalName: '',
+      hospitalName: doctorDetails?.dr_hospital_name || '',
     });
 
     if (doctorDetails?.dr_dob) {
@@ -478,7 +487,7 @@ const AddDoctorScreen = ({ navigation }) => {
     <ScreenLayout
       header={
         <AppHeader
-          title={!title ? 'Add Doctor' : title}
+          title={title}
           leftIcon={Icons.leftIcon}
           onPress={handleGoback}
         />
@@ -612,37 +621,39 @@ const AddDoctorScreen = ({ navigation }) => {
           style={styles.dateIcon}
           tintColor={theme.tokens.colors.primary}
         />
-        <Text style={styles.selectDate}> {formatedDate}</Text>
+        <Text style={styles.selectDate}>
+          {' '}
+          {date ? formatedDate : 'Select Date'}
+        </Text>
       </Pressable>
 
       <AppDatePicker
-        value={date}
-        onChange={setDate}
+        value={date || new Date()}
+        onChange={handleDateChange}
         visible={dateVisible}
         onClose={handleDateClose}
       />
 
-      {!title && (
-        <>
-          <Text style={styles.addressText1}>Hospital Name</Text>
+      <Text style={styles.addressText1}>Hospital Name</Text>
+      <AppInput
+        placeholderText="Please enter Hospital name"
+        leftIconStyle={styles.passIcon}
+        inputBoxStyle={styles.inputBoxStyle}
+        value={input.hospitalName}
+        leftIcontintColor={theme.tokens.colors.primary}
+        leftIcon={Icons.hospitalIcon}
+        handleChange={(value) => handleChange('hospitalName', value)}
+      />
 
-          <AppInput
-            placeholderText="Please enter Hospital name"
-            leftIconStyle={styles.passIcon}
-            inputBoxStyle={styles.inputBoxStyle}
-            value={input.hospitalName}
-            leftIcontintColor={theme.tokens.colors.primary}
-            leftIcon={Icons.hospitalIcon}
-            handleChange={(value) => handleChange('hospitalName', value)}
-          />
-
-          {errors.hospitalName ? (
-            <Text style={styles.nameError}>{errors.hospitalName}</Text>
-          ) : (
-            <View style={styles.bottomSpace} />
-          )}
-        </>
+      {errors.hospitalName ? (
+        <Text style={styles.nameError}>{errors.hospitalName}</Text>
+      ) : (
+        <View style={styles.bottomSpace} />
       )}
+      {
+        //   </>
+        // )}
+      }
 
       <Text style={styles.addressText1}>Locality </Text>
       <AppInput
@@ -759,11 +770,21 @@ const AddDoctorScreen = ({ navigation }) => {
       {errors.city ? (
         <Text style={styles.nameError}>{errors.city}</Text>
       ) : undefined}
+
       <CustomButton
         title="Submit"
         style={styles.btnStyle}
-        onPress={doctorId ? updateDoctor : addDoctor}
+        onPress={() => {
+          if (doctorId) {
+            updateDoctor();
+          } else {
+            addDoctor();
+          }
+        }}
       />
+      {
+        // doctorId ?: addDoctor
+      }
 
       <AppImagePicker
         visible={visible}

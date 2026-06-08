@@ -4,6 +4,8 @@ import { showToast } from '../utils/toast';
 import { baseURL } from '../component/api/axios';
 
 export const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
+export const Icon_Url = `https://thepacificindia.com/`;
+
 const api = axios.create({
   // baseURL: 'https://www.papers.withupartners.in/api/',
   baseURL: 'https://thepacificindia.com/api/',

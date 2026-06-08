@@ -6,9 +6,11 @@ import PrivacyPolicyScreen from '../screen/privacy/PrivacyPolicyScreen';
 import TermandconditionScreen from '../screen/termandcondition/TermandconditionScreen';
 import AboutUsScreen from '../screen/aboutus/AboutUsScreen';
 import SubscriptionScreen from '../screen/subscription/SubscriptionScreen';
-import SupportScreen from '../screen/support/SupportScreen';
 import CustomDrawerContent from '../component/DrawerContent/CustomDrawerContent';
-import DailyVisitScreen from '../screen/dailyVisit/DailyVisitScreen';
+import AppointMentsScreen from '../screen/appointments/AppointMentsScreen';
+import AddAppointMentScreen from '../screen/appointments/addAppointMent/AddAppointMentScreen';
+import AppointMentDetailsScreen from '../screen/appointments/appointMentDetails/AppointMentDetailsScreen';
+import SupportTicketScreen from '../screen/support/SupportTicketScreen';
 
 const Drawer = createDrawerNavigator();
 const { width } = Dimensions.get('window');
@@ -28,7 +30,12 @@ const AppDrawer = () => {
     >
       <Drawer.Screen name="MainTabs" component={MainTabs} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
-      <Drawer.Screen name="DailyVisit" component={DailyVisitScreen} />
+      <Drawer.Screen name="AppointMents" component={AppointMentsScreen} />
+      <Drawer.Screen name="AddAppointMent" component={AddAppointMentScreen} />
+      <Drawer.Screen
+        name="AppointMentDetails"
+        component={AppointMentDetailsScreen}
+      />
 
       <Drawer.Screen
         name="PrivacyPolicyScreen"
@@ -39,9 +46,8 @@ const AppDrawer = () => {
         component={TermandconditionScreen}
       />
       <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
-
       <Drawer.Screen name="SubscriptionScreen" component={SubscriptionScreen} />
-      <Drawer.Screen name="SupportScreen" component={SupportScreen} />
+      <Drawer.Screen name="SupportTicket" component={SupportTicketScreen} />
     </Drawer.Navigator>
   );
 };

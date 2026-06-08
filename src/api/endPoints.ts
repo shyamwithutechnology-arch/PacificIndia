@@ -3,6 +3,7 @@ export const ApiEndPoint = {
   listSpeciality: 'list-speciality',
   medicineBySpecilityId: 'get-medicine-by-speciality-id',
   getProfile: 'get-profile',
+  updateProfile: 'update-profile',
   stateList: 'state-list',
   cityList: 'city-list',
   dailyVisit: 'list-daily-visit-by-member-id',
@@ -12,4 +13,8 @@ export const ApiEndPoint = {
   detailsDoctor: 'details-doctor',
   addDailyVisitByMemberId: 'add-daily-visit-by-member-id',
   doctorMedicine: 'doctor-medicine',
+  addAppointment: 'add-appointment',
+  listAppointment: 'list-appointment',
+  detailsAppointment: 'details-appointment',
+  banner: 'banner',
 };

@@ -15,6 +15,7 @@ const CustomDropDown = ({
   leftIconStyle,
   optionStyle,
   dropdownPosition,
+  placeholderTextStyle,
 }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
@@ -55,7 +56,7 @@ const CustomDropDown = ({
         onChange={(item) => onChange(item.value)}
         // ✅ Left Icons
         renderLeftIcon={renderLeftIcon}
-        placeholderStyle={styles.placeholder}
+        placeholderStyle={[styles.placeholder, placeholderTextStyle]}
         selectedTextStyle={styles.selectedText}
         containerStyle={styles.containerDropdown}
         dropdownPosition={dropdownPosition}

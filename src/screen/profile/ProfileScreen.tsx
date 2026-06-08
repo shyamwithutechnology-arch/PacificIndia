@@ -27,16 +27,27 @@ const ProfileScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
   const [single, setSingle] = useState('');
   const [state, setState] = useState('');
-  console.log('stateqqqq', JSON.stringify(state));
-
   const [city, setCity] = useState('');
   const [userData, setuserData] = useState({});
   const [stateList, setStateList] = useState([]);
-  console.log('stateqqqqqq', JSON.stringify(stateList));
+  const [memberId, setMemberId] = useState('');
+  console.log('stateqqqqqquserData', userData);
   // Alert.alert('stateList', JSON.stringify(stateList));
 
   const [cityList, setCityList] = useState([]);
   // Alert.alert('userData', JSON.stringify(userData));
+  // const [input, setInput] = useState({
+  //   name: '',
+  //   fatherName: '',
+  //   motherName: '',
+  //   mobileNumber: '',
+  //   email: '',
+  //   maritalStatus: '',
+  //   locality: '',
+  //   address: '',
+  //   state: '',
+  //   city: '',
+  // });
   const [input, setInput] = useState({
     name: '',
     fatherName: '',
@@ -44,10 +55,21 @@ const ProfileScreen = ({ navigation }) => {
     mobileNumber: '',
     email: '',
     maritalStatus: '',
+    locality: '',
     address: '',
-    state: '',
-    city: '',
   });
+  // const [errors, setErrors] = useState({
+  //   name: '',
+  //   fatherName: '',
+  //   motherName: '',
+  //   mobileNumber: '',
+  //   email: '',
+  //   maritalStatus: '',
+  //   locality: '',
+  //   address: '',
+  //   state: '',
+  //   city: '',
+  // });
 
   const [errors, setErrors] = useState({
     name: '',
@@ -55,12 +77,65 @@ const ProfileScreen = ({ navigation }) => {
     motherName: '',
     mobileNumber: '',
     email: '',
-    maritalStatus: '',
+    locality: '',
     address: '',
     state: '',
     city: '',
+    maritalStatus: '',
   });
+  console.log('errr', errors);
 
+  const validateForm = () => {
+    const newErrors: any = {};
+
+    if (!input.name.trim()) {
+      newErrors.name = 'Please enter name';
+    }
+
+    if (!input.fatherName.trim()) {
+      newErrors.fatherName = 'Please enter father name';
+    }
+
+    if (!input.motherName.trim()) {
+      newErrors.motherName = 'Please enter mother name';
+    }
+
+    if (!input.mobileNumber.trim()) {
+      newErrors.mobileNumber = 'Please enter mobile number';
+    } else if (!/^\d{10}$/.test(input.mobileNumber)) {
+      newErrors.mobileNumber = 'Please enter valid mobile number';
+    }
+
+    if (!input.email.trim()) {
+      newErrors.email = 'Please enter email';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(input.email)) {
+      newErrors.email = 'Please enter valid email';
+    }
+
+    if (!input.locality.trim()) {
+      newErrors.locality = 'Please enter locality';
+    }
+
+    if (!input.address.trim()) {
+      newErrors.address = 'Please enter address';
+    }
+
+    if (!single) {
+      newErrors.maritalStatus = 'Please select marital status';
+    }
+
+    if (!state) {
+      newErrors.state = 'Please select state';
+    }
+
+    if (!city) {
+      newErrors.city = 'Please select city';
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
   // const stateList = [
   //   { label: 'Rajasthan', value: 'Rajasthan' },
   //   { label: 'Delhi', value: 'Delhi' },
@@ -105,9 +180,15 @@ const ProfileScreen = ({ navigation }) => {
   const handleCity = (val) => {
     if (!state) {
       showToast('error', 'Error', 'Please select state first');
-    } else {
-      setCity(val);
+      return;
     }
+
+    setCity(val);
+
+    setErrors((prev) => ({
+      ...prev,
+      city: '',
+    }));
   };
   const handleMaritalSelect = (val) => {
     setSingle(val);
@@ -136,6 +217,57 @@ const ProfileScreen = ({ navigation }) => {
       const res = await POST_FORM(ApiEndPoint.getProfile, params);
       if (res?.status === '1') {
         setuserData(res?.result[0]);
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const params = {
+        member_id: memberId,
+        member_name: input?.name,
+        member_address: input?.address,
+        member_locality: input?.locality,
+        member_city_id: city,
+        member_state_id: state,
+        member_father_name: input.fatherName,
+        member_mother_name: input?.motherName,
+        member_phone_optional: input.mobileNumber,
+        member_marital: single !== 1 ? 'Married' : 'Single',
+        member_image: image?.uri
+          ? {
+              uri: image.uri,
+              type: image.type || 'image/jpeg',
+              name: image.fileName || 'profile.jpg',
+            }
+          : '',
+      };
+      // console.log('params =>', params);
+      const res = await POST_FORM(ApiEndPoint.updateProfile, params);
+      // console.log('response=>', res);
+
+      if (res?.status === '1') {
+        // setuserData(res?.result[0]);
+        showToast('success', 'Success', res?.msg);
+        fetchUserData(res?.result[0]?.member_id);
+      } else {
+        showToast('error', 'Errpr', res?.msg);
       }
     } catch (error) {
       if (error?.offline) {
@@ -203,6 +335,7 @@ const ProfileScreen = ({ navigation }) => {
       const member_id = await localStorage.getItem(storageKeys.member_id);
       if (member_id) {
         fetchUserData(member_id);
+        setMemberId(member_id);
       }
 
       stateListApi();
@@ -220,12 +353,30 @@ const ProfileScreen = ({ navigation }) => {
       mobileNumber: userData?.member_phone || '',
       email: userData?.member_email || '',
       maritalStatus: userData?.member_marital_status || '',
+      locality: userData?.member_locality || '',
       address: userData?.member_address || '',
     });
 
-    setState(userData?.member_state_id || '');
-    setCity(userData?.member_city_id || '');
-    setSingle(userData?.member_marital_status === 'Unmarried' ? 1 : 2);
+    if (userData?.member_state_id) {
+      setState(userData?.member_state_id);
+    }
+
+    if (userData?.member_city_id) {
+      setCity(userData?.member_city_id);
+    }
+
+    if (userData?.member_marital_status) {
+      setSingle(userData?.member_marital_status === 'Unmarried' ? 1 : 2);
+    }
+    // setInput({
+    //   name: userData?.member_name || '',
+    //   fatherName: userData?.member_father_name || '',
+    //   motherName: userData?.member_mother_name || '',
+    //   mobileNumber: userData?.member_phone || '',
+    //   email: userData?.member_email || '',
+    //   maritalStatus: userData?.member_marital_status || '',
+    //   address: userData?.member_address || '',
+    // });
   }, [userData]);
 
   return (
@@ -273,8 +424,7 @@ const ProfileScreen = ({ navigation }) => {
         value={input.name}
         handleChange={(value) => handleChange('name', value)}
       />
-      {errors?.name && <Text style={styles.nameError}>{errors?.name}</Text>}
-
+      {errors.name ? <Text style={styles.nameError}>{errors.name}</Text> : null}
       <AppInput
         placeholderText={'Please enter father name'}
         leftIconStyle={styles.passIcon}
@@ -282,6 +432,9 @@ const ProfileScreen = ({ navigation }) => {
         value={input.fatherName}
         handleChange={(value) => handleChange('fatherName', value)}
       />
+      {errors.fatherName ? (
+        <Text style={styles.nameError}>{errors.fatherName}</Text>
+      ) : null}
 
       <AppInput
         placeholderText={'Please enter mother name'}
@@ -290,6 +443,10 @@ const ProfileScreen = ({ navigation }) => {
         value={input.motherName}
         handleChange={(value) => handleChange('motherName', value)}
       />
+      {errors.motherName ? (
+        <Text style={styles.nameError}>{errors.motherName}</Text>
+      ) : null}
+
       <AppInput
         placeholderText={'Please enter mobile number'}
         leftIconStyle={styles.passIcon}
@@ -297,6 +454,10 @@ const ProfileScreen = ({ navigation }) => {
         value={input.mobileNumber}
         handleChange={(value) => handleChange('mobileNumber', value)}
       />
+      {errors.mobileNumber ? (
+        <Text style={styles.nameError}>{errors.mobileNumber}</Text>
+      ) : null}
+
       <AppInput
         placeholderText={'Please enter email'}
         leftIconStyle={styles.passIcon}
@@ -304,6 +465,20 @@ const ProfileScreen = ({ navigation }) => {
         value={input.email}
         handleChange={(value) => handleChange('email', value)}
       />
+      {errors.email ? (
+        <Text style={styles.nameError}>{errors.email}</Text>
+      ) : null}
+
+      <AppInput
+        placeholderText={'Please enter locality'}
+        leftIconStyle={styles.passIcon}
+        inputBoxStyle={styles.inputBoxStyle}
+        value={input.locality}
+        handleChange={(value) => handleChange('locality', value)}
+      />
+      {errors.locality ? (
+        <Text style={styles.nameError}>{errors.locality}</Text>
+      ) : null}
 
       <AppInput
         placeholderText={'Please enter address'}
@@ -312,6 +487,9 @@ const ProfileScreen = ({ navigation }) => {
         value={input.address}
         handleChange={(value) => handleChange('address', value)}
       />
+      {errors.address ? (
+        <Text style={styles.nameError}>{errors.address}</Text>
+      ) : null}
       {
         // <AppInput
         //   placeholderText={'Please enter marital status'}
@@ -369,6 +547,9 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.addressText}> Marrized </Text>
         </Pressable>
       </View>
+      {errors.maritalStatus ? (
+        <Text style={styles.nameError}>{errors.maritalStatus}</Text>
+      ) : null}
 
       <Text style={styles.addressText1}>State </Text>
 
@@ -379,6 +560,9 @@ const ProfileScreen = ({ navigation }) => {
         placeholder={'Select State'}
         dropDownContainer={styles.stateDropDown}
       />
+      {errors.state ? (
+        <Text style={styles.nameError}>{errors.state}</Text>
+      ) : null}
 
       <Text style={[styles.addressText1, styles.cityText]}>City </Text>
       <CustomDropDown
@@ -388,8 +572,13 @@ const ProfileScreen = ({ navigation }) => {
         placeholder={'Select City'}
         dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
       />
+      {errors.city ? <Text style={styles.nameError}>{errors.city}</Text> : null}
 
-      <CustomButton title="Submit" style={styles.btnStyle} />
+      <CustomButton
+        title="Submit"
+        style={styles.btnStyle}
+        onPress={handleUpdateProfile}
+      />
       <AppImagePicker
         visible={visible}
         onChange={handleImgChange}

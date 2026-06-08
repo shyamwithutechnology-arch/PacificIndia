@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Alert,
   FlatList,
@@ -30,7 +36,7 @@ import { localStorage, storageKeys } from '../../../storage/storage';
 import { baseURL } from '../../../component/api/axios';
 import { DUMMY_IMAGE } from '../../../api/axios';
 import AppDatePicker from '../../../component/appDatePicker/AppDatePicker';
-import { formatDateDDMMYYYY } from '../../../utils/date';
+import { formatDateDayMonthShortYear } from '../../../utils/date';
 
 const SelectDoctorScreen = () => {
   const theme = useAppTheme();
@@ -47,6 +53,7 @@ const SelectDoctorScreen = () => {
   const [date, setDate] = useState(null);
   const [pickerDate, setPickerDate] = useState(new Date());
   const navigation = useNavigation();
+  const InputRef = useRef<TextInput>(null);
 
   const handleVisibleDate = () => {
     setDateVisible(true);
@@ -54,6 +61,9 @@ const SelectDoctorScreen = () => {
 
   const handleDateClose = () => {
     setDateVisible(false);
+  };
+  const handleFocusInput = () => {
+    InputRef.current?.focus();
   };
 
   const handleNavigate = () => {
@@ -192,6 +202,15 @@ const SelectDoctorScreen = () => {
     return errors;
   };
 
+  //   team_member_id: memberId,
+  // doctor_id: selectedDoctors,
+  // comment: comment,
+  // next_schedule_date: formatDate(date),
+
+  // team_member_id: 32,
+  // doctor_id: 1614,
+  // comment: 'Daily Visit',
+  // next_schedule_date: '20-10-2026',
   const AddDoctor = async () => {
     const errors = validate();
 
@@ -202,12 +221,11 @@ const SelectDoctorScreen = () => {
 
     try {
       setLoading(true);
-
       const response = await POST_FORM(ApiEndPoint.addDailyVisitByMemberId, {
         team_member_id: memberId,
         doctor_id: selectedDoctors,
-        comment,
-        next_schedule_date: formatDate(date),
+        comment: comment,
+        next_schedule_date: formatDateDayMonthShortYear(date),
       });
 
       if (response?.status === '1') {
@@ -221,6 +239,7 @@ const SelectDoctorScreen = () => {
       setComment('');
       setDate(null);
       setSelectedDoctors(null);
+      setIsvisible(false);
     }
   };
 
@@ -274,9 +293,7 @@ const SelectDoctorScreen = () => {
     }
 
     return doctorList?.filter((item) =>
-      item?.dailyr_doctor_name
-        ?.toLowerCase()
-        .includes(search.toLocaleLowerCase())
+      item?.dr_name?.toLowerCase().includes(search.toLocaleLowerCase())
     );
   }, [doctorList, search]);
 
@@ -332,14 +349,15 @@ const SelectDoctorScreen = () => {
       <AppModal visible={visible} onClose={handleCloseModal}>
         <Text style={[styles.addressText1]}>Comment</Text>
 
-        <View style={styles.appInputBox}>
+        <Pressable style={styles.appInputBox} onPress={handleFocusInput}>
           <TextInput
             value={comment}
             onChangeText={handleComment}
             placeholder={'Comment'}
             multiline={true}
+            ref={InputRef}
           />
-        </View>
+        </Pressable>
         {errors?.comment ? (
           <Text style={styles.nameError}>{errors?.comment}</Text>
         ) : undefined}

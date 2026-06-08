@@ -295,6 +295,7 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   const styles = createStyles(theme);
   const route = useRoute();
   const { medicine_id, specialityName } = route?.params || {};
+
   const { width, height } = useWindowDimensions();
   const [orientation, setOrientation] = useState('PORTRAIT');
   const [controlsVisible, setControlsVisible] = useState(true);

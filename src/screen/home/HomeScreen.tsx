@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -8,18 +8,24 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ScreenLayout } from '../../component';
+import { ScreenLayout, Loader } from '../../component';
 import { Icons } from '../../assets/icons';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { createStyles } from './styles';
 import AppHeader from '../../component/AppHeader/AppHeader';
 import { Images } from '../../assets/images';
 import HomeBannerSlider from './component/homebanner/HomeBannerSlider';
+import { showToast } from '../../utils/toast';
+import { GET, POST_FORM } from '../../api/request';
+import { ApiEndPoint } from '../../api/endPoints';
 
 const HomeScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [seach, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [banner, setBanner] = useState([]);
+  console.log('banner', banner);
 
   const category = [
     {
@@ -49,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
       title: 'Daily Visit',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.dailyVisit,
-      screen: 'DailyVisit',
+      screen: 'DailyVisitStack',
     },
     {
       id: 5,
@@ -67,7 +73,7 @@ const HomeScreen = ({ navigation }) => {
     },
   ];
 
-  const banner = [
+  const bannerd = [
     { id: 1, image: Images.bannerImg },
     { id: 2, image: Images.bannerImg },
     { id: 3, image: Images.bannerImg },
@@ -81,6 +87,28 @@ const HomeScreen = ({ navigation }) => {
       navigation.navigate(item?.screen);
     }
   };
+
+  const fetchBanner = async () => {
+    setLoading(true);
+    try {
+      const res = await GET(ApiEndPoint.banner);
+      if (res?.status === '1') {
+        setBanner(res?.result);
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const renderItem = ({ item }) => {
     return (
       <Pressable style={styles.cart} onPress={() => handleNavigate(item)}>
@@ -92,6 +120,11 @@ const HomeScreen = ({ navigation }) => {
       </Pressable>
     );
   };
+
+  useEffect(() => {
+    fetchBanner();
+  }, []);
+
   return (
     <ScreenLayout
       header={
@@ -105,6 +138,7 @@ const HomeScreen = ({ navigation }) => {
         />
       }
     >
+      <Loader visible={loading} />
       <HomeBannerSlider banners={banner} />
 
       <Text
@@ -117,6 +151,7 @@ const HomeScreen = ({ navigation }) => {
         Manage appointments, consult doctors, access reports, and get complete
         healthcare support in one place.
       </Text>
+
       <FlatList
         data={category}
         renderItem={renderItem}

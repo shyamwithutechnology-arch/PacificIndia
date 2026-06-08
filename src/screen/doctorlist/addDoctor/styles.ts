@@ -3,7 +3,8 @@ import { AppTheme } from '../../../hooks/useAppTheme';
 import { Fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { tokens, verticalScale, scale, moderateScale, insets } = theme;
+  const { tokens, verticalScale, scale, moderateScale, insets, normalize } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -62,9 +63,9 @@ export const createStyles = (theme: AppTheme) => {
       fontFamily: Fonts.ManropeBold,
     },
     addressText1: {
-      fontSize: tokens.fontSize.sm,
+      fontSize: tokens.fontSize.xs,
       color: tokens.colors.black,
-      fontFamily: Fonts.ManropeSemiBold,
+      fontFamily: Fonts.ManropeExtraBold,
       marginBottom: tokens.spacing.xxs,
       // marginLeft: tokens.spacing.xs,
     },
@@ -129,7 +130,7 @@ export const createStyles = (theme: AppTheme) => {
       paddingBlock: insets.bottom + tokens.spacing.md,
     },
     selectDate: {
-      fontSize: tokens.fontSize.sm,
+      fontSize: normalize(13),
       color: tokens.colors.InputText,
       fontFamily: Fonts.ManropeRegular,
     },

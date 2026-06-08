@@ -3,7 +3,8 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize, insets } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -127,7 +128,8 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: tokens.spacing.lg,
       backgroundColor: 'rgba(0, 147, 211, 0.12)',
       paddingLeft: tokens.spacing.md,
-      paddingVertical: tokens.spacing.mdPlus,
+      paddingBottom: insets.bottom + tokens.spacing.xs,
+      paddingTop: tokens.spacing.xxs,
     },
     earPhoneBox: {
       width: scale(60),
