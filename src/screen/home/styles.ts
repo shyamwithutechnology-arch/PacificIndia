@@ -3,7 +3,8 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize, isTablet } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -21,6 +22,7 @@ export const createStyles = (theme: AppTheme) => {
       color: tokens.colors.gray,
       fontFamily: Fonts.ManropeMedium,
       textAlign: 'center',
+      marginBottom: tokens.spacing.smPlus,
     },
 
     cart: {
@@ -32,9 +34,10 @@ export const createStyles = (theme: AppTheme) => {
       borderWidth: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      width: '32%',
+      width: isTablet ? '23%' : '48%',
       paddingHorizontal: tokens.spacing.xxs,
       paddingVertical: tokens.spacing.sm,
+      marginTop: isTablet ? tokens.spacing.md : tokens.spacing.xs,
     },
     titleText: {
       fontSize: tokens.fontSize.xs,
@@ -72,6 +75,18 @@ export const createStyles = (theme: AppTheme) => {
     listContainer: {
       paddingBottom: tokens.spacing.xl,
       paddingTop: tokens.spacing.xl,
+    },
+    pacificText: {
+      fontSize: tokens.fontSize.smPlus,
+      fontFamily: Fonts.ManropeSemiBold,
+      color: tokens.colors.black,
+      marginTop: tokens.spacing.sm,
+    },
+    pacificDecText: {
+      fontSize: tokens.fontSize.xxs,
+      fontFamily: Fonts.ManropeMedium,
+      color: tokens.colors.lightGray,
+      textAlign: 'justify',
     },
   });
 };

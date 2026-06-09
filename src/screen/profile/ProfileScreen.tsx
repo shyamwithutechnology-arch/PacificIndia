@@ -1,5 +1,13 @@
-import { View, Text, Pressable, FlatList, Image, Alert } from 'react-native';
-import React, { useCallback, useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  Pressable,
+  FlatList,
+  Image,
+  Alert,
+  useWindowDimensions,
+} from 'react-native';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import {
   AppHeader,
@@ -31,7 +39,10 @@ const ProfileScreen = ({ navigation }) => {
   const [userData, setuserData] = useState({});
   const [stateList, setStateList] = useState([]);
   const [memberId, setMemberId] = useState('');
-  console.log('stateqqqqqquserData', userData);
+  const isTablet = theme.isTablet;
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
   // Alert.alert('stateList', JSON.stringify(stateList));
 
   const [cityList, setCityList] = useState([]);
@@ -136,41 +147,9 @@ const ProfileScreen = ({ navigation }) => {
 
     return Object.keys(newErrors).length === 0;
   };
-  // const stateList = [
-  //   { label: 'Rajasthan', value: 'Rajasthan' },
-  //   { label: 'Delhi', value: 'Delhi' },
-  //   { label: 'Gujarat', value: 'Gujarat' },
-  //   { label: 'Maharashtra', value: 'Maharashtra' },
-  //   { label: 'Punjab', value: 'Punjab' },
-  //   { label: 'Haryana', value: 'Haryana' },
-  //   { label: 'Uttar Pradesh', value: 'Uttar Pradesh' },
-  //   { label: 'Madhya Pradesh', value: 'Madhya Pradesh' },
-  //   { label: 'Bihar', value: 'Bihar' },
-  //   { label: 'West Bengal', value: 'West Bengal' },
-  //   { label: 'Tamil Nadu', value: 'Tamil Nadu' },
-  //   { label: 'Karnataka', value: 'Karnataka' },
-  // ];
-
-  // const cityList = [
-  //   { label: 'Jaipur', value: 'Jaipur' },
-  //   { label: 'Jodhpur', value: 'Jodhpur' },
-  //   { label: 'Udaipur', value: 'Udaipur' },
-  //   { label: 'Ajmer', value: 'Ajmer' },
-  //   { label: 'Kota', value: 'Kota' },
-  //   { label: 'Bikaner', value: 'Bikaner' },
-  //   { label: 'Alwar', value: 'Alwar' },
-  //   { label: 'Bharatpur', value: 'Bharatpur' },
-  //   { label: 'Sikar', value: 'Sikar' },
-  //   { label: 'Tonk', value: 'Tonk' },
-  //   { label: 'Jhunjhunu', value: 'Jhunjhunu' },
-  //   { label: 'Pali', value: 'Pali' },
-  //   { label: 'Chittorgarh', value: 'Chittorgarh' },
-  //   { label: 'Nagaur', value: 'Nagaur' },
-  //   { label: 'Barmer', value: 'Barmer' },
-  // ];
 
   const handleGoback = useCallback(() => {
-    navigation.goBack();
+    navigation.navigate('HomeTab', 'Home');
   }, [navigation]);
 
   const handleState = async (val) => {
@@ -192,6 +171,7 @@ const ProfileScreen = ({ navigation }) => {
   };
   const handleMaritalSelect = (val) => {
     setSingle(val);
+    setErrors((pre) => ({ ...pre, maritalStatus: '' }));
   };
   const handleImgChange = (img) => {
     setImage(img);
@@ -344,39 +324,44 @@ const ProfileScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (!Object.keys(userData).length) return;
+    const loadProfileData = async () => {
+      if (!Object.keys(userData).length) return;
 
-    setInput({
-      name: userData?.member_name || '',
-      fatherName: userData?.member_father_name || '',
-      motherName: userData?.member_mother_name || '',
-      mobileNumber: userData?.member_phone || '',
-      email: userData?.member_email || '',
-      maritalStatus: userData?.member_marital_status || '',
-      locality: userData?.member_locality || '',
-      address: userData?.member_address || '',
-    });
+      setInput({
+        name: userData?.member_name || '',
+        fatherName: userData?.member_father_name || '',
+        motherName: userData?.member_mother_name || '',
+        mobileNumber: userData?.member_phone || '',
+        email: userData?.member_email || '',
+        maritalStatus: userData?.member_marital_status || '',
+        locality: userData?.member_locality || '',
+        address: userData?.member_address || '',
+      });
 
-    if (userData?.member_state_id) {
-      setState(userData?.member_state_id);
-    }
+      if (userData?.member_state_id) {
+        setState(userData?.member_state_id);
 
-    if (userData?.member_city_id) {
-      setCity(userData?.member_city_id);
-    }
+        // Load city list first
+        await cityListApi(userData.member_state_id);
 
-    if (userData?.member_marital_status) {
-      setSingle(userData?.member_marital_status === 'Unmarried' ? 1 : 2);
-    }
-    // setInput({
-    //   name: userData?.member_name || '',
-    //   fatherName: userData?.member_father_name || '',
-    //   motherName: userData?.member_mother_name || '',
-    //   mobileNumber: userData?.member_phone || '',
-    //   email: userData?.member_email || '',
-    //   maritalStatus: userData?.member_marital_status || '',
-    //   address: userData?.member_address || '',
-    // });
+        // Then set selected city
+        setCity(userData.member_city_id);
+      }
+
+      if (userData?.member_marital_status) {
+        setSingle(userData?.member_marital_status === 'Unmarried' ? 1 : 2);
+      }
+      // setInput({
+      //   name: userData?.member_name || '',
+      //   fatherName: userData?.member_father_name || '',
+      //   motherName: userData?.member_mother_name || '',
+      //   mobileNumber: userData?.member_phone || '',
+      //   email: userData?.member_email || '',
+      //   maritalStatus: userData?.member_marital_status || '',
+      //   address: userData?.member_address || '',
+      // });
+    };
+    loadProfileData();
   }, [userData]);
 
   return (
@@ -417,163 +402,330 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </Pressable>
 
-      <AppInput
-        placeholderText={'Please enter name'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.name}
-        handleChange={(value) => handleChange('name', value)}
-      />
-      {errors.name ? <Text style={styles.nameError}>{errors.name}</Text> : null}
-      <AppInput
-        placeholderText={'Please enter father name'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.fatherName}
-        handleChange={(value) => handleChange('fatherName', value)}
-      />
-      {errors.fatherName ? (
-        <Text style={styles.nameError}>{errors.fatherName}</Text>
-      ) : null}
-
-      <AppInput
-        placeholderText={'Please enter mother name'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.motherName}
-        handleChange={(value) => handleChange('motherName', value)}
-      />
-      {errors.motherName ? (
-        <Text style={styles.nameError}>{errors.motherName}</Text>
-      ) : null}
-
-      <AppInput
-        placeholderText={'Please enter mobile number'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.mobileNumber}
-        handleChange={(value) => handleChange('mobileNumber', value)}
-      />
-      {errors.mobileNumber ? (
-        <Text style={styles.nameError}>{errors.mobileNumber}</Text>
-      ) : null}
-
-      <AppInput
-        placeholderText={'Please enter email'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.email}
-        handleChange={(value) => handleChange('email', value)}
-      />
-      {errors.email ? (
-        <Text style={styles.nameError}>{errors.email}</Text>
-      ) : null}
-
-      <AppInput
-        placeholderText={'Please enter locality'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.locality}
-        handleChange={(value) => handleChange('locality', value)}
-      />
-      {errors.locality ? (
-        <Text style={styles.nameError}>{errors.locality}</Text>
-      ) : null}
-
-      <AppInput
-        placeholderText={'Please enter address'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.address}
-        handleChange={(value) => handleChange('address', value)}
-      />
-      {errors.address ? (
-        <Text style={styles.nameError}>{errors.address}</Text>
-      ) : null}
-      {
-        // <AppInput
-        //   placeholderText={'Please enter marital status'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('maritalStatus', value)}
-        // />
-      }
-      {
-        // <AppInput
-        //   placeholderText={'Please enter address'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('address', value)}
-        // />
-        // <AppInput
-        //   placeholderText={'Please enter state'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('state', value)}
-        // />
-        // <AppInput
-        //   placeholderText={'Please enter city'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('city', value)}
-        // />
-      }
-      <Text style={styles.addressText1}>Marital Status </Text>
-
-      <View style={[styles.maritalStatusRow, styles.maritalBoxMain]}>
-        <Pressable
-          style={[styles.maritalStatusRow, single === 1 && styles.outerBox]}
-          onPress={() => handleMaritalSelect(1)}
+      <View
+        style={
+          isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
+        }
+      >
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
         >
-          <View style={[styles.radioBtn, single === 1 && styles.outerBox]}>
-            {single === 1 && <View style={styles.innerRadioBtn} />}
-          </View>
+          <Text style={[styles.addressText1, styles.cityText]}>Name </Text>
+          <AppInput
+            placeholderText={'Please enter name'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.name}
+            handleChange={(value) => handleChange('name', value)}
+          />
+          {errors.name ? (
+            <Text style={styles.nameError}>{errors.name}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
 
-          <Text style={styles.addressText}> Single </Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.maritalStatusRow,
-            styles.marrizedStyle,
-            single === 2 && styles.outerBox,
-          ]}
-          onPress={() => handleMaritalSelect(2)}
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
         >
-          <View style={[styles.radioBtn, single === 2 && styles.outerBox]}>
-            {single === 2 && <View style={styles.innerRadioBtn} />}
-          </View>
-
-          <Text style={styles.addressText}> Marrized </Text>
-        </Pressable>
+          <Text style={[styles.addressText1, styles.cityText]}>
+            Fathe Name{' '}
+          </Text>
+          <AppInput
+            placeholderText={'Please enter father name'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.fatherName}
+            handleChange={(value) => handleChange('fatherName', value)}
+          />
+          {errors.fatherName ? (
+            <Text style={styles.nameError}>{errors.fatherName}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
       </View>
-      {errors.maritalStatus ? (
-        <Text style={styles.nameError}>{errors.maritalStatus}</Text>
-      ) : null}
 
-      <Text style={styles.addressText1}>State </Text>
+      <View
+        style={
+          isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
+        }
+      >
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={[styles.addressText1, styles.cityText]}>
+            Mother Name{' '}
+          </Text>
+          <AppInput
+            placeholderText={'Please enter mother name'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.motherName}
+            handleChange={(value) => handleChange('motherName', value)}
+          />
+          {errors.motherName ? (
+            <Text style={styles.nameError}>{errors.motherName}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={[styles.addressText1, styles.cityText]}>
+            Mobile Number{' '}
+          </Text>
+          <AppInput
+            placeholderText={'Please enter mobile number'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.mobileNumber}
+            handleChange={(value) => handleChange('mobileNumber', value)}
+          />
+          {errors.mobileNumber ? (
+            <Text style={styles.nameError}>{errors.mobileNumber}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+      </View>
 
-      <CustomDropDown
-        data={stateList}
-        onChange={handleState}
-        value={state}
-        placeholder={'Select State'}
-        dropDownContainer={styles.stateDropDown}
-      />
-      {errors.state ? (
-        <Text style={styles.nameError}>{errors.state}</Text>
-      ) : null}
+      <View
+        style={
+          isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
+        }
+      >
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={[styles.addressText1, styles.cityText]}>Email </Text>
+          <AppInput
+            placeholderText={'Please enter email'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.email}
+            handleChange={(value) => handleChange('email', value)}
+          />
+          {errors.email ? (
+            <Text style={styles.nameError}>{errors.email}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={[styles.addressText1, styles.cityText]}>Locality </Text>
+          <AppInput
+            placeholderText={'Please enter locality'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.locality}
+            handleChange={(value) => handleChange('locality', value)}
+          />
+          {errors.locality ? (
+            <Text style={styles.nameError}>{errors.locality}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+      </View>
 
-      <Text style={[styles.addressText1, styles.cityText]}>City </Text>
-      <CustomDropDown
-        data={cityList}
-        onChange={handleCity}
-        value={city}
-        placeholder={'Select City'}
-        dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
-      />
-      {errors.city ? <Text style={styles.nameError}>{errors.city}</Text> : null}
+      <View
+        style={
+          isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
+        }
+      >
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={[styles.addressText1, styles.cityText]}>Address </Text>
+          <AppInput
+            placeholderText={'Please enter address'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.address}
+            handleChange={(value) => handleChange('address', value)}
+          />
+          {errors.address ? (
+            <Text style={styles.nameError}>{errors.address}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+        {
+          // <AppInput
+          //   placeholderText={'Please enter marital status'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('maritalStatus', value)}
+          // />
+        }
+        {
+          // <AppInput
+          //   placeholderText={'Please enter address'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('address', value)}
+          // />
+          // <AppInput
+          //   placeholderText={'Please enter state'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('state', value)}
+          // />
+          // <AppInput
+          //   placeholderText={'Please enter city'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('city', value)}
+          // />
+        }
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={[styles.addressText1, styles.cityText]}>
+            Marital Status
+          </Text>
 
+          <View style={[styles.maritalStatusRow, styles.maritalBoxMain]}>
+            <Pressable
+              style={[styles.maritalStatusRow, single === 1 && styles.outerBox]}
+              onPress={() => handleMaritalSelect(1)}
+            >
+              <View style={[styles.radioBtn, single === 1 && styles.outerBox]}>
+                {single === 1 && <View style={styles.innerRadioBtn} />}
+              </View>
+
+              <Text style={styles.addressText}> Single </Text>
+            </Pressable>
+
+            <Pressable
+              style={[
+                styles.maritalStatusRow,
+                styles.marrizedStyle,
+                single === 2 && styles.outerBox,
+              ]}
+              onPress={() => handleMaritalSelect(2)}
+            >
+              <View style={[styles.radioBtn, single === 2 && styles.outerBox]}>
+                {single === 2 && <View style={styles.innerRadioBtn} />}
+              </View>
+
+              <Text style={styles.addressText}> Marrized </Text>
+            </Pressable>
+          </View>
+          {errors.maritalStatus ? (
+            <Text style={styles.nameError}>{errors.maritalStatus}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+      </View>
+
+      <View
+        style={
+          isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
+        }
+      >
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={styles.addressText1}>State </Text>
+
+          <CustomDropDown
+            data={stateList}
+            onChange={handleState}
+            value={state}
+            placeholder={'Select State'}
+            dropDownContainer={styles.stateDropDown}
+          />
+          {errors.state ? (
+            <Text style={styles.nameError}>{errors.state}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={[styles.addressText1]}>City </Text>
+          <CustomDropDown
+            data={cityList}
+            onChange={handleCity}
+            value={city}
+            placeholder={'Select City'}
+            dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
+          />
+          {errors.city ? (
+            <Text style={styles.nameError}>{errors.city}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+      </View>
       <CustomButton
         title="Submit"
         style={styles.btnStyle}

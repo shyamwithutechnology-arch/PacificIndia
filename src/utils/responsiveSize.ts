@@ -15,9 +15,13 @@ export const useResponsive = () => {
     [width, height]
   );
 
+  const isLandscape = width > height;
+
   const longDimension = useMemo(() => Math.max(width, height), [width, height]);
 
-  const isTablet = shortDimension >= 768;
+  // const isTablet = shortDimension >= 768;
+  const isTablet = longDimension >= 1024;
+
   const maxScale = isTablet ? 1.4 : 1.25;
 
   // We use useCallback so these function references stay stable
@@ -47,7 +51,15 @@ export const useResponsive = () => {
     [scale]
   );
 
-  return { scale, verticalScale, moderateScale, normalize, insets, isTablet };
+  return {
+    scale,
+    verticalScale,
+    moderateScale,
+    normalize,
+    insets,
+    isTablet,
+    isLandscape,
+  };
 };
 
 // import { Dimensions, PixelRatio } from 'react-native';

@@ -93,6 +93,17 @@ export const createStyles = (theme: AppTheme) => {
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+
+    dropDownContainer: {
+      borderWidth: 0.5,
+      borderRadius: tokens.radius.sm,
+      borderColor: tokens.colors.primary,
+
+      marginTop: tokens.spacing.smPlus,
+    },
+    inputBoxStyle: {
+      marginTop: tokens.spacing.mdPlus,
+    },
   });
 };
 // export const styles = StyleSheet.create({

@@ -3,7 +3,8 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize, isTablet } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -34,6 +35,12 @@ export const createStyles = (theme: AppTheme) => {
       paddingVertical: tokens.spacing.smPlus,
       marginBottom: tokens.spacing.md,
       flexDirection: 'row',
+    },
+    cardBoxForLep: {
+      width: '48.5%',
+    },
+    cardBoxForMob: {
+      width: '100%',
     },
     titleText: {
       fontSize: tokens.fontSize.xs,
@@ -77,7 +84,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     searchTop: {
       marginTop: 0,
-      width: '75.5%',
+      width: isTablet ? '83.5%' : '75.5%',
       // marginBottom: tokens.spacing.xs,
     },
     verificationBox: {
@@ -191,7 +198,6 @@ export const createStyles = (theme: AppTheme) => {
     rowSerach: {
       flexDirection: 'row',
       alignItems: 'center',
-      // borderWidth: 1,
       marginTop: tokens.spacing.smPlus,
     },
     addText: {

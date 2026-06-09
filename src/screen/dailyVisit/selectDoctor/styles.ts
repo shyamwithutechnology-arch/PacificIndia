@@ -291,5 +291,14 @@ export const createStyles = (theme: AppTheme) => {
     contentStyle: {
       maxHeight: '90%',
     },
+    cardBoxForLep: {
+      width: '48.5%',
+    },
+    cardBoxForMob: {
+      width: '100%',
+    },
+    cardBoxForMobTwo: {
+      width: '49%',
+    },
   });
 };

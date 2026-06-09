@@ -3,7 +3,8 @@ import { AppTheme } from '../../../hooks/useAppTheme';
 import { Fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize, insets } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -161,6 +162,9 @@ export const createStyles = (theme: AppTheme) => {
     },
     medecinBox: {
       backgroundColor: '#0074D3',
+    },
+    innerContainer: {
+      paddingBottom: insets.bottom + tokens.spacing.md,
     },
   });
 };

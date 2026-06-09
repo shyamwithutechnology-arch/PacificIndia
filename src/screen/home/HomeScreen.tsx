@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
+  Dimensions,
   FlatList,
   Image,
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { ScreenLayout, Loader } from '../../component';
@@ -22,10 +24,21 @@ import { ApiEndPoint } from '../../api/endPoints';
 const HomeScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const { width, height } = useWindowDimensions();
   const [seach, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [banner, setBanner] = useState([]);
-  console.log('banner', banner);
+  const [orientation, setOrientation] = useState('PORTRAIT');
+
+  const isLandscape = width > height;
+
+  // Dynamic column calculation based on orientation and device
+  const numColumns = useMemo(() => {
+    if (theme.isTablet) {
+      return isLandscape ? 4 : 4;
+    }
+    return isLandscape ? 2 : 2;
+  }, [isLandscape, theme.isTablet]);
 
   const category = [
     {
@@ -56,20 +69,6 @@ const HomeScreen = ({ navigation }) => {
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.dailyVisit,
       screen: 'DailyVisitStack',
-    },
-    {
-      id: 5,
-      title: 'Doctors',
-      dec: 'Explore Our Wide Range of Speciality',
-      img: Images.apppointments1,
-      screen: 'Specility',
-    },
-    {
-      id: 6,
-      title: 'Appoitments',
-      dec: 'Explore Our Wide Range of Speciality',
-      img: Images.apppointments1,
-      screen: 'Specility',
     },
   ];
 
@@ -121,6 +120,65 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
+  const headerComponent = () => {
+    return (
+      <View>
+        <HomeBannerSlider banners={banner} />
+
+        <Text
+          style={styles.specialityText}
+          onPress={() => navigation.navigate('Doctorlist')}
+        >
+          Healthcare Solutions
+        </Text>
+        <Text style={styles.specialityDecText}>
+          Manage appointments, consult doctors, access reports, and get complete
+          healthcare support in one place.
+        </Text>
+      </View>
+    );
+  };
+
+  const footerComponent = () => {
+    return (
+      <View>
+        <Text style={styles.pacificText}>Pacific Medical & Diagnostics</Text>
+
+        <Text style={styles.pacificDecText}>
+          Pacific Medical & Diagnostics is an emerging integrated healthcare
+          service provider committed to delivering quality healthcare solutions
+          under one roof. With a team of experienced medical practitioners,
+          advanced diagnostic facilities, and modern laboratory services, we aim
+          to make healthcare more accessible, reliable, and patient-focused. Our
+          organization is built on a foundation of ethical medical practices,
+          professional excellence, and a strong commitment to patient
+          well-being.
+        </Text>
+
+        <Text style={styles.pacificDecText}>
+          We combine expert medical consultations, diagnostic services, and
+          healthcare support through a technology-driven platform that enables
+          patients to conveniently access healthcare services. Our focus is on
+          providing accurate diagnoses, timely treatment guidance, medicine
+          management, and a seamless healthcare experience for individuals and
+          families.
+        </Text>
+      </View>
+    );
+  };
+
+  // Detect orientation changes
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      if (window.width > window.height) {
+        setOrientation('LANDSCAPE');
+      } else {
+        setOrientation('PORTRAIT');
+      }
+    });
+    return () => subscription?.remove();
+  }, []);
+
   useEffect(() => {
     fetchBanner();
   }, []);
@@ -130,34 +188,23 @@ const HomeScreen = ({ navigation }) => {
       header={
         <AppHeader
           title="Pacific India"
-          search={seach}
           leftIcon={Icons.drawerIcon}
-          setSearch={setSearch}
-          searchStatus={true}
           onPress={() => navigation.openDrawer()}
         />
       }
+      scroll={true}
     >
       <Loader visible={loading} />
-      <HomeBannerSlider banners={banner} />
-
-      <Text
-        style={styles.specialityText}
-        onPress={() => navigation.navigate('Doctorlist')}
-      >
-        Healthcare Solutions
-      </Text>
-      <Text style={styles.specialityDecText}>
-        Manage appointments, consult doctors, access reports, and get complete
-        healthcare support in one place.
-      </Text>
 
       <FlatList
+        key={`flatlist-${numColumns}-${orientation}`}
         data={category}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={3}
-        columnWrapperStyle={styles.row}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={numColumns}
+        ListHeaderComponent={headerComponent}
+        ListFooterComponent={footerComponent}
+        columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
       />

@@ -1,37 +1,122 @@
-import React, { useState } from 'react';
-import {
-  Alert,
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Alert, Image, Pressable, Text, View } from 'react-native';
 import {
   ScreenLayout,
   AppHeader,
   AppInput,
   CustomButton,
+  Loader,
+  CustomDropDown,
 } from '../../component';
 import { Icons } from '../../assets/icons';
 import { useAppTheme } from '../../hooks/useAppTheme';
-import { SearchList } from '../../component/searchList/SearchList';
 import { createStyles } from './styles';
 import { Images } from '../../assets/images';
 import UserIcon from 'react-native-vector-icons/FontAwesome6';
+import { GET, POST_FORM } from '../../api/request';
+import { ApiEndPoint } from '../../api/endPoints';
+import { showToast } from '../../utils/toast';
+import { localStorage, storageKeys } from '../../storage/storage';
 
 const SupportTicketScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [seach, setSearch] = useState('');
+  const [memberId, setMemberId] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [subject, setSubject] = useState('');
+  const [comment, setComment] = useState('');
+  const [supportDetails, setSupportDetails] = useState({});
+
+  const subjectData = [
+    { id: 1, label: 'Appointment Issue', value: 'Appointment Issue' },
+    { id: 2, label: 'Doctor Consultation', value: 'Doctor Consultation' },
+    { id: 3, label: 'Prescription Issue', value: 'Prescription Issue' },
+    { id: 4, label: 'Payment Problem', value: 'Payment Problem' },
+    { id: 5, label: 'Refund Request', value: 'Refund Request' },
+    { id: 6, label: 'Lab Report Issue', value: 'Lab Report Issue' },
+    { id: 7, label: 'Account/Login Issue', value: 'Account/Login Issue' },
+    { id: 8, label: 'Other', value: 'Other' },
+  ];
+
+  const handleGoback = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const fetchSupportApi = async (stateId) => {
+    try {
+      setLoading(true);
+      const res = await GET(ApiEndPoint.support);
+      if (res?.status === '1') {
+        setSupportDetails(res.result);
+      }
+    } catch (error) {
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSupport = async () => {
+    if (!subject) {
+      showToast('error', 'Error', 'Please select subject');
+      return;
+    }
+
+    if (!comment?.trim()) {
+      showToast('error', 'Error', 'Please enter comment');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await POST_FORM(`${ApiEndPoint.supportMail}`, {
+        member_id: memberId,
+        subject: subject,
+        comment: comment,
+      });
+      if (res?.status === '1') {
+        showToast('success', 'Success', res?.msg);
+      } else {
+        showToast('error', 'Error', res?.msg);
+      }
+    } catch (error) {
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    let getMemberId = async () => {
+      const id = await localStorage.getItem(storageKeys.member_id);
+      setMemberId(id);
+    };
+    getMemberId();
+    fetchSupportApi();
+  }, []);
 
   return (
     <ScreenLayout
-      header={<AppHeader title="Support" leftIcon={Icons.leftIcon} />}
+      header={
+        <AppHeader
+          title="Support"
+          leftIcon={Icons.leftIcon}
+          onPress={handleGoback}
+        />
+      }
       innerContainer={styles.innerContainer}
       scroll={true}
     >
+      <Loader visible={loading} />
       <View style={styles.customerCareBox}>
         <View style={styles.logoHederRow}>
           <Image
@@ -56,7 +141,7 @@ const SupportTicketScreen = ({ navigation }) => {
             style={styles.nameIcon}
             resizeMode="contain"
           />
-          <Text style={styles.nameText}>Name</Text>
+          <Text style={styles.nameText}>{supportDetails?.name}</Text>
         </View>
         <View style={styles.baseLine} />
 
@@ -66,7 +151,7 @@ const SupportTicketScreen = ({ navigation }) => {
             style={styles.nameIcon}
             resizeMode="contain"
           />
-          <Text style={styles.nameText}>+91-9393495969</Text>
+          <Text style={styles.nameText}>{supportDetails?.phone}</Text>
         </View>
         <View style={styles.baseLine} />
 
@@ -76,8 +161,9 @@ const SupportTicketScreen = ({ navigation }) => {
             style={styles.nameIcon}
             resizeMode="contain"
           />
-          <Text style={styles.nameText}>Support@thepacificindia.com</Text>
+          <Text style={styles.nameText}>{supportDetails?.email}</Text>
         </View>
+
         <View style={styles.baseLine} />
 
         <View style={styles.nameRow}>
@@ -87,9 +173,7 @@ const SupportTicketScreen = ({ navigation }) => {
             resizeMode="contain"
             tintColor={theme.tokens.colors.primary}
           />
-          <Text style={styles.nameText}>
-            3rd Floor, Pacific Medi Tower, 4A, Nand Vihar
-          </Text>
+          <Text style={styles.nameText}>{supportDetails?.address}</Text>
         </View>
       </View>
 
@@ -104,7 +188,6 @@ const SupportTicketScreen = ({ navigation }) => {
           <Text style={styles.nameText}>Name</Text>
         </View>
         <View style={styles.baseLine} />
-
         <View style={styles.nameRow}>
           <Image
             source={Icons.callFillIcon}
@@ -113,9 +196,10 @@ const SupportTicketScreen = ({ navigation }) => {
           />
           <Text style={styles.nameText}>+91-9393495969</Text>
         </View>
-        <View style={styles.baseLine} />
-
         <View style={styles.nameRow}>
+          {
+            // <View style={styles.baseLine} />
+          }
           <Image
             source={Icons.emailIcon}
             style={styles.nameIcon}
@@ -123,13 +207,29 @@ const SupportTicketScreen = ({ navigation }) => {
           />
           <Text style={styles.nameText}>Support@thepacificindia.com</Text>
         </View>
-        <View style={styles.baseLine} />
-        <AppInput placeholderText={'Write here...'} />
+        <CustomDropDown
+          data={subjectData}
+          value={subject}
+          onChange={setSubject}
+          placeholder="Select Subject"
+          dropDownContainer={styles.dropDownContainer}
+        />
+        <AppInput
+          placeholderText={'Write here...'}
+          value={comment}
+          handleChange={setComment}
+          inputBoxStyle={styles.inputBoxStyle}
+        />
 
-        <CustomButton title="Submit" style={styles.submitBtn} />
+        <CustomButton
+          title="Submit"
+          style={styles.submitBtn}
+          onPress={handleSupport}
+        />
       </View>
     </ScreenLayout>
   );
 };
 
 export default SupportTicketScreen;
+// <View style={styles.baseLine} />

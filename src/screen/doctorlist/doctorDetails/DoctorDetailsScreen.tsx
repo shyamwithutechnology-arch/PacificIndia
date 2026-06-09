@@ -145,6 +145,8 @@ const DoctorDetailsScreen = ({ navigation }) => {
           notificationPress={handleNotification}
         />
       }
+      scroll={true}
+      innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
       <View style={styles.card}>

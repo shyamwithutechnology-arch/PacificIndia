@@ -34,8 +34,6 @@ const AddAppointMentScreen = ({ navigation }) => {
   const [memberId, setMemberId] = useState('');
 
   const [state, setState] = useState('');
-  console.log('stateqqqq', JSON.stringify(state));
-
   const [city, setCity] = useState('');
   const [userData, setuserData] = useState({});
   const [stateList, setStateList] = useState([]);
@@ -43,6 +41,8 @@ const AddAppointMentScreen = ({ navigation }) => {
   const [date, setDate] = useState(null);
   const [dateVisible, setDateVisible] = useState(false);
   const formatedDate = formatDateDayMonthShortYear(date);
+
+  const isTablet = theme.isTablet;
 
   const [input, setInput] = useState({
     name: '',
@@ -281,127 +281,164 @@ const AddAppointMentScreen = ({ navigation }) => {
       scroll={true}
     >
       <Loader visible={loading} />
-      <Text style={styles.doctorName}>Doctor Name</Text>
 
-      <AppInput
-        inputBoxStyle={[styles.inputBoxStyle]}
-        placeholderText="Please enter name"
-        value={input.name}
-        handleChange={(value) => handleChange('name', value)}
-      />
-      {errors?.name && <Text style={[styles.nameError]}>{errors?.name}</Text>}
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.doctorName}>Doctor Name</Text>
 
-      <Text style={styles.doctorName}>Doctor Mobile Number</Text>
-      <AppInput
-        inputBoxStyle={styles.inputBoxStyle}
-        placeholderText="Please enter doctor mobile number"
-        value={input.mobile}
-        handleChange={(value) => handleChange('mobile', value)}
-        keyboardType="numeric"
-      />
-      {errors?.mobile && (
-        <Text style={[styles.nameError]}>{errors?.mobile}</Text>
-      )}
+          <AppInput
+            inputBoxStyle={[styles.inputBoxStyle]}
+            placeholderText="Please enter name"
+            value={input.name}
+            handleChange={(value) => handleChange('name', value)}
+          />
+          {errors?.name && (
+            <Text style={[styles.nameError]}>{errors?.name}</Text>
+          )}
+        </View>
 
-      <Text style={styles.doctorName}>Doctor Email</Text>
-      <AppInput
-        inputBoxStyle={styles.inputBoxStyle}
-        placeholderText="Please enter email"
-        value={input.email}
-        handleChange={(value) => handleChange('email', value)}
-        keyboardType="email-address"
-      />
-      {errors?.email && <Text style={[styles.nameError]}>{errors?.email}</Text>}
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.doctorName}>Doctor Mobile Number</Text>
+          <AppInput
+            inputBoxStyle={styles.inputBoxStyle}
+            placeholderText="Please enter doctor mobile number"
+            value={input.mobile}
+            handleChange={(value) => handleChange('mobile', value)}
+            keyboardType="numeric"
+          />
+          {errors?.mobile && (
+            <Text style={[styles.nameError]}>{errors?.mobile}</Text>
+          )}
+        </View>
+      </View>
 
-      <Text style={styles.doctorName}>Appointment Date</Text>
-      <Pressable style={styles.dateSelectBox} onPress={handleVisibleDate}>
-        {
-          // <Image
-          //   source={Icons.dateIcon}
-          //   style={styles.dateIcon}
-          //   tintColor={theme.tokens.colors.primary}
-          // />
-        }
-        <Text style={styles.selectDate}>
-          {' '}
-          {date ? formatedDate : 'Select Date'}
-        </Text>
-      </Pressable>
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.doctorName}>Doctor Email</Text>
+          <AppInput
+            inputBoxStyle={styles.inputBoxStyle}
+            placeholderText="Please enter email"
+            value={input.email}
+            handleChange={(value) => handleChange('email', value)}
+            keyboardType="email-address"
+          />
+          {errors?.email && (
+            <Text style={[styles.nameError]}>{errors?.email}</Text>
+          )}
+        </View>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.doctorName}>Appointment Date</Text>
+          <Pressable style={styles.dateSelectBox} onPress={handleVisibleDate}>
+            {
+              // <Image
+              //   source={Icons.dateIcon}
+              //   style={styles.dateIcon}
+              //   tintColor={theme.tokens.colors.primary}
+              // />
+            }
+            <Text style={styles.selectDate}>
+              {' '}
+              {date ? formatedDate : 'Select Date'}
+            </Text>
+          </Pressable>
 
-      {errors?.date && <Text style={[styles.nameError]}>{errors?.date}</Text>}
+          {errors?.date && (
+            <Text style={[styles.nameError]}>{errors?.date}</Text>
+          )}
+          <AppDatePicker
+            value={date || new Date()}
+            onChange={handleDateChange}
+            visible={dateVisible}
+            onClose={handleDateClose}
+          />
+        </View>
+      </View>
 
-      <AppDatePicker
-        value={date || new Date()}
-        onChange={handleDateChange}
-        visible={dateVisible}
-        onClose={handleDateClose}
-      />
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={[styles.doctorName]}>Appointment Time</Text>
+          <AppInput
+            inputBoxStyle={styles.inputBoxStyle}
+            placeholderText="Please enter appointment time "
+            value={input.time}
+            handleChange={(value) => handleChange('time', value)}
+          />
+          {errors?.time && (
+            <Text style={[styles.nameError]}>{errors?.time}</Text>
+          )}
+        </View>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.doctorName}>Hospital Name</Text>
+          <AppInput
+            inputBoxStyle={styles.inputBoxStyle}
+            placeholderText="Please enter hospital name"
+            value={input.hospitalName}
+            handleChange={(value) => handleChange('hospitalName', value)}
+          />
+          {errors?.hospitalName && (
+            <Text style={[styles.nameError]}>{errors?.hospitalName}</Text>
+          )}
+        </View>
+      </View>
 
-      <Text style={[styles.doctorName]}>Appointment Time</Text>
-      <AppInput
-        inputBoxStyle={styles.inputBoxStyle}
-        placeholderText="Please enter appointment time "
-        value={input.time}
-        handleChange={(value) => handleChange('time', value)}
-      />
-      {errors?.time && <Text style={[styles.nameError]}>{errors?.time}</Text>}
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.doctorName}>Hospital locality</Text>
+          <AppInput
+            inputBoxStyle={styles.inputBoxStyle}
+            placeholderText="Please enter hospital locality"
+            value={input.hospitalLocality}
+            handleChange={(value) => handleChange('hospitalLocality', value)}
+          />
+          {errors?.hospitalLocality && (
+            <Text style={[styles.nameError]}>{errors?.hospitalLocality}</Text>
+          )}
+        </View>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.doctorName}>Hospital address</Text>
+          <AppInput
+            inputBoxStyle={styles.inputBoxStyle}
+            placeholderText="Please enter hospital address"
+            value={input.hospitalAddress}
+            handleChange={(value) => handleChange('hospitalAddress', value)}
+          />
+          {errors?.hospitalAddress && (
+            <Text style={[styles.nameError]}>{errors?.hospitalAddress}</Text>
+          )}
+        </View>
+      </View>
 
-      <Text style={styles.doctorName}>Hospital Name</Text>
-      <AppInput
-        inputBoxStyle={styles.inputBoxStyle}
-        placeholderText="Please enter hospital name"
-        value={input.hospitalName}
-        handleChange={(value) => handleChange('hospitalName', value)}
-      />
-      {errors?.hospitalName && (
-        <Text style={[styles.nameError]}>{errors?.hospitalName}</Text>
-      )}
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={[styles.addressText1, styles.stateText]}>State </Text>
 
-      <Text style={styles.doctorName}>Hospital locality</Text>
-      <AppInput
-        inputBoxStyle={styles.inputBoxStyle}
-        placeholderText="Please enter hospital locality"
-        value={input.hospitalLocality}
-        handleChange={(value) => handleChange('hospitalLocality', value)}
-      />
-      {errors?.hospitalLocality && (
-        <Text style={[styles.nameError]}>{errors?.hospitalLocality}</Text>
-      )}
-
-      <Text style={styles.doctorName}>Hospital address</Text>
-      <AppInput
-        inputBoxStyle={styles.inputBoxStyle}
-        placeholderText="Please enter hospital address"
-        value={input.hospitalAddress}
-        handleChange={(value) => handleChange('hospitalAddress', value)}
-      />
-      {errors?.hospitalAddress && (
-        <Text style={[styles.nameError]}>{errors?.hospitalAddress}</Text>
-      )}
-
-      <Text style={[styles.addressText1, styles.stateText]}>State </Text>
-
-      <CustomDropDown
-        data={stateList}
-        onChange={handleState}
-        value={state}
-        placeholder={'Select State'}
-        dropDownContainer={styles.stateDropDown}
-        placeholderTextStyle={styles.cityPlaceholderText}
-      />
-      {errors?.state && <Text style={[styles.nameError]}>{errors?.state}</Text>}
-
-      <Text style={[styles.addressText1, styles.cityText]}>City </Text>
-      <CustomDropDown
-        data={cityList}
-        onChange={handleCity}
-        value={city}
-        placeholder={'Select City'}
-        placeholderTextStyle={styles.cityPlaceholderText}
-        dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
-      />
-      {errors?.city && <Text style={[styles.nameError]}>{errors?.city}</Text>}
-
+          <CustomDropDown
+            data={stateList}
+            onChange={handleState}
+            value={state}
+            placeholder={'Select State'}
+            dropDownContainer={styles.stateDropDown}
+            placeholderTextStyle={styles.cityPlaceholderText}
+          />
+          {errors?.state && (
+            <Text style={[styles.nameError]}>{errors?.state}</Text>
+          )}
+        </View>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={[styles.addressText1, styles.cityText]}>City </Text>
+          <CustomDropDown
+            data={cityList}
+            onChange={handleCity}
+            value={city}
+            placeholder={'Select City'}
+            placeholderTextStyle={styles.cityPlaceholderText}
+            dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
+          />
+          {errors?.city && (
+            <Text style={[styles.nameError]}>{errors?.city}</Text>
+          )}
+        </View>
+      </View>
       <CustomButton
         title="Submit"
         onPress={addAppointMent}

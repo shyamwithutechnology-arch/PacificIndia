@@ -3,7 +3,8 @@ import { colors, Fonts } from '../../theme';
 import { AppTheme } from '../../hooks/useAppTheme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { tokens, verticalScale, scale, moderateScale, insets } = theme;
+  const { tokens, verticalScale, scale, moderateScale, insets, isTablet } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -15,7 +16,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     inputBoxStyle: {
       borderRadius: scale(6),
-      marginTop: tokens.spacing.smPlus,
+      // marginBottom: tokens.spacing.xs,
     },
     splashLogo: {
       height: moderateScale(86),
@@ -53,7 +54,7 @@ export const createStyles = (theme: AppTheme) => {
       marginLeft: tokens.spacing.xs,
     },
     addressText1: {
-      fontSize: tokens.fontSize.sm,
+      fontSize: tokens.fontSize.xs,
       color: tokens.colors.black,
       fontFamily: Fonts.ManropeBold,
       marginBottom: tokens.spacing.xxs,
@@ -63,6 +64,9 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: moderateScale(11),
       color: tokens.colors.red,
       fontFamily: Fonts.ManropeBold,
+    },
+    bottomSpace: {
+      marginBottom: tokens.spacing.xs,
     },
     radioBtn: {
       height: moderateScale(16),
@@ -88,7 +92,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     maritalBoxMain: {
       marginTop: tokens.spacing.xxs,
-      marginBottom: tokens.spacing.lg,
+      marginBottom: tokens.spacing.sm,
     },
     outerBox: {
       borderColor: tokens.colors.primary,
@@ -108,13 +112,21 @@ export const createStyles = (theme: AppTheme) => {
       marginBottom: tokens.spacing.sm,
     },
     cityText: {
-      marginTop: tokens.spacing.smPlus,
+      marginTop: tokens.spacing.sm,
     },
     btnStyle: {
       marginTop: tokens.spacing.md,
     },
     innerContainer: {
       paddingBlock: insets.bottom + tokens.spacing.md,
+    },
+    formRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+
+    halfField: {
+      width: '49%',
     },
   });
 };

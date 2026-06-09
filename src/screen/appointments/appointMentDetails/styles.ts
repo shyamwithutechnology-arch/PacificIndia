@@ -3,7 +3,7 @@ import { AppTheme } from '../../../hooks/useAppTheme';
 import { Fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { tokens, moderateScale, normalize } = theme;
+  const { tokens, moderateScale, normalize, insets } = theme;
 
   return StyleSheet.create({
     card: {
@@ -53,8 +53,9 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: normalize(13),
     },
     innerContainer: {
-      paddingTop: tokens.spacing.sm,
+      paddingTop: tokens.spacing.lg,
       backgroundColor: '#f6f9fb',
+      paddingBottom: insets.bottom + tokens.spacing.sm,
       // borderWidth: 1,
     },
   });
