@@ -26,6 +26,7 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: tokens.fontSize.xxs,
       color: tokens.colors.lightGray,
       fontFamily: Fonts.ManropeMedium,
+      marginVertical: verticalScale(2),
     },
     baseLine: {
       height: verticalScale(1.4),

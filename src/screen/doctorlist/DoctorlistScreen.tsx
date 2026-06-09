@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
+  Dimensions,
   FlatList,
   Image,
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { Loader, ScreenLayout } from '../../component';
@@ -28,6 +30,9 @@ const DoctorlistScreen = ({ navigation }) => {
   const [seach, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [doctorList, setDoctorList] = useState([]);
+  const [orientation, setOrientation] = useState('PORTRAIT');
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   // const handleNavigate = () => {
   //   navigation.navigate('SpecialityStack', { screen: 'SpecialityDetails' });
@@ -41,7 +46,6 @@ const DoctorlistScreen = ({ navigation }) => {
     if (!seach.trim()) {
       return doctorList;
     }
-
     return doctorList?.filter((item) =>
       item?.dr_name?.toLowerCase().includes(seach.toLocaleLowerCase())
     );
@@ -100,13 +104,13 @@ const DoctorlistScreen = ({ navigation }) => {
   ];
 
   const handleGoback = useCallback(() => {
-    navigation.goBack();
+    navigation.navigate('HomeTab', 'Home');
   }, [navigation]);
 
   const renderItem = ({ item }) => {
     return (
       <Pressable
-        style={styles.cart}
+        style={[styles.cart, numColumns > 1 && styles.cartBox]}
         onPress={() => handleNavigate(item?.dr_id)}
       >
         <Image
@@ -191,6 +195,26 @@ const DoctorlistScreen = ({ navigation }) => {
     getId();
   }, []);
 
+  // Dynamic column calculation based on orientation and device
+  const numColumns = useMemo(() => {
+    if (theme.isTablet) {
+      return isLandscape ? 3 : 1;
+    }
+    return isLandscape ? 2 : 1;
+  }, [isLandscape, theme.isTablet]);
+
+  // Detect orientation changes
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      if (window.width > window.height) {
+        setOrientation('LANDSCAPE');
+      } else {
+        setOrientation('PORTRAIT');
+      }
+    });
+    return () => subscription?.remove();
+  }, []);
+
   return (
     <ScreenLayout
       header={
@@ -224,11 +248,16 @@ const DoctorlistScreen = ({ navigation }) => {
       </View>
       <Loader visible={loading} />
       <FlatList
+        key={`flatlist-${numColumns}-${orientation}`}
         data={filteredList}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
+        columnWrapperStyle={
+          numColumns > 1 ? styles.columnWrapperStyle : undefined
+        }
+        numColumns={numColumns}
       />
     </ScreenLayout>
   );

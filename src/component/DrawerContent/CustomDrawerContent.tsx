@@ -1,13 +1,25 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconLogOut from 'react-native-vector-icons/AntDesign';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import { Images } from '../../assets/images';
 import { createStyles } from './styles';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { Icons } from '../../assets/icons';
 import { localStorage, storageKeys } from '../../storage/storage';
+import { POST_FORM } from '../api/request';
+import { showToast } from '../../utils/toast';
+import Loader from '../Common/Loader';
+import { ApiEndPoint } from '../../api/endPoints';
 
 const menuItems = [
   { title: 'Speciality', icon: 'person-outline', route: 'Speciality' },
@@ -17,7 +29,7 @@ const menuItems = [
     icon: 'document-text-outline',
     route: 'AppointMents',
   },
-  { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
+  // { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
   {
     title: 'Support',
     icon: 'notifications-outline',
@@ -67,6 +79,11 @@ const CustomDrawerContent = ({ navigation }: any) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
 
+  const [userData, setuserData] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const drawerStatus = useDrawerStatus();
+
   const handleLogOut = async () => {
     await localStorage.removeItem(storageKeys.fcm_token);
     navigation.getParent()?.replace('AuthStack');
@@ -102,6 +119,47 @@ const CustomDrawerContent = ({ navigation }: any) => {
     }
   };
 
+  const fetchUserData = async (member_id) => {
+    setLoading(true);
+
+    try {
+      const params = {
+        member_id: member_id,
+      };
+      const res = await POST_FORM(ApiEndPoint.getProfile, params);
+      if (res?.status === '1') {
+        setuserData(res?.result[0]);
+      }
+    } catch (error) {
+      if (error?.offline) {
+        return;
+      }
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getMemberData = async () => {
+    const id = await localStorage.getItem(storageKeys.member_id);
+
+    console.log('member id =>', id);
+
+    if (id) {
+      fetchUserData(id);
+    }
+  };
+
+  useEffect(() => {
+    if (drawerStatus === 'open') {
+      getMemberData();
+    }
+  }, [drawerStatus]);
+
   return (
     <View style={styles.container}>
       {/* HEADER */}
@@ -111,13 +169,13 @@ const CustomDrawerContent = ({ navigation }: any) => {
       >
         <View style={styles.headerInnerBox}>
           <Image
-            source={Images.profileImg} // change path
+            source={Images?.profileImg} // change path
             style={styles.avatar}
             resizeMode="contain"
           />
           <View>
-            <Text style={styles.name}>Manoj Deshmukh</Text>
-            <Text style={styles.role}>Medical Representative (MR)</Text>
+            <Text style={styles.name}>{userData?.member_name}</Text>
+            <Text style={styles.role}>{userData?.member_designation_name}</Text>
           </View>
         </View>
         {/* CLOSE BUTTON */}
@@ -128,6 +186,8 @@ const CustomDrawerContent = ({ navigation }: any) => {
           <Icon name="close" size={theme.moderateScale(20)} color="#000" />
         </TouchableOpacity>
       </LinearGradient>
+      <Loader visible={loading} />
+
       {/* MENU */}
       <ScrollView showsVerticalScrollIndicator={false}>
         {menuItems.map((item, index) => (

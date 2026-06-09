@@ -81,5 +81,14 @@ export const createStyles = (theme: AppTheme) => {
       color: tokens.colors.InputText,
       fontSize: normalize(13),
     },
+
+    formRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+
+    halfField: {
+      width: '48%',
+    },
   });
 };

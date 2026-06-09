@@ -7,12 +7,14 @@ import React, {
 } from 'react';
 import {
   Alert,
+  Dimensions,
   FlatList,
   Image,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import {
@@ -41,8 +43,11 @@ import { formatDateDayMonthShortYear } from '../../../utils/date';
 const SelectDoctorScreen = () => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const { width, height } = useWindowDimensions();
+
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
+  const [orientation, setOrientation] = useState('PORTRAIT');
   const [doctorList, setDoctorList] = useState([]);
   const [memberId, setMemberId] = useState([]);
   const [selectedDoctors, setSelectedDoctors] = useState(null);
@@ -246,7 +251,16 @@ const SelectDoctorScreen = () => {
   const renderItem = ({ item }) => {
     const isSelected = selectedDoctors === item?.dr_id;
     return (
-      <Pressable style={styles.cart}>
+      <Pressable
+        style={[
+          styles.cart,
+          theme.isTablet
+            ? styles.cardBoxForLep
+            : numColumns > 1
+            ? styles.cardBoxForMobTwo
+            : styles.cardBoxForMob,
+        ]}
+      >
         <Image
           source={{ uri: DUMMY_IMAGE }}
           style={styles.categoryImg}
@@ -301,13 +315,28 @@ const SelectDoctorScreen = () => {
     navigation.goBack();
   }, [navigation]);
 
-  // useEffect(() => {
-  //   const getMemberId = async () => {
-  //     const Id = await localStorage.getItem(storageKeys.member_id);
+  const isLandscape = width > height;
 
-  //   };
-  //   getMemberId();
-  // }, []);
+  // Dynamic column calculation based on orientation and device
+  const numColumns = useMemo(() => {
+    if (theme.isTablet) {
+      return isLandscape ? 2 : 2;
+    }
+    return isLandscape ? 2 : 1;
+  }, [isLandscape, theme.isTablet]);
+
+  // Detect orientation changes
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      if (window.width > window.height) {
+        setOrientation('LANDSCAPE');
+      } else {
+        setOrientation('PORTRAIT');
+      }
+    });
+    return () => subscription?.remove();
+  }, []);
+
   useEffect(() => {
     const getId = async () => {
       const id = await localStorage.getItem(storageKeys.member_id);
@@ -339,11 +368,16 @@ const SelectDoctorScreen = () => {
       />
 
       <FlatList
+        key={`flatlist-${numColumns}-${orientation}`}
         data={filteredList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
+        numColumns={numColumns}
+        columnWrapperStyle={
+          numColumns > 1 ? { justifyContent: 'space-between' } : undefined
+        }
       />
 
       <AppModal visible={visible} onClose={handleCloseModal}>

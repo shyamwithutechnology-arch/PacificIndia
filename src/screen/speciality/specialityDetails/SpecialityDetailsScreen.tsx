@@ -278,6 +278,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
+import FastImage from 'react-native-fast-image';
 import { useRoute } from '@react-navigation/native';
 import { createStyles } from './styles';
 import { Images } from '../../../assets/images';
@@ -537,21 +538,35 @@ const SpecialityDetailsScreen = ({ navigation }) => {
           ]}
           onPress={() => handleOpenPreview(item, index)}
         >
-          <Image
-            source={{
-              uri: imageError[item.mssub_id] ? DUMMY_IMAGE : imageUrl,
-            }}
+          {
+            // <Image
+            //   source={{
+            //     uri: imageError[item.mssub_id] ? DUMMY_IMAGE : imageUrl,
+            //   }}
+            //   style={[
+            //     styles.categoryImg,
+            //     { width: cardWidth * 0.8, height: cardWidth * 0.8 },
+            //   ]}
+            //   resizeMode="cover"
+            //   onError={() => {
+            //     setImageError((prev) => ({
+            //       ...prev,
+            //       [item.mssub_id]: true,
+            //     }));
+            //   }}
+            // />
+          }
+          <FastImage
             style={[
               styles.categoryImg,
               { width: cardWidth * 0.8, height: cardWidth * 0.8 },
             ]}
-            resizeMode="cover"
-            onError={() => {
-              setImageError((prev) => ({
-                ...prev,
-                [item.mssub_id]: true,
-              }));
+            source={{
+              uri: imageUrl,
+              priority: FastImage.priority.normal,
+              cache: FastImage.cacheControl.immutable,
             }}
+            resizeMode={FastImage.resizeMode.cover}
           />
 
           {/* Check icon */}
@@ -709,10 +724,10 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         )}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        removeClippedSubviews={true}
+        initialNumToRender={20}
+        maxToRenderPerBatch={20}
+        windowSize={10}
+        removeClippedSubviews={false}
       />
 
       {/* Custom Full-Screen Image Viewer */}
@@ -758,10 +773,21 @@ const SpecialityDetailsScreen = ({ navigation }) => {
               renderItem={({ item }) => (
                 <TouchableWithoutFeedback onPress={toggleControls}>
                   <View style={styles.fullScreenImageWrapper}>
-                    <Image
-                      source={{ uri: item.uri }}
+                    {
+                      // <Image
+                      //   source={{ uri: item.uri }}
+                      //   style={styles.fullScreenImage}
+                      //   resizeMode="contain"
+                      // />
+                    }
+                    <FastImage
                       style={styles.fullScreenImage}
-                      resizeMode="contain"
+                      source={{
+                        uri: item.uri,
+                        priority: FastImage.priority.normal,
+                        cache: FastImage.cacheControl.immutable,
+                      }}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   </View>
                 </TouchableWithoutFeedback>

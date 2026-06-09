@@ -11,6 +11,7 @@ import AppointMentsScreen from '../screen/appointments/AppointMentsScreen';
 import AddAppointMentScreen from '../screen/appointments/addAppointMent/AddAppointMentScreen';
 import AppointMentDetailsScreen from '../screen/appointments/appointMentDetails/AppointMentDetailsScreen';
 import SupportTicketScreen from '../screen/support/SupportTicketScreen';
+import NotificationScreen from '../screen/notification/NotificationScreen';
 
 const Drawer = createDrawerNavigator();
 const { width } = Dimensions.get('window');
@@ -48,6 +49,7 @@ const AppDrawer = () => {
       <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
       <Drawer.Screen name="SubscriptionScreen" component={SubscriptionScreen} />
       <Drawer.Screen name="SupportTicket" component={SupportTicketScreen} />
+      <Drawer.Screen name="Notification" component={NotificationScreen} />
     </Drawer.Navigator>
   );
 };

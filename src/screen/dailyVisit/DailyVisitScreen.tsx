@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
+  Dimensions,
   FlatList,
   Image,
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { AppInput, AppModal, Loader, ScreenLayout } from '../../component';
@@ -26,12 +28,14 @@ import { DUMMY_IMAGE } from '../../api/axios';
 const DailyVisitScreen = () => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const { width, height } = useWindowDimensions();
   const navigation = useNavigation();
 
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [dailyVisit, setDailyVisit] = useState([]);
   const [memberId, setMemberId] = useState([]);
+  const [orientation, setOrientation] = useState('PORTRAIT');
 
   const handleNavigate = () => {
     navigation.navigate('DoctorDetails');
@@ -117,7 +121,12 @@ const DailyVisitScreen = () => {
   const renderItem = ({ item }) => {
     // dailyr_comment
     return (
-      <Pressable style={styles.cart}>
+      <Pressable
+        style={[
+          styles.cart,
+          theme.isTablet ? styles.cardBoxForLep : styles.cardBoxForMob,
+        ]}
+      >
         <Image
           source={{ uri: DUMMY_IMAGE }}
           style={styles.categoryImg}
@@ -167,6 +176,16 @@ const DailyVisitScreen = () => {
     );
   };
 
+  const isLandscape = width > height;
+
+  // Dynamic column calculation based on orientation and device
+  const numColumns = useMemo(() => {
+    if (theme.isTablet) {
+      return isLandscape ? 2 : 2;
+    }
+    return 1;
+  }, [isLandscape, theme.isTablet]);
+
   const filteredList = useMemo(() => {
     if (!search.trim()) {
       return dailyVisit;
@@ -186,6 +205,19 @@ const DailyVisitScreen = () => {
   //   };
   //   getMemberId();
   // }, []);
+
+  // Detect orientation changes
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      if (window.width > window.height) {
+        setOrientation('LANDSCAPE');
+      } else {
+        setOrientation('PORTRAIT');
+      }
+    });
+    return () => subscription?.remove();
+  }, []);
+
   useEffect(() => {
     const getId = async () => {
       const id = await localStorage.getItem(storageKeys.member_id);
@@ -251,11 +283,16 @@ const DailyVisitScreen = () => {
       </View>
 
       <FlatList
+        key={`flatlist-${numColumns}-${orientation}`}
         data={filteredList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
+        numColumns={numColumns}
+        columnWrapperStyle={
+          numColumns > 1 ? { justifyContent: 'space-between' } : undefined
+        }
       />
     </ScreenLayout>
   );

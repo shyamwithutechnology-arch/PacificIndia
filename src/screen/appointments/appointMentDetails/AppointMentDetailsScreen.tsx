@@ -7,6 +7,7 @@ import { createStyles } from './styles';
 import { showToast } from '../../../utils/toast';
 import { POST_FORM } from '../../../api/request';
 import { ApiEndPoint } from '../../../api/endPoints';
+import AppBackHandler from '../../../component/backhandler/AppBackHandler';
 
 const AppointMentDetailsScreen = ({ navigation, route }) => {
   const theme = useAppTheme();
@@ -69,7 +70,7 @@ const AppointMentDetailsScreen = ({ navigation, route }) => {
       scroll={true}
     >
       <Loader visible={loading} />
-
+      <AppBackHandler goBack={true} />
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Doctor Information</Text>
 
@@ -94,6 +95,78 @@ const AppointMentDetailsScreen = ({ navigation, route }) => {
         />
       </View>
 
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Hospital Details</Text>
+
+        <DetailRow
+          label="Hospital Name"
+          value={appointmentDetails.hospital_name}
+        />
+        <DetailRow
+          label="Address"
+          value={appointmentDetails.hospital_address}
+        />
+        <DetailRow
+          label="Locality"
+          value={appointmentDetails.hospital_locality}
+        />
+        <DetailRow label="State" value={appointmentDetails.state_name} />
+        <DetailRow label="City" value={appointmentDetails.city_name} />
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Hospital Details</Text>
+
+        <DetailRow
+          label="Hospital Name"
+          value={appointmentDetails.hospital_name}
+        />
+        <DetailRow
+          label="Address"
+          value={appointmentDetails.hospital_address}
+        />
+        <DetailRow
+          label="Locality"
+          value={appointmentDetails.hospital_locality}
+        />
+        <DetailRow label="State" value={appointmentDetails.state_name} />
+        <DetailRow label="City" value={appointmentDetails.city_name} />
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Hospital Details</Text>
+
+        <DetailRow
+          label="Hospital Name"
+          value={appointmentDetails.hospital_name}
+        />
+        <DetailRow
+          label="Address"
+          value={appointmentDetails.hospital_address}
+        />
+        <DetailRow
+          label="Locality"
+          value={appointmentDetails.hospital_locality}
+        />
+        <DetailRow label="State" value={appointmentDetails.state_name} />
+        <DetailRow label="City" value={appointmentDetails.city_name} />
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Hospital Details</Text>
+
+        <DetailRow
+          label="Hospital Name"
+          value={appointmentDetails.hospital_name}
+        />
+        <DetailRow
+          label="Address"
+          value={appointmentDetails.hospital_address}
+        />
+        <DetailRow
+          label="Locality"
+          value={appointmentDetails.hospital_locality}
+        />
+        <DetailRow label="State" value={appointmentDetails.state_name} />
+        <DetailRow label="City" value={appointmentDetails.city_name} />
+      </View>
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Hospital Details</Text>
 

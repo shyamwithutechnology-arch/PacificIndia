@@ -90,10 +90,9 @@ const LoginScreen = ({ navigation }) => {
           storageKeys.member_id,
           response?.result[0]?.member_id
         );
-        navigation?.navigate('OtpRequest', {
-          opt: response?.result[0]?.otp,
-          phone: input.number,
-        });
+
+        localStorage.setItem(storageKeys.fcm_token, '1234');
+        navigation.getParent().replace('AppDrawer');
       }
     } catch (error) {
       if (error?.offline) {

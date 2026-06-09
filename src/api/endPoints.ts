@@ -17,4 +17,7 @@ export const ApiEndPoint = {
   listAppointment: 'list-appointment',
   detailsAppointment: 'details-appointment',
   banner: 'banner',
+  support: 'support',
+  supportMail: 'support-mail',
+  notificationList: 'notification-list',
 };

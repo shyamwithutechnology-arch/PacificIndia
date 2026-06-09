@@ -3,8 +3,15 @@ import { AppTheme } from '../../../hooks/useAppTheme';
 import { Fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { tokens, verticalScale, scale, moderateScale, insets, normalize } =
-    theme;
+  const {
+    tokens,
+    verticalScale,
+    scale,
+    moderateScale,
+    insets,
+    normalize,
+    isTablet,
+  } = theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -151,6 +158,14 @@ export const createStyles = (theme: AppTheme) => {
     dateIcon: {
       height: moderateScale(23),
       width: moderateScale(23),
+    },
+    formRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+
+    halfField: {
+      width: '48%',
     },
   });
 };

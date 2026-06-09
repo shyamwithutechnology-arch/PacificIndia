@@ -1,4 +1,12 @@
-import { View, Text, Pressable, FlatList, Image, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  FlatList,
+  Image,
+  Alert,
+  useWindowDimensions,
+} from 'react-native';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAppTheme } from '../../../hooks/useAppTheme';
 import {
@@ -29,6 +37,8 @@ const AddDoctorScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const route = useRoute();
+  const isTablet = theme.isTablet;
+  // Alert.alert('isTablet', JSON.stringify(isTablet));
   // const { title, doctorId } = route?.params;
   const { title = 'Add Doctor', doctorId = '' } = route?.params || {};
   const [visible, setVisible] = useState(false);
@@ -48,7 +58,8 @@ const AddDoctorScreen = ({ navigation }) => {
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
   const formatedDate = formatDateDayMonthShortYear(date);
-  console.log('doctorDetails', doctorDetails);
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   const [input, setInput] = useState({
     name: '',
@@ -534,142 +545,172 @@ const AddDoctorScreen = ({ navigation }) => {
           {errors.image}
         </Text>
       ) : null}
-      <View>
-        <Text style={styles.addressText1}>Name </Text>
-        <AppInput
-          placeholderText={'Please enter name'}
-          leftIconStyle={styles.passIcon}
-          leftIcon={Icons.userProfileIcon}
-          inputBoxStyle={styles.inputBoxStyle}
-          leftIcontintColor={theme.tokens.colors.primary}
-          value={input.name}
-          handleChange={(value) => handleChange('name', value)}
-        />
-        {errors.name ? (
-          <Text style={styles.nameError}>{errors.name}</Text>
-        ) : (
-          <View style={styles.bottomSpace} />
-        )}
+
+      <View
+        style={
+          isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
+        }
+      >
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={styles.addressText1}>Name </Text>
+          <AppInput
+            placeholderText={'Please enter name'}
+            leftIconStyle={styles.passIcon}
+            leftIcon={Icons.userProfileIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            leftIcontintColor={theme.tokens.colors.primary}
+            value={input.name}
+            handleChange={(value) => handleChange('name', value)}
+          />
+          {errors.name ? (
+            <Text style={styles.nameError}>{errors.name}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+
+        <View
+          style={
+            isTablet
+              ? styles.halfField
+              : isLandscape
+              ? styles.halfField
+              : undefined
+          }
+        >
+          <Text style={styles.addressText1}>Mobile Number </Text>
+          <AppInput
+            placeholderText={'Please enter mobile number'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.mobileNumber}
+            leftIcon={Icons.callIcon}
+            leftIcontintColor={theme.tokens.colors.primary}
+            handleChange={(value) => handleChange('mobileNumber', value)}
+            keyboardType={'number-pad'}
+            maxLength={10}
+          />
+          {errors.mobileNumber ? (
+            <Text style={styles.nameError}>{errors.mobileNumber}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+      </View>
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.addressText1}>Email </Text>
+          <AppInput
+            placeholderText={'Please enter email'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.email}
+            leftIcon={Icons.emailOutlineIcon}
+            handleChange={(value) => handleChange('email', value)}
+            keyboardType={'email-address'}
+          />
+          {errors.email ? (
+            <Text style={styles.nameError}>{errors.email}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+        {
+          // <AppInput
+          //   placeholderText={'Please enter marital status'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('maritalStatus', value)}
+          // />
+        }
+        {
+          // <AppInput
+          //   placeholderText={'Please enter address'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('address', value)}
+          // />
+          // <AppInput
+          //   placeholderText={'Please enter state'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('state', value)}
+          // />
+          // <AppInput
+          //   placeholderText={'Please enter city'}
+          //   leftIconStyle={styles.passIcon}
+          //   inputBoxStyle={styles.inputBoxStyle}
+          //   handleChange={(value) => handleChange('city', value)}
+          // />
+        }
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.addressText1}>Date of Birth </Text>
+          <Pressable style={styles.dateSelectBox} onPress={handleVisibleDate}>
+            <Image
+              source={Icons.dateIcon}
+              style={styles.dateIcon}
+              tintColor={theme.tokens.colors.primary}
+            />
+            <Text style={styles.selectDate}>
+              {' '}
+              {date ? formatedDate : 'Select Date'}
+            </Text>
+          </Pressable>
+
+          <AppDatePicker
+            value={date || new Date()}
+            onChange={handleDateChange}
+            visible={dateVisible}
+            onClose={handleDateClose}
+          />
+        </View>
       </View>
 
-      <Text style={styles.addressText1}>Mobile Number </Text>
-      <AppInput
-        placeholderText={'Please enter mobile number'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.mobileNumber}
-        leftIcon={Icons.callIcon}
-        leftIcontintColor={theme.tokens.colors.primary}
-        handleChange={(value) => handleChange('mobileNumber', value)}
-        keyboardType={'number-pad'}
-        maxLength={10}
-      />
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.addressText1}>Hospital Name</Text>
+          <AppInput
+            placeholderText="Please enter Hospital name"
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.hospitalName}
+            leftIcontintColor={theme.tokens.colors.primary}
+            leftIcon={Icons.hospitalIcon}
+            handleChange={(value) => handleChange('hospitalName', value)}
+          />
 
-      {errors.mobileNumber ? (
-        <Text style={styles.nameError}>{errors.mobileNumber}</Text>
-      ) : (
-        <View style={styles.bottomSpace} />
-      )}
-
-      <Text style={styles.addressText1}>Email </Text>
-      <AppInput
-        placeholderText={'Please enter email'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.email}
-        leftIcon={Icons.emailOutlineIcon}
-        handleChange={(value) => handleChange('email', value)}
-        keyboardType={'email-address'}
-      />
-      {errors.email ? (
-        <Text style={styles.nameError}>{errors.email}</Text>
-      ) : (
-        <View style={styles.bottomSpace} />
-      )}
-      {
-        // <AppInput
-        //   placeholderText={'Please enter marital status'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('maritalStatus', value)}
-        // />
-      }
-      {
-        // <AppInput
-        //   placeholderText={'Please enter address'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('address', value)}
-        // />
-        // <AppInput
-        //   placeholderText={'Please enter state'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('state', value)}
-        // />
-        // <AppInput
-        //   placeholderText={'Please enter city'}
-        //   leftIconStyle={styles.passIcon}
-        //   inputBoxStyle={styles.inputBoxStyle}
-        //   handleChange={(value) => handleChange('city', value)}
-        // />
-      }
-      <Text style={styles.addressText1}>Date of Birth </Text>
-      <Pressable style={styles.dateSelectBox} onPress={handleVisibleDate}>
-        <Image
-          source={Icons.dateIcon}
-          style={styles.dateIcon}
-          tintColor={theme.tokens.colors.primary}
-        />
-        <Text style={styles.selectDate}>
-          {' '}
-          {date ? formatedDate : 'Select Date'}
-        </Text>
-      </Pressable>
-
-      <AppDatePicker
-        value={date || new Date()}
-        onChange={handleDateChange}
-        visible={dateVisible}
-        onClose={handleDateClose}
-      />
-
-      <Text style={styles.addressText1}>Hospital Name</Text>
-      <AppInput
-        placeholderText="Please enter Hospital name"
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.hospitalName}
-        leftIcontintColor={theme.tokens.colors.primary}
-        leftIcon={Icons.hospitalIcon}
-        handleChange={(value) => handleChange('hospitalName', value)}
-      />
-
-      {errors.hospitalName ? (
-        <Text style={styles.nameError}>{errors.hospitalName}</Text>
-      ) : (
-        <View style={styles.bottomSpace} />
-      )}
-      {
-        //   </>
-        // )}
-      }
-
-      <Text style={styles.addressText1}>Locality </Text>
-      <AppInput
-        placeholderText={'Please enter locality'}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.inputBoxStyle}
-        value={input.locality}
-        leftIcontintColor={theme.tokens.colors.primary}
-        leftIcon={Icons.mapIcon}
-        handleChange={(value) => handleChange('locality', value)}
-      />
-      {errors.locality ? (
-        <Text style={styles.nameError}>{errors.locality}</Text>
-      ) : (
-        <View style={styles.bottomSpace} />
-      )}
+          {errors.hospitalName ? (
+            <Text style={styles.nameError}>{errors.hospitalName}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.addressText1}>Locality </Text>
+          <AppInput
+            placeholderText={'Please enter locality'}
+            leftIconStyle={styles.passIcon}
+            inputBoxStyle={styles.inputBoxStyle}
+            value={input.locality}
+            leftIcontintColor={theme.tokens.colors.primary}
+            leftIcon={Icons.mapIcon}
+            handleChange={(value) => handleChange('locality', value)}
+          />
+          {errors.locality ? (
+            <Text style={styles.nameError}>{errors.locality}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
+      </View>
 
       <Text style={styles.addressText1}>Address </Text>
       <AppInput
@@ -687,90 +728,108 @@ const AddDoctorScreen = ({ navigation }) => {
         <View style={styles.bottomSpace} />
       )}
 
-      <Text style={styles.addressText1}>Marital Status </Text>
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.addressText1}>Marital Status </Text>
 
-      <View style={[styles.maritalStatusRow, styles.maritalBoxMain]}>
-        <Pressable
-          style={[styles.maritalStatusRow, single === 1 && styles.outerBox]}
-          onPress={() => handleMaritalSelect(1)}
-        >
-          <View style={[styles.radioBtn, single === 1 && styles.outerBox]}>
-            {single === 1 && <View style={styles.innerRadioBtn} />}
+          <View style={[styles.maritalStatusRow, styles.maritalBoxMain]}>
+            <Pressable
+              style={[styles.maritalStatusRow, single === 1 && styles.outerBox]}
+              onPress={() => handleMaritalSelect(1)}
+            >
+              <View style={[styles.radioBtn, single === 1 && styles.outerBox]}>
+                {single === 1 && <View style={styles.innerRadioBtn} />}
+              </View>
+
+              <Text
+                style={[
+                  styles.addressText,
+                  single === 1 && styles.singleSelected,
+                ]}
+              >
+                {' '}
+                Single{' '}
+              </Text>
+            </Pressable>
+
+            <Pressable
+              style={[
+                styles.maritalStatusRow,
+                styles.marrizedStyle,
+                single === 2 && styles.outerBox,
+              ]}
+              onPress={() => handleMaritalSelect(2)}
+            >
+              <View style={[styles.radioBtn, single === 2 && styles.outerBox]}>
+                {single === 2 && <View style={styles.innerRadioBtn} />}
+              </View>
+
+              <Text
+                style={[
+                  styles.addressText,
+                  single === 2 && styles.singleSelected,
+                ]}
+              >
+                {' '}
+                Married{' '}
+              </Text>
+            </Pressable>
           </View>
+          {errors.maritalStatus ? (
+            <Text style={styles.nameError}>{errors.maritalStatus}</Text>
+          ) : (
+            <View style={styles.bottomSpace} />
+          )}
+        </View>
 
-          <Text
-            style={[styles.addressText, single === 1 && styles.singleSelected]}
-          >
-            {' '}
-            Single{' '}
-          </Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.maritalStatusRow,
-            styles.marrizedStyle,
-            single === 2 && styles.outerBox,
-          ]}
-          onPress={() => handleMaritalSelect(2)}
-        >
-          <View style={[styles.radioBtn, single === 2 && styles.outerBox]}>
-            {single === 2 && <View style={styles.innerRadioBtn} />}
-          </View>
-
-          <Text
-            style={[styles.addressText, single === 2 && styles.singleSelected]}
-          >
-            {' '}
-            Married{' '}
-          </Text>
-        </Pressable>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={styles.addressText1}>Select Speciality </Text>
+          <CustomDropDown
+            data={speciality}
+            onChange={handleSpecility}
+            value={selectedSpecility}
+            placeholder={'Select Speciality'}
+            dropDownContainer={styles.stateDropDown}
+          />
+          {errors.speciality ? (
+            <Text style={styles.nameError}>{errors.speciality}</Text>
+          ) : undefined}
+        </View>
       </View>
-      {errors.maritalStatus ? (
-        <Text style={styles.nameError}>{errors.maritalStatus}</Text>
-      ) : (
-        <View style={styles.bottomSpace} />
-      )}
 
-      <Text style={styles.addressText1}>Select Speciality </Text>
-      <CustomDropDown
-        data={speciality}
-        onChange={handleSpecility}
-        value={selectedSpecility}
-        placeholder={'Select Speciality'}
-        dropDownContainer={styles.stateDropDown}
-      />
-      {errors.speciality ? (
-        <Text style={styles.nameError}>{errors.speciality}</Text>
-      ) : undefined}
+      <View style={isTablet ? styles.formRow : undefined}>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={[styles.addressText1, styles.stateText]}>State </Text>
+          <CustomDropDown
+            data={stateList}
+            onChange={handleState}
+            value={state}
+            placeholder={'Select State'}
+            dropDownContainer={styles.stateDropDown}
+          />
+          {errors.state ? (
+            <Text style={styles.nameError}>{errors.state}</Text>
+          ) : undefined}
+        </View>
 
-      <Text style={[styles.addressText1, styles.stateText]}>State </Text>
-      <CustomDropDown
-        data={stateList}
-        onChange={handleState}
-        value={state}
-        placeholder={'Select State'}
-        dropDownContainer={styles.stateDropDown}
-      />
-      {errors.state ? (
-        <Text style={styles.nameError}>{errors.state}</Text>
-      ) : undefined}
-      <Text style={[styles.addressText1, !errors.state && styles.cityText]}>
-        City{' '}
-      </Text>
+        <View style={isTablet ? styles.halfField : undefined}>
+          <Text style={[styles.addressText1, !errors.state && styles.cityText]}>
+            City{' '}
+          </Text>
 
-      <CustomDropDown
-        data={cityList}
-        onChange={handleCity}
-        value={city}
-        placeholder={'Select City'}
-        dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
-        dropdownPosition={'top'}
-      />
-      {errors.city ? (
-        <Text style={styles.nameError}>{errors.city}</Text>
-      ) : undefined}
-
+          <CustomDropDown
+            data={cityList}
+            onChange={handleCity}
+            value={city}
+            placeholder={'Select City'}
+            dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
+            dropdownPosition={'top'}
+          />
+          {errors.city ? (
+            <Text style={styles.nameError}>{errors.city}</Text>
+          ) : undefined}
+        </View>
+      </View>
       <CustomButton
         title="Submit"
         style={styles.btnStyle}
