@@ -385,5 +385,17 @@ export const createStyles = (theme: AppTheme) => {
       fontFamily: Fonts.ManropeSemiBold,
       marginLeft: tokens.spacing.xxs,
     },
+    listEmptyCom: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 30,
+    },
+
+    emptyText: {
+      fontSize: 16,
+      color: '#666',
+      fontWeight: '500',
+    },
   });
 };

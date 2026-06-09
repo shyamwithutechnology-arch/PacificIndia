@@ -6,6 +6,7 @@ import { Images } from '../../../../assets/images';
 import Loader from '../../../../component/Common/Loader';
 import { useAppTheme } from '../../../../hooks/useAppTheme';
 import { createStyles } from './styles';
+import { Icon_Url } from '../../../../api/axios';
 
 const FALLBACK_IMAGES = [
   { id: '1', image: Images.bannerImg },
@@ -15,6 +16,7 @@ const FALLBACK_IMAGES = [
 
 export default function HomeBannerSlider({ banners = [], loading = false }) {
   const ref = useRef<ICarouselInstance>(null);
+  console.log('bannersaaaa', banners);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -25,23 +27,44 @@ export default function HomeBannerSlider({ banners = [], loading = false }) {
 
   const BANNER_HEIGHT = width * 0.4;
 
+  // const carouselData =
+  //   banners?.length > 0
+  //     ? banners.map((banner, index) => ({
+  //         id: String(banner?.id ?? index),
+  //         imageUrl: banner?.ban_image ?? null,
+  //         image:
+  //           `${Icon_Url}uploads/banner/${banner?.image}` ??
+  //           FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]?.image,
+  //       }))
+  //     : FALLBACK_IMAGES;
+
   const carouselData =
     banners?.length > 0
       ? banners.map((banner, index) => ({
           id: String(banner?.id ?? index),
-          imageUrl: banner?.ban_image ?? null,
-          image:
-            banner?.image ??
-            FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]?.image,
+          imageUrl: `${Icon_Url}uploads/banner/${encodeURIComponent(
+            banner?.image || ''
+          )}`,
         }))
       : FALLBACK_IMAGES;
 
+  // const renderBannerItem = ({ item }) => (
+  //   <View style={styles.imageWrapper}>
+  //     <Image
+  //       source={item?.imageUrl ? { uri: item.imageUrl } : item.image}
+  //       style={styles.image}
+  //       resizeMode="contain"
+  //     />
+  //   </View>
+  // );
   const renderBannerItem = ({ item }) => (
     <View style={styles.imageWrapper}>
       <Image
-        source={item?.imageUrl ? { uri: item.imageUrl } : item.image}
+        source={
+          item?.imageUrl ? { uri: item.imageUrl } : FALLBACK_IMAGES[0].image
+        }
         style={styles.image}
-        resizeMode="contain"
+        resizeMode="cover"
       />
     </View>
   );

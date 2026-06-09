@@ -419,9 +419,9 @@ const MedicenListScreen = ({ navigation }) => {
     specialityList();
   }, []);
 
-  useEffect(() => {
-    Alert.alert('dr_idddddd', JSON.stringify(dr_id));
-  }, [dr_id]);
+  // useEffect(() => {
+  //   Alert.alert('dr_idddddd', JSON.stringify(dr_id));
+  // }, [dr_id]);
 
   return (
     <ScreenLayout
@@ -444,22 +444,17 @@ const MedicenListScreen = ({ navigation }) => {
         keyExtractor={keyExtractor}
         numColumns={numColumns}
         columnWrapperStyle={styles.row}
-        ListHeaderComponent={() => (
-          <FlatList
-            horizontal
-            data={speciality}
-            keyExtractor={(item) => item?.ms_id.toString()}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.headerListContainer}
-            renderItem={handerItemRender}
-          />
-        )}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
         windowSize={5}
         removeClippedSubviews={true}
+        ListEmptyComponent={
+          <View style={styles.listEmptyCom}>
+            <Text style={styles.emptyText}>No data found</Text>
+          </View>
+        }
       />
 
       {/* Custom Full-Screen Image Viewer */}

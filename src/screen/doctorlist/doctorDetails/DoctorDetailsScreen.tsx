@@ -28,6 +28,7 @@ const DoctorDetailsScreen = ({ navigation }) => {
   const [seach, setSearch] = useState('');
   const [doctorList, setDoctorList] = useState({});
   const [loading, setLoading] = useState(false);
+  console.log(('doctorList', doctorList));
 
   const handleGoback = useCallback(() => {
     navigation.goBack();
@@ -257,7 +258,10 @@ const DoctorDetailsScreen = ({ navigation }) => {
         <Pressable
           style={[styles.doctorMedicineBtn, styles.medecinBox]}
           onPress={() =>
-            navigation.navigate('SpecialityStack', { screen: 'SpecialityList' })
+            navigation.navigate('SpecialityStack', {
+              screen: 'SpecialityDetails',
+              medicine_id: doctorList?.dr_id,
+            })
           }
         >
           <Text style={styles.doctorText}> Medicine</Text>

@@ -15,7 +15,7 @@ const menuItems = [
   {
     title: 'Appointments',
     icon: 'document-text-outline',
-    route: 'Appointments',
+    route: 'AppointMents',
   },
   { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
   {
@@ -56,6 +56,7 @@ const menuItems = [
 ];
 
 const nestedRoutes = {
+  DailyVisit: { screen: 'DailyVisitStack', inner: 'DailyVisit' },
   Speciality: { screen: 'SpecialityStack', inner: 'Speciality' },
   Services: { screen: 'Services', inner: 'Services' },
   Bookings: { screen: 'Bookings', inner: 'Bookings' },

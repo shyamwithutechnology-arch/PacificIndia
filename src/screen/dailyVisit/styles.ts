@@ -76,11 +76,10 @@ export const createStyles = (theme: AppTheme) => {
       paddingTop: tokens.spacing.smPlus,
     },
     searchTop: {
-      // marginTop: tokens.spacing.md,
-      width: '80%',
       marginTop: 0,
+      width: '75.5%',
+      // marginBottom: tokens.spacing.xs,
     },
-
     verificationBox: {
       paddingHorizontal: verticalScale(10),
       paddingVertical: verticalScale(3),
@@ -167,15 +166,21 @@ export const createStyles = (theme: AppTheme) => {
       justifyContent: 'flex-end',
       flexDirection: 'row',
     },
+
     addBox: {
-      height: verticalScale(32),
-      width: scale(70),
+      height: verticalScale(33),
+      width: scale(80),
       backgroundColor: tokens.colors.primary,
-      borderRadius: tokens.radius.xxl,
+      borderRadius: tokens.radius.lg,
       alignItems: 'center',
       justifyContent: 'center',
       marginLeft: tokens.spacing.sm,
-      alignSelf: 'flex-end',
+      flexDirection: 'row',
+      paddingHorizontal: tokens.spacing.sm,
+    },
+    addIcon: {
+      height: moderateScale(16),
+      width: moderateScale(16),
     },
     addNewText: {
       fontSize: tokens.fontSize.md,

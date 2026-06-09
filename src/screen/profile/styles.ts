@@ -15,7 +15,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     inputBoxStyle: {
       borderRadius: scale(6),
-      marginBottom: tokens.spacing.smPlus,
+      marginTop: tokens.spacing.smPlus,
     },
     splashLogo: {
       height: moderateScale(86),
@@ -63,7 +63,6 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: moderateScale(11),
       color: tokens.colors.red,
       fontFamily: Fonts.ManropeBold,
-      marginLeft: moderateScale(20),
     },
     radioBtn: {
       height: moderateScale(16),

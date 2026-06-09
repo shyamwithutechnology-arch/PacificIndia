@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -22,21 +22,25 @@ import { showToast } from '../../utils/toast';
 import { localStorage, storageKeys } from '../../storage/storage';
 import { baseURL } from '../../component/api/axios';
 import { DUMMY_IMAGE } from '../../api/axios';
-import { Modal } from 'react-native/types_generated/index';
 
 const DailyVisitScreen = () => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const navigation = useNavigation();
+
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [dailyVisit, setDailyVisit] = useState([]);
   const [memberId, setMemberId] = useState([]);
 
-  const navigation = useNavigation();
-
   const handleNavigate = () => {
     navigation.navigate('DoctorDetails');
   };
+
+  const handleGoback = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   const category = [
     {
       id: 1,
@@ -199,29 +203,51 @@ const DailyVisitScreen = () => {
           title="Daily Visit"
           search={search}
           leftIcon={Icons.leftIcon}
+          onPress={handleGoback}
           notificationPress={() => {}}
         />
       }
     >
       <Loader visible={loading} />
+
+      {
+        // <View style={styles.rowSerach}>
+        //   <SearchList
+        //     value={search}
+        //     onChange={setSearch}
+        //     searchRowCustom={styles.searchTop}
+        //     searchPlaceHolder={'Add Your New Visit....'}
+        //   />
+        // <View style={styles.addNewVisitBox}>
+        //   <Text style={styles.addNewText}>Add Your New Visit....</Text>
+        //   <Pressable
+        //     style={styles.addBox}
+        //     onPress={() => navigation.navigate('SelectDoctor')}
+        //   >
+        //     <Text style={styles.addText}>Add</Text>
+        //   </Pressable>
+        // </View>
+        // </View>
+      }
       <View style={styles.rowSerach}>
-        {
-          // <SearchList
-          //   value={seach}
-          //   onChange={setSearch}
-          //   searchRowCustom={styles.searchTop}
-          //   searchPlaceHolder={'Add Your New Visit....'}
-          // />
-        }
-        <View style={styles.addNewVisitBox}>
-          <Text style={styles.addNewText}>Add Your New Visit....</Text>
-          <Pressable
-            style={styles.addBox}
-            onPress={() => navigation.navigate('SelectDoctor')}
-          >
-            <Text style={styles.addText}>Add</Text>
-          </Pressable>
-        </View>
+        <SearchList
+          value={search}
+          onChange={setSearch}
+          searchRowCustom={styles.searchTop}
+          searchPlaceHolder={'Search Doctor....'}
+        />
+
+        <Pressable
+          style={styles.addBox}
+          onPress={() => navigation.navigate('SelectDoctor')}
+        >
+          <Image
+            source={Icons.addIcon}
+            style={styles.addIcon}
+            resizeMode="contain"
+          />
+          <Text style={styles.addText}> Add</Text>
+        </Pressable>
       </View>
 
       <FlatList

@@ -9,7 +9,7 @@ import SpecialityScreen from '../screen/speciality/SpecialityScreen';
 import NotificationScreen from '../screen/notification/NotificationScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SpecialityStack from './stacks/SpecialityStack';
-import SupportScreen from '../screen/support/SupportScreen';
+import SupportScreen from '../screen/support/SupportTicketScreen';
 import DailyVisitScreen from '../screen/dailyVisit/DailyVisitScreen';
 import DoctorDetailsScreen from '../screen/doctorlist/doctorDetails/DoctorDetailsScreen';
 import DoctorlistScreen from '../screen/doctorlist/DoctorlistScreen';

@@ -21,7 +21,7 @@ import { createStyles } from './styles';
 import { Images } from '../../assets/images';
 import UserIcon from 'react-native-vector-icons/FontAwesome6';
 
-const SupportScreen = ({ navigation }) => {
+const SupportTicketScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [seach, setSearch] = useState('');
@@ -132,4 +132,4 @@ const SupportScreen = ({ navigation }) => {
   );
 };
 
-export default SupportScreen;
+export default SupportTicketScreen;

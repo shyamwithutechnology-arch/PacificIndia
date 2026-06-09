@@ -252,6 +252,7 @@ export const createStyles = (theme: AppTheme) => {
     submitBtn: {
       width: '60%',
       marginTop: tokens.spacing.lg,
+      // marginBottom: tokens.spacing.md,
     },
     commentBox: {
       // height: verticalScale(60),
@@ -286,6 +287,9 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: moderateScale(11),
       color: tokens.colors.red,
       fontFamily: Fonts.ManropeBold,
+    },
+    contentStyle: {
+      maxHeight: '90%',
     },
   });
 };

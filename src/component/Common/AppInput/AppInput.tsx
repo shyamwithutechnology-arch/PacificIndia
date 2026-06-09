@@ -43,6 +43,7 @@ const AppInput = ({
           multiline={multiline}
           keyboardType={keyboardType}
           maxLength={maxLength}
+          textAlignVertical="center"
         />
         {rightIcon && (
           <Image
