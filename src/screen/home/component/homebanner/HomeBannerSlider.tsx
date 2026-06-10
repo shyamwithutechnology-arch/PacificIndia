@@ -14,7 +14,12 @@ const FALLBACK_IMAGES = [
   { id: '3', image: Images.bannerImg },
 ];
 
-export default function HomeBannerSlider({ banners = [], loading = false }) {
+export default function HomeBannerSlider({
+  banners = [],
+  loading = false,
+  onTouchStart,
+  onTouchEnd,
+}) {
   const ref = useRef<ICarouselInstance>(null);
   console.log('bannersaaaa', banners);
 
@@ -75,18 +80,24 @@ export default function HomeBannerSlider({ banners = [], loading = false }) {
 
   return (
     <View style={styles.container}>
-      <Carousel
-        ref={ref}
-        width={width - 23}
-        height={BANNER_HEIGHT}
-        data={carouselData}
-        autoPlay={carouselData.length > 1}
-        loop={carouselData.length > 1}
-        autoPlayInterval={3000}
-        onSnapToItem={(index) => setActiveIndex(index)}
-        renderItem={renderBannerItem}
-      />
-
+      <View onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        <Carousel
+          ref={ref}
+          width={width - 23}
+          height={BANNER_HEIGHT}
+          data={carouselData}
+          autoPlay={carouselData.length > 1}
+          loop={carouselData.length > 1}
+          autoPlayInterval={3000}
+          onSnapToItem={(index) => setActiveIndex(index)}
+          renderItem={renderBannerItem}
+          pagingEnabled
+          enabled={true}
+          onConfigurePanGesture={(gesture) => {
+            gesture.activeOffsetX([-10, 10]);
+          }}
+        />
+      </View>
       <View style={styles.dotWrapper}>
         {carouselData.map((_, index) => (
           <View

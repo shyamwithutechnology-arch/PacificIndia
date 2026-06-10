@@ -43,32 +43,6 @@ const SpecialityScreen = () => {
     });
   };
 
-  const category = [
-    { id: 1, title: 'Obstetrics & Gynaecology', img: Images.doctor },
-    { id: 2, title: 'Orthopaedics', img: Images.doctor },
-    { id: 3, title: 'General Physician', img: Images.apppointments },
-    { id: 4, title: 'General & Laparoscopic Surgeon', img: Images.dailyVisit },
-    { id: 5, title: 'Nephrology', img: Images.apppointments1 },
-    { id: 6, title: 'Paediatrics', img: Images.apppointments1 },
-    { id: 7, title: 'Ophthalmology', img: Images.apppointments1 },
-    { id: 8, title: 'Diabetology', img: Images.apppointments1 },
-    { id: 19, title: 'Endocrinology', img: Images.apppointments1 },
-    { id: 20, title: 'Cardiology', img: Images.apppointments1 },
-    { id: 21, title: 'Urology', img: Images.apppointments1 },
-    {
-      id: 22,
-      title: 'Pulmonology/ Respiratory Medicine',
-      img: Images.apppointments1,
-    }, // Fixed duplicate ID from 20 to 22
-  ];
-
-  const banner = [
-    { id: 1, image: Images.bannerImg },
-    { id: 2, image: Images.bannerImg },
-    { id: 3, image: Images.bannerImg },
-    { id: 4, image: Images.bannerImg },
-  ];
-
   const specialityList = async () => {
     try {
       setLoading(true);
@@ -90,28 +64,22 @@ const SpecialityScreen = () => {
     }
   };
 
-  const renderItem = ({ item }) => {
-    const imageUrl =
-      item?.ms_image && item.ms_image.startsWith('http')
-        ? item.ms_image
-        : item?.ms_image
-        ? `${baseURL}/uploads/doctor/${item.ms_image}`
-        : DUMMY_IMAGE;
+  const renderItem = ({ item, index }) => {
+    const imageUrl = `${baseURL}/uploads/medicine/${item.ms_image}`;
+    // index === 0 && Alert.alert('aaaaaaaa', JSON.stringify(item));
 
     return (
       <Pressable style={styles.cart} onPress={() => handleNavigate(item)}>
         <View style={styles.categoryBox}>
           <Image
-            source={{
-              uri: imageError[item.id] ? DUMMY_IMAGE : imageUrl,
-            }}
+            source={
+              item?.ms_image
+                ? {
+                    uri: imageUrl,
+                  }
+                : DUMMY_IMAGE
+            }
             style={styles.categoryImg}
-            onError={() => {
-              setImageError((prev) => ({
-                ...prev,
-                [item.id]: true,
-              }));
-            }}
           />
         </View>
         <Text style={styles.titleText}>{item?.ms_name}</Text>
@@ -142,6 +110,7 @@ const SpecialityScreen = () => {
           onPress={handleBack}
         />
       }
+      scroll={!loading && true}
     >
       <Loader visible={loading} />
       <AppBackHandler screenName={'HomeTab'} nestedScreen="Home" />

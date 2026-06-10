@@ -7,7 +7,7 @@ const Loader = ({ visible = true, message = 'Loading...' }) => {
   return (
     <View style={styles.overlay}>
       <View style={styles.loaderBox}>
-        <ActivityIndicator size="large" color="green" />
+        <ActivityIndicator size="large" color="#0093D3" />
       </View>
     </View>
   );

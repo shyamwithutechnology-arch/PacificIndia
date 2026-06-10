@@ -266,7 +266,7 @@ const DoctorDetailsScreen = ({ navigation }) => {
             })
           }
         >
-          <Text style={styles.doctorText}> Medicine</Text>
+          <Text style={styles.doctorText}>All Medicine</Text>
         </Pressable>
       </View>
     </ScreenLayout>

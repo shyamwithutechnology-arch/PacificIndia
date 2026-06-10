@@ -413,7 +413,7 @@ export const createStyles = (theme: AppTheme) => {
     // Full-screen modal styles
     modalFullScreen: {
       flex: 1,
-      backgroundColor: '#000000',
+      backgroundColor: '#fff',
     },
 
     imageContainer: {
@@ -616,6 +616,16 @@ export const createStyles = (theme: AppTheme) => {
       color: tokens.colors.white,
       fontFamily: Fonts.ManropeSemiBold,
       marginLeft: tokens.spacing.xxs,
+    },
+    imageLoaderContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1,
     },
   });
 };

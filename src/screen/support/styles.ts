@@ -98,11 +98,30 @@ export const createStyles = (theme: AppTheme) => {
       borderWidth: 0.5,
       borderRadius: tokens.radius.sm,
       borderColor: tokens.colors.primary,
-
-      marginTop: tokens.spacing.smPlus,
+      marginBottom: tokens.spacing.smPlus,
     },
     inputBoxStyle: {
       marginTop: tokens.spacing.mdPlus,
+    },
+
+    commentBox: {
+      // height: verticalScale(60),
+      textAlignVertical: 'top',
+      borderWidth: 0,
+    },
+    appInputBox: {
+      borderWidth: 1,
+      height: verticalScale(90),
+      borderRadius: tokens.radius.md,
+      borderColor: '#D9D9D9',
+      paddingHorizontal: tokens.spacing.sm,
+    },
+    addressText1: {
+      fontSize: tokens.fontSize.xs,
+      color: tokens.colors.black,
+      fontFamily: Fonts.ManropeBold,
+      marginBottom: tokens.spacing.xxs,
+      // marginLeft: tokens.spacing.xs,
     },
   });
 };

@@ -130,6 +130,9 @@ export const createStyles = (theme: AppTheme) => {
       paddingLeft: tokens.spacing.md,
       paddingBottom: insets.bottom + tokens.spacing.xs,
       paddingTop: tokens.spacing.xxs,
+      bottom: 0,
+      right: 0,
+      left: 0,
     },
     earPhoneBox: {
       width: scale(60),
@@ -160,6 +163,10 @@ export const createStyles = (theme: AppTheme) => {
       width: scale(1),
       backgroundColor: 'rgba(12, 64, 111, 0.24)',
       marginHorizontal: tokens.spacing.sm,
+    },
+    drawerIcon: {
+      height: moderateScale(20),
+      width: moderateScale(20),
     },
   });
 };

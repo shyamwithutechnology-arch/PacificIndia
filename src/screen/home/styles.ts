@@ -3,8 +3,15 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize, isTablet } =
-    theme;
+  const {
+    verticalScale,
+    scale,
+    tokens,
+    moderateScale,
+    normalize,
+    isTablet,
+    insets,
+  } = theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -73,20 +80,30 @@ export const createStyles = (theme: AppTheme) => {
       shadowColor: '#fff',
     },
     listContainer: {
-      paddingBottom: tokens.spacing.xl,
-      paddingTop: tokens.spacing.xl,
+      paddingBottom: insets.bottom + tokens.spacing.xxl,
+      paddingTop: tokens.spacing.sm,
+      flexGrow: 1,
     },
     pacificText: {
       fontSize: tokens.fontSize.smPlus,
       fontFamily: Fonts.ManropeSemiBold,
       color: tokens.colors.black,
-      marginTop: tokens.spacing.sm,
+      marginTop: tokens.spacing.mdPlus,
+      borderBottomWidth: 1,
+      alignSelf: 'flex-start',
+      borderBottomColor: '#8c8c8c',
+      marginBottom: tokens.spacing.sm,
     },
     pacificDecText: {
-      fontSize: tokens.fontSize.xxs,
+      fontSize: tokens.fontSize.xs,
       fontFamily: Fonts.ManropeMedium,
       color: tokens.colors.lightGray,
       textAlign: 'justify',
+      lineHeight: moderateScale(21),
+    },
+    secondParagrapText: {
+      marginTop: tokens.spacing.smPlus,
+      marginBottom: tokens.spacing.xxl,
     },
   });
 };

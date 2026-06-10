@@ -104,7 +104,7 @@ const MainTabs = () => {
               focused={focused}
               activeIcon={Icons.healthcareIcon}
               inactiveIcon={Icons.healthcareIcon}
-              label="DailyVisit"
+              label="Visit"
             />
           ),
         }}
@@ -135,7 +135,7 @@ const MainTabs = () => {
               focused={focused}
               activeIcon={Icons.doctorListIcon}
               inactiveIcon={Icons.doctorListIcon}
-              label="Doctorlist"
+              label="Doctor"
             />
           ),
         }}

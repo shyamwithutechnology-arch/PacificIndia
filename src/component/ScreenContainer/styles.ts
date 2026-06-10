@@ -9,7 +9,7 @@ export const createStyles = (theme: AppTheme) => {
       backgroundColor: tokens.colors.white,
     },
     flex: {
-      flex: 1,
+      flexGrow: 1,
     },
   });
 };

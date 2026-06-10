@@ -20,42 +20,45 @@ import { POST_FORM } from '../api/request';
 import { showToast } from '../../utils/toast';
 import Loader from '../Common/Loader';
 import { ApiEndPoint } from '../../api/endPoints';
+import LogoutModal from '../logoutModal/logOutModal';
 
 const menuItems = [
-  { title: 'Speciality', icon: 'person-outline', route: 'Speciality' },
-  { title: 'DailyVisit', icon: 'person-outline', route: 'DailyVisit' },
+  {
+    title: 'Profile',
+    icon: Icons.userProfileIcon,
+    route: 'Profile',
+  },
+  { title: 'Speciality', icon: Icons.specialityIcon, route: 'Speciality' },
+
+  { title: 'Daily Visit', icon: Icons.healthcareIcon, route: 'DailyVisit' },
   {
     title: 'Appointments',
-    icon: 'document-text-outline',
+    icon: Icons.appointment_icon,
     route: 'AppointMents',
   },
   // { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
   {
-    title: 'Support',
-    icon: 'notifications-outline',
-    route: 'SupportTicket',
+    title: 'Notifications',
+    icon: Icons.notificationIcon,
+    route: 'Notification',
   },
-  {
-    title: 'Profile',
-    icon: 'notifications-outline',
-    route: 'Profile',
-  },
-  {
-    title: 'Terms & Conditions',
-    icon: 'document-text-outline',
-    route: 'TermAndCondition',
-  },
-  {
-    title: 'Privacy Policy',
-    icon: 'shield-checkmark-outline',
-    route: 'PrivacyPolicy',
-  },
-  { title: 'Help & Support', icon: 'headset-outline', route: 'HelpAndSupport' },
 
   {
-    title: 'Notifications',
-    icon: 'notifications-outline',
-    route: 'Notification',
+    title: 'Terms & Conditions',
+    icon: Icons.termAndConditionIcon,
+    route: 'Termandcondition',
+  },
+
+  {
+    title: 'Privacy Policy',
+    icon: Icons.privacyPolicyIcon,
+    route: 'PrivacyPolicy',
+  },
+
+  {
+    title: 'Support',
+    icon: Icons.supportIcon,
+    route: 'SupportTicket',
   },
 
   // { title: 'About Us', icon: 'information-circle-outline', route: 'AboutUs' },
@@ -81,6 +84,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
 
   const [userData, setuserData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [logOutVisible, setLogOutVisible] = useState(false);
 
   const drawerStatus = useDrawerStatus();
 
@@ -88,6 +92,15 @@ const CustomDrawerContent = ({ navigation }: any) => {
     await localStorage.removeItem(storageKeys.fcm_token);
     navigation.getParent()?.replace('AuthStack');
     navigation.closeDrawer();
+  };
+
+  // logout
+  const handleLodOutVisible = () => {
+    setLogOutVisible(true);
+  };
+
+  const handleLodOutClose = () => {
+    setLogOutVisible(false);
   };
 
   // const handleNavigate = (item: any) => {
@@ -197,10 +210,19 @@ const CustomDrawerContent = ({ navigation }: any) => {
             onPress={() => handleNavigate(item)}
           >
             <View style={styles.menuLeft}>
-              <Icon
-                name={item.icon}
-                size={theme.moderateScale(20)}
-                color="#1FAF9A"
+              {
+                // <Icon
+                //   name={item.icon}
+                //   size={theme.moderateScale(20)}
+                //   color="#1FAF9A"
+                // />
+              }
+
+              <Image
+                source={item?.icon}
+                style={styles.drawerIcon}
+                resizeMode="contain"
+                tintColor={theme.tokens.colors.primary}
               />
               <Text style={styles.menuText}>{item.title}</Text>
             </View>
@@ -209,7 +231,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
         ))}
 
         {/* LOGOUT */}
-        <TouchableOpacity style={styles.logout} onPress={handleLogOut}>
+        <TouchableOpacity style={styles.logout} onPress={handleLodOutVisible}>
           <View style={styles.logoutIcon}>
             <Image
               source={Icons.logOutIcon}
@@ -220,19 +242,6 @@ const CustomDrawerContent = ({ navigation }: any) => {
           <Text style={styles.logoutText}>Logout My Account</Text>
         </TouchableOpacity>
 
-        {/* HELP CARD */}
-        <View style={styles.mainBoxSupport}>
-          <Image
-            source={Images.apppointments1}
-            style={styles.earPhone}
-            resizeMode="contain"
-          />
-          <View style={styles.verticalLine} />
-          <View>
-            <Text style={styles.helpLineTest}>Support</Text>
-            <Text style={styles.supportNuber}>+91 8739990555</Text>
-          </View>
-        </View>
         {
           // <View style={styles.helpCard}>
           //   <Icon
@@ -245,7 +254,26 @@ const CustomDrawerContent = ({ navigation }: any) => {
           //   </Text>
           // </View>
         }
+        <LogoutModal
+          visible={logOutVisible}
+          onClose={handleLodOutClose}
+          handleLodOut={handleLogOut}
+        />
       </ScrollView>
+
+      {/* HELP CARD */}
+      <View style={styles.mainBoxSupport}>
+        <Image
+          source={Images.apppointments1}
+          style={styles.earPhone}
+          resizeMode="contain"
+        />
+        <View style={styles.verticalLine} />
+        <View>
+          <Text style={styles.helpLineTest}>Support</Text>
+          <Text style={styles.supportNuber}>+91 96808 25225</Text>
+        </View>
+      </View>
     </View>
   );
 };

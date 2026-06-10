@@ -689,6 +689,14 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   );
 
   useEffect(() => {
+    const nextImages = previewImages
+      .slice(currentIndex + 1, currentIndex + 3)
+      .map((item) => ({ uri: item.uri }));
+
+    FastImage.preload(nextImages);
+  }, [currentIndex]);
+
+  useEffect(() => {
     specialityList();
   }, []);
   return (
@@ -724,8 +732,8 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         )}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
-        initialNumToRender={20}
-        maxToRenderPerBatch={20}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
         windowSize={10}
         removeClippedSubviews={false}
       />
@@ -734,7 +742,7 @@ const SpecialityDetailsScreen = ({ navigation }) => {
       <Modal
         visible={visible}
         transparent={false}
-        animationType="fade"
+        animationType="none"
         statusBarTranslucent={true}
         onRequestClose={() => {
           setVisible(false);

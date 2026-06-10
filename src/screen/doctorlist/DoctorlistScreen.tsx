@@ -114,7 +114,7 @@ const DoctorlistScreen = ({ navigation }) => {
         onPress={() => handleNavigate(item?.dr_id)}
       >
         <Image
-          source={{ uri: item?.dr_hospital_image }}
+          source={{ uri: item?.dr_image }}
           style={styles.categoryImg}
           borderRadius={theme.tokens.radius.md}
         />

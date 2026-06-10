@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import SplashScreen from '../../screen/auth/splash/SplashScreen';
 import AuthStack from '../AuthStack';
 import AppDrawer from '../AppDrawer';
-import PrivacyPolicyScreen from '../../screen/privacy/PrivacyPolicyScreen';
 import TermandconditionScreen from '../../screen/termandcondition/TermandconditionScreen';
 import { localStorage, storageKeys } from '../../storage/storage';
+import PrivacyPolicyScreen from '../../screen/privacyPolicy/PrivacyPolicyScreen';
 
 const Stack = createNativeStackNavigator();
 

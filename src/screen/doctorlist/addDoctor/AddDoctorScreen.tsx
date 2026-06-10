@@ -670,6 +670,8 @@ const AddDoctorScreen = ({ navigation }) => {
             onChange={handleDateChange}
             visible={dateVisible}
             onClose={handleDateClose}
+            minimumDate={new Date('1900-01-01')}
+            maximumDate={new Date()}
           />
         </View>
       </View>

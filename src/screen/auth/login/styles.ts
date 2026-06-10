@@ -6,12 +6,18 @@ export const createStyles = (theme: AppTheme) => {
   const { verticalScale, scale, tokens, moderateScale } = theme;
   return StyleSheet.create({
     loginText: {
-      fontSize: tokens.fontSize.md,
-      color: colors.black,
-      marginBottom: tokens.spacing.sm,
-      marginTop: tokens.spacing.sm,
+      fontSize: tokens.fontSize.mdPlus,
+      color: colors.primary,
+      marginTop: tokens.spacing.lg,
       alignSelf: 'center',
       fontFamily: Fonts.ManropeBold,
+      marginBottom: tokens.spacing.sm,
+    },
+    loginToContinueText: {
+      marginTop: 0,
+      marginBottom: tokens.spacing.lg,
+      fontSize: tokens.fontSize.sm,
+      color: colors.black,
     },
     container: {
       flex: 1,
@@ -28,7 +34,7 @@ export const createStyles = (theme: AppTheme) => {
       justifyContent: 'center',
       alignSelf: 'center',
       marginTop: tokens.spacing.xxxl,
-      marginBottom: tokens.spacing.lg,
+      // marginBottom: tokens.spacing.lg,
     },
     passinput: {
       marginTop: verticalScale(13),
@@ -36,10 +42,12 @@ export const createStyles = (theme: AppTheme) => {
     callIcon: {
       height: moderateScale(17),
       width: moderateScale(17),
+      tintColor: tokens.colors.primary,
     },
     passIcon: {
       height: moderateScale(18),
       width: moderateScale(18),
+      tintColor: tokens.colors.primary,
     },
     loginBtn: {
       marginTop: verticalScale(20),
@@ -49,7 +57,10 @@ export const createStyles = (theme: AppTheme) => {
       color: colors.InputText,
       fontFamily: Fonts.ManropeMedium,
       alignSelf: 'center',
-      marginTop: 'auto',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      marginBottom: 'auto',
       // marginBottom: verticalScale(20),
     },
 

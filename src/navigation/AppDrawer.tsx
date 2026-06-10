@@ -2,7 +2,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import MainTabs from './MainTabs';
 import { Dimensions } from 'react-native';
 import ProfileScreen from '../screen/profile/ProfileScreen';
-import PrivacyPolicyScreen from '../screen/privacy/PrivacyPolicyScreen';
 import TermandconditionScreen from '../screen/termandcondition/TermandconditionScreen';
 import AboutUsScreen from '../screen/aboutus/AboutUsScreen';
 import SubscriptionScreen from '../screen/subscription/SubscriptionScreen';
@@ -12,6 +11,8 @@ import AddAppointMentScreen from '../screen/appointments/addAppointMent/AddAppoi
 import AppointMentDetailsScreen from '../screen/appointments/appointMentDetails/AppointMentDetailsScreen';
 import SupportTicketScreen from '../screen/support/SupportTicketScreen';
 import NotificationScreen from '../screen/notification/NotificationScreen';
+import PrivacyPolicyScreen from '../screen/privacyPolicy/PrivacyPolicyScreen';
+// import PrivacyPolicyScreen from '../screen/privacyPolicy/PrivacyPolicyScreen';
 
 const Drawer = createDrawerNavigator();
 const { width } = Dimensions.get('window');
@@ -38,12 +39,9 @@ const AppDrawer = () => {
         component={AppointMentDetailsScreen}
       />
 
+      <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Drawer.Screen
-        name="PrivacyPolicyScreen"
-        component={PrivacyPolicyScreen}
-      />
-      <Drawer.Screen
-        name="TermandconditionScreen"
+        name="Termandcondition"
         component={TermandconditionScreen}
       />
       <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
@@ -54,3 +52,4 @@ const AppDrawer = () => {
   );
 };
 export default AppDrawer;
+// <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Image, Pressable, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, Image, Pressable, Text, TextInput, View } from 'react-native';
 import {
   ScreenLayout,
   AppHeader,
@@ -21,6 +21,9 @@ import { localStorage, storageKeys } from '../../storage/storage';
 const SupportTicketScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const InputRef = useRef<TextInput>(null);
+  const scrollRef = useRef(null);
+
   const [seach, setSearch] = useState('');
   const [memberId, setMemberId] = useState('');
   const [loading, setLoading] = useState(false);
@@ -43,6 +46,9 @@ const SupportTicketScreen = ({ navigation }) => {
     navigation.goBack();
   }, [navigation]);
 
+  const handleFocusInput = () => {
+    InputRef.current?.focus();
+  };
   const fetchSupportApi = async (stateId) => {
     try {
       setLoading(true);
@@ -125,7 +131,7 @@ const SupportTicketScreen = ({ navigation }) => {
             resizeMode="contain"
           />
           <View>
-            <Text style={styles.pacificText}>Pacific India</Text>
+            <Text style={styles.pacificText}>Medwell Pacific</Text>
             <Text style={styles.customerText}>Customer Care</Text>
           </View>
         </View>
@@ -179,34 +185,8 @@ const SupportTicketScreen = ({ navigation }) => {
 
       <View style={styles.headerBox}>
         <Text style={styles.haveAnyText}>Have any query?</Text>
-        <View style={styles.nameRow}>
-          <UserIcon
-            name="user-large"
-            color={theme.tokens.colors.primary}
-            size={theme.moderateScale(18)}
-          />
-          <Text style={styles.nameText}>Name</Text>
-        </View>
-        <View style={styles.baseLine} />
-        <View style={styles.nameRow}>
-          <Image
-            source={Icons.callFillIcon}
-            style={styles.nameIcon}
-            resizeMode="contain"
-          />
-          <Text style={styles.nameText}>+91-9393495969</Text>
-        </View>
-        <View style={styles.nameRow}>
-          {
-            // <View style={styles.baseLine} />
-          }
-          <Image
-            source={Icons.emailIcon}
-            style={styles.nameIcon}
-            resizeMode="contain"
-          />
-          <Text style={styles.nameText}>Support@thepacificindia.com</Text>
-        </View>
+
+        <Text style={[styles.addressText1]}>Subject </Text>
         <CustomDropDown
           data={subjectData}
           value={subject}
@@ -214,13 +194,20 @@ const SupportTicketScreen = ({ navigation }) => {
           placeholder="Select Subject"
           dropDownContainer={styles.dropDownContainer}
         />
-        <AppInput
-          placeholderText={'Write here...'}
-          value={comment}
-          handleChange={setComment}
-          inputBoxStyle={styles.inputBoxStyle}
-        />
 
+        <Text style={[styles.addressText1]}>Comment </Text>
+        <Pressable style={styles.appInputBox} onPress={handleFocusInput}>
+          <TextInput
+            value={comment}
+            onChangeText={setComment}
+            placeholder={'Comment'}
+            multiline={true}
+            ref={InputRef}
+            onFocus={() => {
+              scrollRef.current?.scrollToEnd();
+            }}
+          />
+        </Pressable>
         <CustomButton
           title="Submit"
           style={styles.submitBtn}

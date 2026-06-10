@@ -30,7 +30,7 @@ export const createStyles = (theme: AppTheme) => {
       height: verticalScale(38),
       borderWidth: 0.5,
       borderColor: tokens.colors.primary,
-      borderRadius: tokens.spacing.smPlus,
+      borderRadius: tokens.spacing.xsPlus,
       flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: tokens.spacing.sm,
