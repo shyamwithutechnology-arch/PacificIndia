@@ -83,6 +83,7 @@ const ProfileScreen = ({ navigation }) => {
   // });
 
   const [errors, setErrors] = useState({
+    image: '',
     name: '',
     fatherName: '',
     motherName: '',
@@ -98,6 +99,10 @@ const ProfileScreen = ({ navigation }) => {
 
   const validateForm = () => {
     const newErrors: any = {};
+
+    if (!image?.uri) {
+      newErrors.image = 'Please upload profile image';
+    }
 
     if (!input.name.trim()) {
       newErrors.name = 'Please enter name';
@@ -149,7 +154,7 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleGoback = useCallback(() => {
-    navigation.navigate('HomeTab', 'Home');
+    navigation.navigate('HomeTab', { screen: 'Home' });
   }, [navigation]);
 
   const handleState = async (val) => {
@@ -175,6 +180,7 @@ const ProfileScreen = ({ navigation }) => {
   };
   const handleImgChange = (img) => {
     setImage(img);
+    setErrors((pre) => ({ ...pre, image: '' }));
   };
   const handleImgClose = () => {
     setVisible(false);
@@ -401,6 +407,12 @@ const ProfileScreen = ({ navigation }) => {
           />
         </View>
       </Pressable>
+
+      {errors.image ? (
+        <Text style={[styles.nameError, styles.profileImgError]}>
+          {errors.image}
+        </Text>
+      ) : undefined}
 
       <View
         style={

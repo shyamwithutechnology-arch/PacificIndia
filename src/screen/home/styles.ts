@@ -83,7 +83,7 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: tokens.spacing.sm,
     },
     pacificDecText: {
-      fontSize: tokens.fontSize.xxs,
+      fontSize: tokens.fontSize.xs,
       fontFamily: Fonts.ManropeMedium,
       color: tokens.colors.lightGray,
       textAlign: 'justify',

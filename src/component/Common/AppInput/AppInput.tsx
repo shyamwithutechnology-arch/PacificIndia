@@ -16,6 +16,7 @@ const AppInput = ({
   keyboardType = 'default',
   maxLength = null,
   leftIcontintColor,
+  editable = true,
 }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
@@ -44,6 +45,7 @@ const AppInput = ({
           keyboardType={keyboardType}
           maxLength={maxLength}
           textAlignVertical="center"
+          editable={editable}
         />
         {rightIcon && (
           <Image

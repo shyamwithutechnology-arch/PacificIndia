@@ -25,6 +25,7 @@ import { ApiEndPoint } from '../../../api/endPoints';
 import { localStorage, storageKeys } from '../../../storage/storage';
 import { formatDateDayMonthShortYear } from '../../../utils/date';
 import AppDatePicker from '../../../component/appDatePicker/AppDatePicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AddAppointMentScreen = ({ navigation }) => {
   const theme = useAppTheme();
@@ -39,8 +40,11 @@ const AddAppointMentScreen = ({ navigation }) => {
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
   const [date, setDate] = useState(null);
+  const [time, setTime] = useState(new Date());
+  const [show, setShow] = useState(false);
   const [dateVisible, setDateVisible] = useState(false);
   const formatedDate = formatDateDayMonthShortYear(date);
+  console.log('time', time);
 
   const isTablet = theme.isTablet;
 
@@ -104,6 +108,9 @@ const AddAppointMentScreen = ({ navigation }) => {
   const handleVisibleDate = () => {
     setDateVisible(true);
   };
+  const handleShowTime = () => {
+    setShow(true);
+  };
 
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
@@ -125,7 +132,7 @@ const AddAppointMentScreen = ({ navigation }) => {
       if (res?.status === '1') {
         const formattedStates = res.result.map((item) => ({
           label: item.state_name,
-          value: item.state_id,
+          value: String(item.state_id),
         }));
         setStateList(formattedStates);
         // Alert.alert('stateList', JSON.stringify(res?.result || []));
@@ -150,7 +157,7 @@ const AddAppointMentScreen = ({ navigation }) => {
       if (res?.status === '1') {
         const formattedCities = res.result.map((item) => ({
           label: item.city_name,
-          value: item.city_id,
+          value: String(item.city_id),
         }));
         setCityList(formattedCities);
       }
@@ -357,12 +364,14 @@ const AddAppointMentScreen = ({ navigation }) => {
       <View style={isTablet ? styles.formRow : undefined}>
         <View style={isTablet ? styles.halfField : undefined}>
           <Text style={[styles.doctorName]}>Appointment Time</Text>
-          <AppInput
-            inputBoxStyle={styles.inputBoxStyle}
-            placeholderText="Please enter appointment time "
-            value={input.time}
-            handleChange={(value) => handleChange('time', value)}
-          />
+          <Pressable onPress={handleShowTime}>
+            <AppInput
+              inputBoxStyle={styles.inputBoxStyle}
+              placeholderText="Please enter appointment time "
+              value={input.time}
+              editable={false}
+            />
+          </Pressable>
           {errors?.time && (
             <Text style={[styles.nameError]}>{errors?.time}</Text>
           )}
@@ -444,6 +453,30 @@ const AddAppointMentScreen = ({ navigation }) => {
         onPress={addAppointMent}
         style={styles.submitBtn}
       />
+
+      {show && (
+        <DateTimePicker
+          value={time}
+          mode="time"
+          is24Hour={false}
+          display="default"
+          onChange={(event, selectedDate) => {
+            setShow(false);
+
+            if (selectedDate) {
+              setTime(selectedDate);
+
+              const formattedTime = selectedDate.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+              });
+
+              handleChange('time', formattedTime);
+            }
+          }}
+        />
+      )}
     </ScreenLayout>
   );
 };

@@ -20,41 +20,41 @@ import { POST_FORM } from '../api/request';
 import { showToast } from '../../utils/toast';
 import Loader from '../Common/Loader';
 import { ApiEndPoint } from '../../api/endPoints';
+import LogoutModal from '../logoutModal/logOutModal';
 
 const menuItems = [
-  { title: 'Speciality', icon: 'person-outline', route: 'Speciality' },
-  { title: 'DailyVisit', icon: 'person-outline', route: 'DailyVisit' },
+  { title: 'Speciality', icon: Icons.specialityIcon, route: 'Speciality' },
+  { title: 'DailyVisit', icon: Icons.healthcareIcon, route: 'DailyVisit' },
   {
     title: 'Appointments',
-    icon: 'document-text-outline',
+    icon: Icons.appointment_icon,
     route: 'AppointMents',
   },
   // { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
   {
     title: 'Support',
-    icon: 'notifications-outline',
+    icon: Icons.supportIcon,
     route: 'SupportTicket',
   },
   {
     title: 'Profile',
-    icon: 'notifications-outline',
+    icon: Icons.userProfileIcon,
     route: 'Profile',
   },
   {
     title: 'Terms & Conditions',
-    icon: 'document-text-outline',
+    icon: Icons.termAndConditionIcon,
     route: 'TermAndCondition',
   },
   {
     title: 'Privacy Policy',
-    icon: 'shield-checkmark-outline',
+    icon: Icons.privacyPolicyIcon,
     route: 'PrivacyPolicy',
   },
-  { title: 'Help & Support', icon: 'headset-outline', route: 'HelpAndSupport' },
 
   {
     title: 'Notifications',
-    icon: 'notifications-outline',
+    icon: Icons.notificationIcon,
     route: 'Notification',
   },
 
@@ -81,6 +81,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
 
   const [userData, setuserData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [logOutVisible, setLogOutVisible] = useState(false);
 
   const drawerStatus = useDrawerStatus();
 
@@ -88,6 +89,15 @@ const CustomDrawerContent = ({ navigation }: any) => {
     await localStorage.removeItem(storageKeys.fcm_token);
     navigation.getParent()?.replace('AuthStack');
     navigation.closeDrawer();
+  };
+
+  // logout
+  const handleLodOutVisible = () => {
+    setLogOutVisible(true);
+  };
+
+  const handleLodOutClose = () => {
+    setLogOutVisible(false);
   };
 
   // const handleNavigate = (item: any) => {
@@ -197,10 +207,19 @@ const CustomDrawerContent = ({ navigation }: any) => {
             onPress={() => handleNavigate(item)}
           >
             <View style={styles.menuLeft}>
-              <Icon
-                name={item.icon}
-                size={theme.moderateScale(20)}
-                color="#1FAF9A"
+              {
+                // <Icon
+                //   name={item.icon}
+                //   size={theme.moderateScale(20)}
+                //   color="#1FAF9A"
+                // />
+              }
+
+              <Image
+                source={item?.icon}
+                style={styles.drawerIcon}
+                resizeMode="contain"
+                tintColor={theme.tokens.colors.primary}
               />
               <Text style={styles.menuText}>{item.title}</Text>
             </View>
@@ -209,7 +228,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
         ))}
 
         {/* LOGOUT */}
-        <TouchableOpacity style={styles.logout} onPress={handleLogOut}>
+        <TouchableOpacity style={styles.logout} onPress={handleLodOutVisible}>
           <View style={styles.logoutIcon}>
             <Image
               source={Icons.logOutIcon}
@@ -245,6 +264,11 @@ const CustomDrawerContent = ({ navigation }: any) => {
           //   </Text>
           // </View>
         }
+        <LogoutModal
+          visible={logOutVisible}
+          onClose={handleLodOutClose}
+          handleLodOut={handleLogOut}
+        />
       </ScrollView>
     </View>
   );

@@ -161,5 +161,9 @@ export const createStyles = (theme: AppTheme) => {
       backgroundColor: 'rgba(12, 64, 111, 0.24)',
       marginHorizontal: tokens.spacing.sm,
     },
+    drawerIcon: {
+      height: moderateScale(20),
+      width: moderateScale(20),
+    },
   });
 };

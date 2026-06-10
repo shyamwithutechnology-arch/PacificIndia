@@ -39,4 +39,7 @@ export const Icons = {
   marritalStatusIcon: require('./marrital_status_icon.png'),
   healthcareIcon: require('./healthcare_icon.png'),
   doctorListIcon: require('./doctor_list_icon.png'),
+  privacyPolicyIcon: require('./privacy_policy_icon.png'),
+  termAndConditionIcon: require('./term_And_condition_icon.png'),
+  appointment_icon: require('./appointment_icon.png'),
 };

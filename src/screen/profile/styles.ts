@@ -65,6 +65,9 @@ export const createStyles = (theme: AppTheme) => {
       color: tokens.colors.red,
       fontFamily: Fonts.ManropeBold,
     },
+    profileImgError: {
+      alignSelf: 'center',
+    },
     bottomSpace: {
       marginBottom: tokens.spacing.xs,
     },
