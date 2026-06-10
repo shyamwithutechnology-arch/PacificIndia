@@ -77,15 +77,47 @@
 
 // export default TermandconditionScreen;
 
-import { View, Text } from 'react-native';
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { AppHeader, ScreenLayout } from '../../component';
+import { AppTheme, useAppTheme } from '../../hooks/useAppTheme';
+import { Icons } from '../../assets/icons';
 
-const TermandconditionScreen = () => {
+const TermandconditionScreen = ({ navigation }) => {
+  const theme = useAppTheme();
+  const styles = createStyles(theme);
+
   return (
-    <View>
-      <Text>TermandconditionScreen</Text>
-    </View>
+    <ScreenLayout
+      innerContainer={styles.container}
+      paddingHorizontalStyle={0}
+      header={
+        <AppHeader
+          title={'Terms and condition'}
+          leftIcon={Icons.leftIcon}
+          onPress={() => navigation.goBack()}
+        />
+      }
+    >
+      <WebView
+        source={{
+          uri: 'https://thepacificindia.com/terms-condition',
+        }}
+        startInLoadingState={true}
+      />
+    </ScreenLayout>
   );
 };
 
 export default TermandconditionScreen;
+
+export const createStyles = (theme: AppTheme) => {
+  const { verticalScale, moderateScale, scale, tokens } = theme;
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      // paddingTop: tokens.spacing.sm,
+    },
+  });
+};

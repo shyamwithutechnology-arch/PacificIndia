@@ -23,8 +23,14 @@ import { ApiEndPoint } from '../../api/endPoints';
 import LogoutModal from '../logoutModal/logOutModal';
 
 const menuItems = [
+  {
+    title: 'Profile',
+    icon: Icons.userProfileIcon,
+    route: 'Profile',
+  },
   { title: 'Speciality', icon: Icons.specialityIcon, route: 'Speciality' },
-  { title: 'DailyVisit', icon: Icons.healthcareIcon, route: 'DailyVisit' },
+
+  { title: 'Daily Visit', icon: Icons.healthcareIcon, route: 'DailyVisit' },
   {
     title: 'Appointments',
     icon: Icons.appointment_icon,
@@ -32,20 +38,17 @@ const menuItems = [
   },
   // { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
   {
-    title: 'Support',
-    icon: Icons.supportIcon,
-    route: 'SupportTicket',
+    title: 'Notifications',
+    icon: Icons.notificationIcon,
+    route: 'Notification',
   },
-  {
-    title: 'Profile',
-    icon: Icons.userProfileIcon,
-    route: 'Profile',
-  },
+
   {
     title: 'Terms & Conditions',
     icon: Icons.termAndConditionIcon,
-    route: 'TermAndCondition',
+    route: 'Termandcondition',
   },
+
   {
     title: 'Privacy Policy',
     icon: Icons.privacyPolicyIcon,
@@ -53,9 +56,9 @@ const menuItems = [
   },
 
   {
-    title: 'Notifications',
-    icon: Icons.notificationIcon,
-    route: 'Notification',
+    title: 'Support',
+    icon: Icons.supportIcon,
+    route: 'SupportTicket',
   },
 
   // { title: 'About Us', icon: 'information-circle-outline', route: 'AboutUs' },
@@ -239,19 +242,6 @@ const CustomDrawerContent = ({ navigation }: any) => {
           <Text style={styles.logoutText}>Logout My Account</Text>
         </TouchableOpacity>
 
-        {/* HELP CARD */}
-        <View style={styles.mainBoxSupport}>
-          <Image
-            source={Images.apppointments1}
-            style={styles.earPhone}
-            resizeMode="contain"
-          />
-          <View style={styles.verticalLine} />
-          <View>
-            <Text style={styles.helpLineTest}>Support</Text>
-            <Text style={styles.supportNuber}>+91 8739990555</Text>
-          </View>
-        </View>
         {
           // <View style={styles.helpCard}>
           //   <Icon
@@ -270,6 +260,20 @@ const CustomDrawerContent = ({ navigation }: any) => {
           handleLodOut={handleLogOut}
         />
       </ScrollView>
+
+      {/* HELP CARD */}
+      <View style={styles.mainBoxSupport}>
+        <Image
+          source={Images.apppointments1}
+          style={styles.earPhone}
+          resizeMode="contain"
+        />
+        <View style={styles.verticalLine} />
+        <View>
+          <Text style={styles.helpLineTest}>Support</Text>
+          <Text style={styles.supportNuber}>+91 96808 25225</Text>
+        </View>
+      </View>
     </View>
   );
 };

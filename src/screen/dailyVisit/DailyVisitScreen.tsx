@@ -128,7 +128,9 @@ const DailyVisitScreen = () => {
         ]}
       >
         <Image
-          source={{ uri: DUMMY_IMAGE }}
+          source={
+            item?.dailyr_dr_image ? { uri: item?.dailyr_dr_image } : DUMMY_IMAGE
+          }
           style={styles.categoryImg}
           borderRadius={theme.tokens.radius.md}
         />

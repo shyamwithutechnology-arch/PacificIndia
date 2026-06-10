@@ -23,7 +23,6 @@ const LoginScreen = ({ navigation }) => {
     number: '',
     password: '',
   });
-  console.log('error++++++++++++', errors);
 
   // Alert.alert('Err', errors.number);
 
@@ -38,6 +37,9 @@ const LoginScreen = ({ navigation }) => {
   // };
 
   const handleChange = (key: string, value: any) => {
+    if (key === 'number') {
+      value = value.replace(/[^0-9]/g, '');
+    }
     setInput((pre) => ({ ...pre, [key]: value }));
     setErrors((pre) => ({ ...pre, [key]: '' }));
   };
@@ -93,6 +95,8 @@ const LoginScreen = ({ navigation }) => {
 
         localStorage.setItem(storageKeys.fcm_token, '1234');
         navigation.getParent().replace('AppDrawer');
+      } else {
+        showToast('error', 'Error', response?.msg);
       }
     } catch (error) {
       if (error?.offline) {
@@ -116,6 +120,11 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.logoBox}>
         <Image source={Images.logo} style={styles.logo} />
       </View>
+      <Text style={styles.loginText}>Welcome Back</Text>
+      <Text style={[styles.loginText, styles.loginToContinueText]}>
+        {' '}
+        Login to continue
+      </Text>
       <Loader visible={loading} />
       <AppInput
         leftIcon={Icons.callIcon}
@@ -123,6 +132,7 @@ const LoginScreen = ({ navigation }) => {
         inputBoxStyle={styles.passinput}
         leftIconStyle={styles.callIcon}
         maxLength={10}
+        keyboardType={'numeric'}
         value={input?.number}
         handleChange={(value) => handleChange('number', value)}
       />

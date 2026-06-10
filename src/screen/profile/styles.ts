@@ -19,14 +19,13 @@ export const createStyles = (theme: AppTheme) => {
       // marginBottom: tokens.spacing.xs,
     },
     splashLogo: {
-      height: moderateScale(86),
-      width: moderateScale(86),
+      height: moderateScale(99),
+      width: moderateScale(99),
       // marginBottom: tokens.spacing.xxs,
-      marginTop: tokens.spacing.xs,
     },
     logoBox: {
       height: verticalScale(100),
-      width: scale(100),
+      aspectRatio: 1,
       borderRadius: scale(200),
       backgroundColor: tokens.colors.white,
       alignItems: 'center',
@@ -35,6 +34,7 @@ export const createStyles = (theme: AppTheme) => {
       marginVertical: tokens.spacing.md,
       elevation: 10,
       shadowColor: '#8b8b8b',
+      // borderWidth: 1,
     },
     editProfileBtn: {
       height: moderateScale(25),

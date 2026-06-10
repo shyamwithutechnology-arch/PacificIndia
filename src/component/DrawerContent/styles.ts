@@ -130,6 +130,9 @@ export const createStyles = (theme: AppTheme) => {
       paddingLeft: tokens.spacing.md,
       paddingBottom: insets.bottom + tokens.spacing.xs,
       paddingTop: tokens.spacing.xxs,
+      bottom: 0,
+      right: 0,
+      left: 0,
     },
     earPhoneBox: {
       width: scale(60),

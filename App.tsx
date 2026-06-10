@@ -1,8 +1,8 @@
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React from 'react';
 // import { LoginSceen } from './src/screen/auth/login';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { store } from './src/redux/store/store';
 import { Provider } from 'react-redux';
 import RootNavigator from './src/navigation/stacks/RootStack';
@@ -14,10 +14,12 @@ import { toastConfig } from './src/utils/toastConfig';
 const App = () => {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <RootNavigator />
-        <Toast config={toastConfig} />
-      </NavigationContainer>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <RootNavigator />
+          <Toast config={toastConfig} />
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
     // <SafeAreaProvider style={styles.container}>
     //   <HomeScreen />

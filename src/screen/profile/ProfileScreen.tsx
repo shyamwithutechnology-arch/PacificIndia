@@ -389,7 +389,8 @@ const ProfileScreen = ({ navigation }) => {
           <Image
             source={{ uri: image?.uri }}
             style={styles.splashLogo}
-            resizeMode="contain"
+            resizeMode="cover"
+            borderRadius={theme.scale(180)}
           />
         ) : (
           <Image

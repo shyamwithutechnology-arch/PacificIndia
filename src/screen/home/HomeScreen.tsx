@@ -29,6 +29,7 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [banner, setBanner] = useState([]);
   const [orientation, setOrientation] = useState('PORTRAIT');
+  const [listScrollEnabled, setListScrollEnabled] = useState(true);
 
   const isLandscape = width > height;
 
@@ -155,7 +156,7 @@ const HomeScreen = ({ navigation }) => {
           well-being.
         </Text>
 
-        <Text style={styles.pacificDecText}>
+        <Text style={[styles.pacificDecText, styles.secondParagrapText]}>
           We combine expert medical consultations, diagnostic services, and
           healthcare support through a technology-driven platform that enables
           patients to conveniently access healthcare services. Our focus is on
@@ -187,12 +188,11 @@ const HomeScreen = ({ navigation }) => {
     <ScreenLayout
       header={
         <AppHeader
-          title="Pacific India"
+          title="Medwell Pacific"
           leftIcon={Icons.drawerIcon}
           onPress={() => navigation.openDrawer()}
         />
       }
-      scroll={true}
     >
       <Loader visible={loading} />
 
@@ -202,6 +202,7 @@ const HomeScreen = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         numColumns={numColumns}
+        scrollEnabled={true}
         ListHeaderComponent={headerComponent}
         ListFooterComponent={footerComponent}
         columnWrapperStyle={numColumns > 1 ? styles.row : undefined}

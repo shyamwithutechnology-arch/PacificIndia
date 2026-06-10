@@ -64,28 +64,22 @@ const SpecialityScreen = () => {
     }
   };
 
-  const renderItem = ({ item }) => {
-    const imageUrl =
-      item?.ms_image && item.ms_image.startsWith('http')
-        ? item.ms_image
-        : item?.ms_image
-        ? `${baseURL}/uploads/doctor/${item.ms_image}`
-        : DUMMY_IMAGE;
+  const renderItem = ({ item, index }) => {
+    const imageUrl = `${baseURL}/uploads/medicine/${item.ms_image}`;
+    // index === 0 && Alert.alert('aaaaaaaa', JSON.stringify(item));
 
     return (
       <Pressable style={styles.cart} onPress={() => handleNavigate(item)}>
         <View style={styles.categoryBox}>
           <Image
-            source={{
-              uri: imageError[item.id] ? DUMMY_IMAGE : imageUrl,
-            }}
+            source={
+              item?.ms_image
+                ? {
+                    uri: imageUrl,
+                  }
+                : DUMMY_IMAGE
+            }
             style={styles.categoryImg}
-            onError={() => {
-              setImageError((prev) => ({
-                ...prev,
-                [item.id]: true,
-              }));
-            }}
           />
         </View>
         <Text style={styles.titleText}>{item?.ms_name}</Text>

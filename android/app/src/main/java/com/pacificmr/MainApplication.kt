@@ -1,4 +1,4 @@
-package com.pacificmr
+package com.medwellpacific
 
 import android.app.Application
 import com.facebook.react.PackageList
