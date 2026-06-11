@@ -3,7 +3,8 @@ import { AppTheme } from '../../../hooks/useAppTheme';
 import { Fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize, insets } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -31,7 +32,7 @@ export const createStyles = (theme: AppTheme) => {
       borderWidth: 1,
       paddingHorizontal: tokens.spacing.xxs,
       paddingVertical: tokens.spacing.smPlus,
-      marginBottom: tokens.spacing.md,
+      marginBottom: tokens.spacing.smPlus,
       flexDirection: 'row',
     },
     titleText: {
@@ -70,8 +71,8 @@ export const createStyles = (theme: AppTheme) => {
       shadowColor: '#fff',
     },
     listContainer: {
-      paddingBottom: tokens.spacing.sm,
       paddingTop: tokens.spacing.smPlus,
+      paddingBottom: insets.bottom + tokens.spacing.xxl,
     },
     searchTop: {
       width: '100%',
@@ -299,6 +300,9 @@ export const createStyles = (theme: AppTheme) => {
     },
     cardBoxForMobTwo: {
       width: '49%',
+    },
+    innerContainer: {
+      paddingBottom: insets.bottom + tokens.spacing.xxxl,
     },
   });
 };

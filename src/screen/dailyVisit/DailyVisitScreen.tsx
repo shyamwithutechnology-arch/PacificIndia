@@ -241,6 +241,7 @@ const DailyVisitScreen = () => {
           notificationPress={() => {}}
         />
       }
+      innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
 

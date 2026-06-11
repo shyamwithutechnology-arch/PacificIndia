@@ -26,6 +26,7 @@ import { localStorage, storageKeys } from '../../../storage/storage';
 import { formatDateDayMonthShortYear } from '../../../utils/date';
 import AppDatePicker from '../../../component/appDatePicker/AppDatePicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AppBackHandler from '../../../component/backhandler/AppBackHandler';
 
 const AddAppointMentScreen = ({ navigation }) => {
   const theme = useAppTheme();
@@ -287,6 +288,7 @@ const AddAppointMentScreen = ({ navigation }) => {
       }
       scroll={true}
     >
+      <AppBackHandler goBack={true} />
       <Loader visible={loading} />
 
       <View style={isTablet ? styles.formRow : undefined}>

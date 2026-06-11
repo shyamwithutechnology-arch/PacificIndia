@@ -1,17 +1,6 @@
 import React, { ReactNode, useState } from 'react';
-import {
-  View,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  StatusBar,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { View, StatusBar, StyleProp, ViewStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { createStyles } from './styles';
@@ -23,6 +12,7 @@ type ScreenLayoutProps = {
   paddingHorizontalStyle?: number;
   innerContainer?: StyleProp<ViewStyle>;
   statusBarBgColor?: string;
+  extraScrollHeight: number;
 };
 
 export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
@@ -32,11 +22,11 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
   paddingHorizontalStyle,
   innerContainer,
   statusBarBgColor = '#0093D3',
+  extraScrollHeight = 0,
 }) => {
   const theme = useAppTheme();
   const { tokens } = theme;
   const styles = createStyles(theme);
-
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const horizontalPadding =
@@ -59,7 +49,7 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
       {scroll ? (
         <KeyboardAwareScrollView
           enableOnAndroid
-          extraScrollHeight={100}
+          extraScrollHeight={extraScrollHeight}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[

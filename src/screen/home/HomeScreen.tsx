@@ -1,12 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Alert,
+  BackHandler,
   Dimensions,
   FlatList,
   Image,
   Pressable,
   StyleSheet,
   Text,
+  ToastAndroid,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -20,6 +28,7 @@ import HomeBannerSlider from './component/homebanner/HomeBannerSlider';
 import { showToast } from '../../utils/toast';
 import { GET, POST_FORM } from '../../api/request';
 import { ApiEndPoint } from '../../api/endPoints';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
   const theme = useAppTheme();
@@ -30,6 +39,7 @@ const HomeScreen = ({ navigation }) => {
   const [banner, setBanner] = useState([]);
   const [orientation, setOrientation] = useState('PORTRAIT');
   const [listScrollEnabled, setListScrollEnabled] = useState(true);
+  const backPressCount = useRef(0);
 
   const isLandscape = width > height;
 
@@ -71,13 +81,6 @@ const HomeScreen = ({ navigation }) => {
       img: Images.dailyVisit,
       screen: 'DailyVisitStack',
     },
-  ];
-
-  const bannerd = [
-    { id: 1, image: Images.bannerImg },
-    { id: 2, image: Images.bannerImg },
-    { id: 3, image: Images.bannerImg },
-    { id: 4, image: Images.bannerImg },
   ];
 
   const handleNavigate = (item) => {
@@ -167,6 +170,34 @@ const HomeScreen = ({ navigation }) => {
       </View>
     );
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (backPressCount.current === 0) {
+          backPressCount.current = 1;
+
+          ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT);
+
+          setTimeout(() => {
+            backPressCount.current = 0;
+          }, 2000);
+
+          return true;
+        }
+
+        BackHandler.exitApp();
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress
+      );
+
+      return () => subscription.remove();
+    }, [])
+  );
 
   // Detect orientation changes
   useEffect(() => {

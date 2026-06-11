@@ -120,6 +120,7 @@ const SupportTicketScreen = ({ navigation }) => {
         />
       }
       innerContainer={styles.innerContainer}
+      extraScrollHeight={120}
       scroll={true}
     >
       <Loader visible={loading} />

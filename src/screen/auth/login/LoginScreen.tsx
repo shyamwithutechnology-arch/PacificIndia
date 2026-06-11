@@ -116,44 +116,46 @@ const LoginScreen = ({ navigation }) => {
   // };
 
   return (
-    <ScreenLayout>
-      <View style={styles.logoBox}>
-        <Image source={Images.logo} style={styles.logo} />
-      </View>
-      <Text style={styles.loginText}>Welcome Back</Text>
-      <Text style={[styles.loginText, styles.loginToContinueText]}>
-        {' '}
-        Login to continue
-      </Text>
-      <Loader visible={loading} />
-      <AppInput
-        leftIcon={Icons.callIcon}
-        placeholderText={'Please enter mobile number'}
-        inputBoxStyle={styles.passinput}
-        leftIconStyle={styles.callIcon}
-        maxLength={10}
-        keyboardType={'numeric'}
-        value={input?.number}
-        handleChange={(value) => handleChange('number', value)}
-      />
-      {errors.number && <Text style={styles.errorText}>{errors.number}</Text>}
-      <AppInput
-        placeholderText={'Please enter password'}
-        leftIcon={Icons.passwordicon}
-        leftIconStyle={styles.passIcon}
-        inputBoxStyle={styles.passinput}
-        value={input?.password}
-        handleChange={(value) => handleChange('password', value)}
-      />
-      {errors.password && (
-        <Text style={styles.errorText}>{errors.password}</Text>
-      )}
+    <ScreenLayout paddingHorizontalStyle={0}>
+      <View style={styles.homeContainer}>
+        <View style={styles.logoBox}>
+          <Image source={Images.logo} style={styles.logo} />
+        </View>
+        <Text style={styles.loginText}>Welcome Back</Text>
+        <Text style={[styles.loginText, styles.loginToContinueText]}>
+          {' '}
+          Login to continue
+        </Text>
+        <Loader visible={loading} />
+        <AppInput
+          leftIcon={Icons.callIcon}
+          placeholderText={'Please enter mobile number'}
+          inputBoxStyle={styles.passinput}
+          leftIconStyle={styles.callIcon}
+          maxLength={10}
+          keyboardType={'numeric'}
+          value={input?.number}
+          handleChange={(value) => handleChange('number', value)}
+        />
+        {errors.number && <Text style={styles.errorText}>{errors.number}</Text>}
+        <AppInput
+          placeholderText={'Please enter password'}
+          leftIcon={Icons.passwordicon}
+          leftIconStyle={styles.passIcon}
+          inputBoxStyle={styles.passinput}
+          value={input?.password}
+          handleChange={(value) => handleChange('password', value)}
+        />
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
 
-      <CustomButton
-        title="Login"
-        style={styles.loginBtn}
-        onPress={handleLogin}
-      />
+        <CustomButton
+          title="Login"
+          style={styles.loginBtn}
+          onPress={handleLogin}
+        />
+      </View>
       <Text style={styles.versionText}>Version 1.0</Text>
     </ScreenLayout>
   );
