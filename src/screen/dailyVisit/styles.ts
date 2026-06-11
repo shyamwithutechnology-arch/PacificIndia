@@ -3,8 +3,15 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize, isTablet } =
-    theme;
+  const {
+    verticalScale,
+    scale,
+    tokens,
+    moderateScale,
+    normalize,
+    isTablet,
+    insets,
+  } = theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -79,8 +86,8 @@ export const createStyles = (theme: AppTheme) => {
       shadowColor: '#fff',
     },
     listContainer: {
-      paddingBottom: tokens.spacing.sm,
       paddingTop: tokens.spacing.smPlus,
+      paddingBottom: insets.bottom + tokens.spacing.xxxl,
     },
     searchTop: {
       marginTop: 0,
@@ -203,6 +210,9 @@ export const createStyles = (theme: AppTheme) => {
     addText: {
       fontSize: tokens.fontSize.md,
       color: tokens.colors.white,
+    },
+    innerContainer: {
+      paddingBottom: insets.bottom + tokens.spacing.xxl,
     },
   });
 };

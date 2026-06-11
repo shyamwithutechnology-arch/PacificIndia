@@ -132,6 +132,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     btnStyle: {
       marginTop: tokens.spacing.md,
+      marginBottom: insets.bottom + tokens.spacing.sm,
     },
     innerContainer: {
       paddingBlock: insets.bottom + tokens.spacing.md,

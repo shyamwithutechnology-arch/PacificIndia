@@ -60,8 +60,7 @@ export const createStyles = (theme: AppTheme) => {
       bottom: 0,
       left: 0,
       right: 0,
-      marginBottom: 'auto',
-      // marginBottom: verticalScale(20),
+      marginBottom: verticalScale(20),
     },
 
     //error
@@ -70,6 +69,10 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: tokens.fontSize.xs,
       marginTop: tokens.spacing.xxs,
       // marginLeft: tokens.spacing.lg,
+    },
+    homeContainer: {
+      flexGrow: 1,
+      paddingHorizontal: tokens.spacing.md,
     },
   });
 };

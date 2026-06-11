@@ -358,6 +358,7 @@ const SelectDoctorScreen = () => {
           onPress={handleGoback}
         />
       }
+      innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
       <SearchList

@@ -3,7 +3,8 @@ import { AppTheme } from '../../hooks/useAppTheme';
 import { Fonts } from '../../theme';
 
 export const createStyles = (theme: AppTheme) => {
-  const { verticalScale, scale, tokens, moderateScale, normalize } = theme;
+  const { verticalScale, scale, tokens, moderateScale, normalize, insets } =
+    theme;
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -40,8 +41,8 @@ export const createStyles = (theme: AppTheme) => {
       width: '94%',
     },
     listContainer: {
-      paddingBottom: tokens.spacing.sm,
       paddingTop: tokens.spacing.smPlus,
+      paddingBottom: insets.bottom + tokens.spacing.xxxl,
     },
     nameLebelText: {
       fontSize: tokens.fontSize.sm,
@@ -52,6 +53,9 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: tokens.fontSize.sm,
       color: tokens.colors.black,
       fontFamily: Fonts.ManropeSemiBold,
+    },
+    innerContainer: {
+      paddingBottom: insets.bottom + tokens.spacing.xxl,
     },
   });
 };

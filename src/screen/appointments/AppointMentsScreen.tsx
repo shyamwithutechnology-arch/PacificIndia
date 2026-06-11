@@ -21,6 +21,7 @@ import { POST_FORM } from '../../api/request';
 import { ApiEndPoint } from '../../api/endPoints';
 import { showToast } from '../../utils/toast';
 import { formatDateDayMonthShortYear } from '../../utils/date';
+import AppBackHandler from '../../component/backhandler/AppBackHandler';
 
 const AppointMentsScreen = ({ navigation }) => {
   const theme = useAppTheme();
@@ -130,8 +131,11 @@ const AppointMentsScreen = ({ navigation }) => {
           onPress={handleGoback}
         />
       }
+      innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
+      <AppBackHandler goBack={true} />
+
       <View style={styles.searchRow}>
         <SearchList
           value={seach}
