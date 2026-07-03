@@ -45,6 +45,10 @@ const DailyVisitScreen = () => {
     navigation.goBack();
   }, [navigation]);
 
+  const handleNotification = () => {
+    navigation.navigate('Notification');
+  };
+
   const category = [
     {
       id: 1,
@@ -238,7 +242,7 @@ const DailyVisitScreen = () => {
           search={search}
           leftIcon={Icons.leftIcon}
           onPress={handleGoback}
-          notificationPress={() => {}}
+          notificationPress={handleNotification}
         />
       }
       innerContainer={styles.innerContainer}

@@ -276,7 +276,7 @@ const createStyles = (theme: AppTheme) => {
     },
 
     text1: {
-      fontFamily: Fonts.ManropeBold,
+      fontFamily: Fonts.ManropeSemiBold,
       color: tokens.colors.green,
       fontSize: tokens.fontSize.lg,
     },

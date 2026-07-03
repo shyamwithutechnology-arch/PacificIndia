@@ -16,6 +16,7 @@ import {
   CustomButton,
   ScreenLayout,
   Loader,
+  AppBackHandler,
 } from '../../component';
 import { Icons } from '../../assets/icons';
 import { createStyles } from './styles';
@@ -44,6 +45,7 @@ const ProfileScreen = ({ navigation }) => {
   const isLandscape = width > height;
 
   // Alert.alert('stateList', JSON.stringify(stateList));
+  console.log('userData', userData);
 
   const [cityList, setCityList] = useState([]);
   // Alert.alert('userData', JSON.stringify(userData));
@@ -383,7 +385,7 @@ const ProfileScreen = ({ navigation }) => {
       innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
-
+      <AppBackHandler screenName="HomeTab" nestedScreen="Home" />
       <Pressable style={styles.logoBox} onPress={handleImgOpen}>
         {image?.uri ? (
           <Image
@@ -408,13 +410,11 @@ const ProfileScreen = ({ navigation }) => {
           />
         </View>
       </Pressable>
-
       {errors.image ? (
         <Text style={[styles.nameError, styles.profileImgError]}>
           {errors.image}
         </Text>
       ) : undefined}
-
       <View
         style={
           isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
@@ -470,7 +470,6 @@ const ProfileScreen = ({ navigation }) => {
           )}
         </View>
       </View>
-
       <View
         style={
           isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
@@ -527,7 +526,6 @@ const ProfileScreen = ({ navigation }) => {
           )}
         </View>
       </View>
-
       <View
         style={
           isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
@@ -580,7 +578,6 @@ const ProfileScreen = ({ navigation }) => {
           )}
         </View>
       </View>
-
       <View
         style={
           isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined
@@ -684,7 +681,6 @@ const ProfileScreen = ({ navigation }) => {
           )}
         </View>
       </View>
-
       <View
         style={
           isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined

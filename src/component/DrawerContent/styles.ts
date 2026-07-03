@@ -22,10 +22,12 @@ export const createStyles = (theme: AppTheme) => {
     },
 
     avatar: {
-      width: scale(60),
-      aspectRatio: 1,
+      width: moderateScale(60),
+      height: moderateScale(60),
       borderRadius: tokens.spacing.xl,
       marginRight: tokens.spacing.smPlus,
+      alignSelf: 'center',
+      marginLeft: scale(12),
       // marginTop: tokens.spacing.md,
     },
 
@@ -167,6 +169,20 @@ export const createStyles = (theme: AppTheme) => {
     drawerIcon: {
       height: moderateScale(20),
       width: moderateScale(20),
+    },
+
+    logoBox: {
+      height: moderateScale(60),
+      width: moderateScale(60),
+      borderRadius: scale(200),
+      backgroundColor: tokens.colors.white,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'center',
+      elevation: 10,
+      shadowColor: '#8b8b8b',
+      marginRight: scale(20),
+      // borderWidth: 1,
     },
   });
 };

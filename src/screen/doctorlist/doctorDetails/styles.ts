@@ -9,7 +9,10 @@ export const createStyles = (theme: AppTheme) => {
     container: {
       flex: 1,
     },
-
+    homeContainer: {
+      flex: 1,
+      paddingBottom: insets.bottom + tokens.spacing.lg,
+    },
     card: {
       backgroundColor: tokens.colors.white,
       elevation: 10,
@@ -120,7 +123,7 @@ export const createStyles = (theme: AppTheme) => {
       marginBottom: tokens.spacing.sm,
     },
     locationBnt: {
-      marginBottom: 0,
+      // marginBottom: ,
       marginTop: tokens.spacing.md,
     },
     locationText: {
@@ -162,9 +165,6 @@ export const createStyles = (theme: AppTheme) => {
     },
     medecinBox: {
       backgroundColor: '#0074D3',
-    },
-    innerContainer: {
-      paddingBottom: insets.bottom + tokens.spacing.md,
     },
   });
 };

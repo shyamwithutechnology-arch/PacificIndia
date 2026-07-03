@@ -75,3 +75,46 @@ const NotificationScreen = ({ navigation }) => {
 };
 
 export default NotificationScreen;
+
+// import React from 'react';
+// import { useWindowDimensions } from 'react-native';
+// import { ImageZoom } from '@likashefqet/react-native-image-zoom';
+// import FastImage from 'react-native-fast-image';
+
+// const NotificationScreen = () => {
+//   const { width, height } = useWindowDimensions();
+
+//   return (
+//     // <ImageZoom style={{ width, height }} minScale={1} maxScale={4}>
+//     //   <FastImage
+//     //     source={{
+//     //       uri: 'https://picsum.photos/800/1200',
+//     //     }}
+//     //     style={{ width, height }}
+//     //     resizeMode={FastImage.resizeMode.contain}
+//     //   />
+//     // </ImageZoom>
+//     <ImageZoom
+//       minScale={1}
+//       maxScale={100}
+//       doubleTapScale={2.5}
+//       isDoubleTapEnabled
+//       isPanEnabled
+//       isPinchEnabled
+//       style={{ flex: 1 }}
+//       // style={{
+//       //   width,
+//       //   height,
+//       // }}
+//       // Pass the source directly here instead of nesting FastImage
+//       source={{
+//         uri: 'https://picsum.photos/800/1200',
+//         priority: FastImage.priority.high,
+//         cache: FastImage.cacheControl.immutable,
+//       }}
+//       resizeMode="contain"
+//     />
+//   );
+// };
+
+// export default NotificationScreen;

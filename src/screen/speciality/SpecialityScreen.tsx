@@ -66,8 +66,6 @@ const SpecialityScreen = () => {
 
   const renderItem = ({ item, index }) => {
     const imageUrl = `${baseURL}/uploads/medicine/${item.ms_image}`;
-    // index === 0 && Alert.alert('aaaaaaaa', JSON.stringify(item));
-
     return (
       <Pressable style={styles.cart} onPress={() => handleNavigate(item)}>
         <View style={styles.categoryBox}>

@@ -53,6 +53,7 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[
+            styles.flex,
             innerContainer,
             { paddingHorizontal: horizontalPadding },
           ]}

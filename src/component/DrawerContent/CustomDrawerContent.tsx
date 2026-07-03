@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconLogOut from 'react-native-vector-icons/AntDesign';
@@ -21,6 +22,8 @@ import { showToast } from '../../utils/toast';
 import Loader from '../Common/Loader';
 import { ApiEndPoint } from '../../api/endPoints';
 import LogoutModal from '../logoutModal/logOutModal';
+import { logout } from '../../../src/redux/Slices/authSlice';
+import { useAppDispatch } from '../../redux/hooks';
 
 const menuItems = [
   {
@@ -81,6 +84,7 @@ const nestedRoutes = {
 const CustomDrawerContent = ({ navigation }: any) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const dispatch = useAppDispatch();
 
   const [userData, setuserData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -89,9 +93,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
   const drawerStatus = useDrawerStatus();
 
   const handleLogOut = async () => {
-    await localStorage.removeItem(storageKeys.fcm_token);
-    navigation.getParent()?.replace('AuthStack');
-    navigation.closeDrawer();
+    dispatch(logout());
   };
 
   // logout
@@ -181,11 +183,13 @@ const CustomDrawerContent = ({ navigation }: any) => {
         style={styles.header}
       >
         <View style={styles.headerInnerBox}>
-          <Image
-            source={Images?.profileImg} // change path
-            style={styles.avatar}
-            resizeMode="contain"
-          />
+          <Pressable style={styles.logoBox}>
+            <Image
+              source={Images.logo} // change path
+              style={styles.avatar}
+              resizeMode="contain"
+            />
+          </Pressable>
           <View>
             <Text style={styles.name}>{userData?.member_name}</Text>
             <Text style={styles.role}>{userData?.member_designation_name}</Text>

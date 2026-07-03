@@ -433,7 +433,10 @@ export const createStyles = (theme: AppTheme) => {
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
     },
-
+    fullScreenImageaa: {
+      height: Dimensions.get('window').height,
+      width: Dimensions.get('window').width,
+    },
     // Header styles for both orientations
     previewHeader: {
       position: 'absolute',

@@ -81,6 +81,13 @@ const HomeScreen = ({ navigation }) => {
       img: Images.dailyVisit,
       screen: 'DailyVisitStack',
     },
+    {
+      id: 5,
+      title: 'Report',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Images.dailyVisit,
+      screen: 'Report',
+    },
   ];
 
   const handleNavigate = (item) => {

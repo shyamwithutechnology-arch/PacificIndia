@@ -51,58 +51,6 @@ const DoctorlistScreen = ({ navigation }) => {
     );
   }, [doctorList, seach]);
 
-  const category = [
-    {
-      id: 1,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Women & Heart Clinic, Malviya Nagar',
-      img: Images.doctorImg1,
-    },
-    {
-      id: 2,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Cocoon Hospital, Jagatpura / Malviya Nagar',
-      img: Images.doctorImg2,
-    },
-    {
-      id: 3,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Women & Heart Clinic, Malviya Nagar',
-      img: Images.doctorImg3,
-    },
-    {
-      id: 4,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Cocoon Hospital, Jagatpura / Malviya Nagar',
-      img: Images.doctorImg1,
-    },
-    {
-      id: 5,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Cocoon Hospital, Jagatpura / Malviya Nagar',
-      img: Images.doctorImg2,
-    },
-    {
-      id: 6,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Women & Heart Clinic, Malviya Nagar',
-      img: Images.doctorImg3,
-    },
-  ];
-
-  const banner = [
-    { id: 1, image: Images.bannerImg },
-    { id: 2, image: Images.bannerImg },
-    { id: 3, image: Images.bannerImg },
-    { id: 4, image: Images.bannerImg },
-  ];
-
   const handleGoback = useCallback(() => {
     navigation.navigate('HomeTab', 'Home');
   }, [navigation]);

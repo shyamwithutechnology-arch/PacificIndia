@@ -12,8 +12,8 @@ const DoctorsStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Doctorlist" component={DoctorlistScreen} />
       <Stack.Screen name="DoctorDetails" component={DoctorDetailsScreen} />
-      <Stack.Screen name="AddDoctor" component={AddDoctorScreen} />
       <Stack.Screen name="MedicenList" component={MedicenListScreen} />
+      <Stack.Screen name="AddDoctor" component={AddDoctorScreen} />
     </Stack.Navigator>
   );
 };

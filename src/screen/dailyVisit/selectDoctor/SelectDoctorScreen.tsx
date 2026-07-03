@@ -10,6 +10,8 @@ import {
   Dimensions,
   FlatList,
   Image,
+  Keyboard,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -58,6 +60,7 @@ const SelectDoctorScreen = () => {
   const [date, setDate] = useState(null);
   const [pickerDate, setPickerDate] = useState(new Date());
   const navigation = useNavigation();
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const InputRef = useRef<TextInput>(null);
 
   const handleVisibleDate = () => {
@@ -107,59 +110,6 @@ const SelectDoctorScreen = () => {
     }));
   };
 
-  const category = [
-    {
-      id: 1,
-      name: 'Dr. Himani Sharma',
-      date: '20-5-2026',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Women & Heart Clinic, Malviya Nagar',
-      img: Images.doctorImg1,
-    },
-    {
-      id: 2,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Cocoon Hospital, Jagatpura / Malviya Nagar',
-      img: Images.doctorImg2,
-      date: '20-5-2026',
-    },
-    {
-      id: 3,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Women & Heart Clinic, Malviya Nagar',
-      img: Images.doctorImg3,
-      date: '20-5-2026',
-    },
-    {
-      id: 4,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Cocoon Hospital, Jagatpura / Malviya Nagar',
-      img: Images.doctorImg1,
-    },
-    {
-      id: 5,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Cocoon Hospital, Jagatpura / Malviya Nagar',
-      img: Images.doctorImg2,
-      date: '20-5-2026',
-    },
-    {
-      id: 6,
-      name: 'Dr. Himani Sharma',
-      dec: 'Gynecologist & obstetrician',
-      location: 'Women & Heart Clinic, Malviya Nagar',
-      img: Images.doctorImg3,
-      date: '20-5-2026',
-    },
-  ];
-
-  // const handleSelectDoctor = (item) => {
-  //   setSelectedDoctors((prev) => (prev === item.dr_id ? null : item.dr_id));
-  // };
   const handleSelectDoctor = (item) => {
     if (selectedDoctors === item.dr_id) {
       setSelectedDoctors(null); // uncheck
@@ -207,15 +157,6 @@ const SelectDoctorScreen = () => {
     return errors;
   };
 
-  //   team_member_id: memberId,
-  // doctor_id: selectedDoctors,
-  // comment: comment,
-  // next_schedule_date: formatDate(date),
-
-  // team_member_id: 32,
-  // doctor_id: 1614,
-  // comment: 'Daily Visit',
-  // next_schedule_date: '20-10-2026',
   const AddDoctor = async () => {
     const errors = validate();
 
@@ -325,6 +266,23 @@ const SelectDoctorScreen = () => {
     return isLandscape ? 2 : 1;
   }, [isLandscape, theme.isTablet]);
 
+  useEffect(() => {
+    const showListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      (e) => setKeyboardHeight(e.endCoordinates.height)
+    );
+
+    const hideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => setKeyboardHeight(0)
+    );
+
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
+  }, []);
+
   // Detect orientation changes
   useEffect(() => {
     const subscription = Dimensions.addEventListener('change', ({ window }) => {
@@ -408,12 +366,24 @@ const SelectDoctorScreen = () => {
           //   <Text style={styles.nameError}>{errors?.date}</Text>
           // ) : undefined}
         }
-
-        <CustomButton
-          title="Submit"
-          style={styles.submitBtn}
-          onPress={AddDoctor}
-        />
+        <View
+          style={{
+            paddingBottom: keyboardHeight,
+          }}
+        >
+          <CustomButton
+            title="Submit"
+            style={styles.submitBtn}
+            onPress={AddDoctor}
+          />
+        </View>
+        {
+          // <CustomButton
+          //   title="Submit"
+          //   style={styles.submitBtn}
+          //   onPress={AddDoctor}
+          // />
+        }
       </AppModal>
 
       <AppDatePicker

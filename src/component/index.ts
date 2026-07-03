@@ -6,3 +6,4 @@ export { SearchList } from './../component/searchList/SearchList';
 export { default as AppModal } from './../component/modal/AppModal';
 export { default as AppHeader } from './../component/AppHeader/AppHeader';
 export { default as CustomDropDown } from './../component/dropDown/CustomDropDown';
+export { default as AppBackHandler } from './../component/backhandler/AppBackHandler';
