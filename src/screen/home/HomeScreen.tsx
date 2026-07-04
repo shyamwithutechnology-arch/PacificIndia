@@ -51,6 +51,19 @@ const HomeScreen = ({ navigation }) => {
     return isLandscape ? 2 : 2;
   }, [isLandscape, theme.isTablet]);
 
+  const handleNephroLogist = () => {
+    navigation.navigate('SpecialityStack', {
+      screen: 'SpecialityDetails',
+      params: {
+        medicine_id: 21,
+        specialityName: 'Nephrologist',
+      },
+    });
+  };
+
+  const reportNavigate = () => {
+    navigation.navigate('Report');
+  };
   const category = [
     {
       id: 1,
@@ -74,18 +87,18 @@ const HomeScreen = ({ navigation }) => {
       img: Images.apppointments,
       screen: 'AppointMents',
     },
-    {
-      id: 4,
-      title: 'Daily Visit',
-      dec: 'Explore Our Wide Range of Speciality',
-      img: Images.dailyVisit,
-      screen: 'DailyVisitStack',
-    },
+    // {
+    //   id: 4,
+    //   title: 'Daily Visit',
+    //   dec: 'Explore Our Wide Range of Speciality',
+    //   img: Images.dailyVisit,
+    //   screen: 'DailyVisitStack',
+    // },
     {
       id: 5,
       title: 'Report',
       dec: 'Explore Our Wide Range of Speciality',
-      img: Images.dailyVisit,
+      img: Icons.reportIcon,
       screen: 'Report',
     },
   ];
@@ -152,28 +165,29 @@ const HomeScreen = ({ navigation }) => {
 
   const footerComponent = () => {
     return (
-      <View>
-        <Text style={styles.pacificText}>Pacific Medical & Diagnostics</Text>
+      <View style={styles.nefroBox}>
+        <Text style={styles.nefroText}>Nephro </Text>
+        <View style={styles.nefroContainer}>
+          <Pressable style={styles.cart} onPress={handleNephroLogist}>
+            <View style={styles.categoryBox}>
+              <Image source={Icons.nephrologyIcon} style={styles.categoryImg} />
+            </View>
+            <Text style={styles.titleText}>Nephro</Text>
+            <Text style={styles.titledDecText}>
+              Explore Our Wide Range of Speciality
+            </Text>
+          </Pressable>
 
-        <Text style={styles.pacificDecText}>
-          Pacific Medical & Diagnostics is an emerging integrated healthcare
-          service provider committed to delivering quality healthcare solutions
-          under one roof. With a team of experienced medical practitioners,
-          advanced diagnostic facilities, and modern laboratory services, we aim
-          to make healthcare more accessible, reliable, and patient-focused. Our
-          organization is built on a foundation of ethical medical practices,
-          professional excellence, and a strong commitment to patient
-          well-being.
-        </Text>
-
-        <Text style={[styles.pacificDecText, styles.secondParagrapText]}>
-          We combine expert medical consultations, diagnostic services, and
-          healthcare support through a technology-driven platform that enables
-          patients to conveniently access healthcare services. Our focus is on
-          providing accurate diagnoses, timely treatment guidance, medicine
-          management, and a seamless healthcare experience for individuals and
-          families.
-        </Text>
+          <Pressable style={styles.cart} onPress={reportNavigate}>
+            <View style={styles.categoryBox}>
+              <Image source={Icons.reportIcon} style={styles.categoryImg} />
+            </View>
+            <Text style={styles.titleText}>Report</Text>
+            <Text style={styles.titledDecText}>
+              Explore Our Wide Range of Speciality
+            </Text>
+          </Pressable>
+        </View>
       </View>
     );
   };
@@ -252,3 +266,27 @@ const HomeScreen = ({ navigation }) => {
 };
 
 export default HomeScreen;
+
+//  <View>
+//       <Text style={styles.pacificText}>Pacific Medical & Diagnostics</Text>
+
+//       <Text style={styles.pacificDecText}>
+//         Pacific Medical & Diagnostics is an emerging integrated healthcare
+//         service provider committed to delivering quality healthcare solutions
+//         under one roof. With a team of experienced medical practitioners,
+//         advanced diagnostic facilities, and modern laboratory services, we aim
+//         to make healthcare more accessible, reliable, and patient-focused. Our
+//         organization is built on a foundation of ethical medical practices,
+//         professional excellence, and a strong commitment to patient
+//         well-being.
+//       </Text>
+
+//       <Text style={[styles.pacificDecText, styles.secondParagrapText]}>
+//         We combine expert medical consultations, diagnostic services, and
+//         healthcare support through a technology-driven platform that enables
+//         patients to conveniently access healthcare services. Our focus is on
+//         providing accurate diagnoses, timely treatment guidance, medicine
+//         management, and a seamless healthcare experience for individuals and
+//         families.
+//       </Text>
+//     </View>

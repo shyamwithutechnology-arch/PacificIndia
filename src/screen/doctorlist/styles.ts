@@ -178,6 +178,30 @@ export const createStyles = (theme: AppTheme) => {
       height: moderateScale(16),
       width: moderateScale(16),
     },
+
+    //serach
+    suggestionContainer: {
+      backgroundColor: '#fff',
+      borderRadius: moderateScale(10),
+      elevation: 5,
+      // marginHorizontal: scale(10),
+      marginTop: verticalScale(4),
+      marginBottom: verticalScale(20),
+    },
+
+    suggestionItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: moderateScale(14),
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: '#ddd',
+    },
+    doctorName: {
+      fontSize: tokens.fontSize.sm,
+      color: tokens.colors.black,
+      fontFamily: Fonts.ManropeMedium,
+      marginLeft: tokens.spacing.sm,
+    },
   });
 };
 // export const styles = StyleSheet.create({

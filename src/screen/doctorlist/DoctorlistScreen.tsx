@@ -23,11 +23,13 @@ import { ApiEndPoint } from '../../api/endPoints';
 import { showToast } from '../../utils/toast';
 import { localStorage, storageKeys } from '../../storage/storage';
 import AppBackHandler from '../../component/backhandler/AppBackHandler';
+import SeachIcon from 'react-native-vector-icons/EvilIcons';
 
 const DoctorlistScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
-  const [seach, setSearch] = useState('');
+  const [search, setSearch] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
   const [doctorList, setDoctorList] = useState([]);
   const [orientation, setOrientation] = useState('PORTRAIT');
@@ -43,17 +45,26 @@ const DoctorlistScreen = ({ navigation }) => {
   };
 
   const filteredList = useMemo(() => {
-    if (!seach.trim()) {
+    if (!search.trim()) {
       return doctorList;
     }
     return doctorList?.filter((item) =>
-      item?.dr_name?.toLowerCase().includes(seach.toLocaleLowerCase())
+      item?.dr_name?.toLowerCase().includes(search.toLocaleLowerCase())
     );
-  }, [doctorList, seach]);
+  }, [doctorList, search]);
 
   const handleGoback = useCallback(() => {
     navigation.navigate('HomeTab', 'Home');
   }, [navigation]);
+
+  const handleSeachChange = (text) => {
+    setSearch(text);
+    setShowSuggestions(true);
+  };
+  const handleSuggestionSelect = (dr_name) => {
+    setSearch(dr_name);
+    setShowSuggestions(false);
+  };
 
   const renderItem = ({ item }) => {
     return (
@@ -109,6 +120,15 @@ const DoctorlistScreen = ({ navigation }) => {
       </Pressable>
     );
   };
+
+  const suggestions = useMemo(() => {
+    if (!search.trim()) return [];
+    return doctorList
+      .filter((item) =>
+        item.dr_name.toLowerCase().includes(search.toLowerCase())
+      )
+      .slice(0, 5);
+  }, [search, doctorList]);
 
   const fetchDoctorList = async (id: string) => {
     try {
@@ -176,8 +196,8 @@ const DoctorlistScreen = ({ navigation }) => {
       <AppBackHandler screenName="HomeTab" nestedScreen="HomeScreen" />
       <View style={styles.rowSerach}>
         <SearchList
-          value={seach}
-          onChange={setSearch}
+          value={search}
+          onChange={handleSeachChange}
           searchRowCustom={styles.searchTop}
           searchPlaceHolder={'Search Doctor....'}
         />
@@ -195,6 +215,7 @@ const DoctorlistScreen = ({ navigation }) => {
         </Pressable>
       </View>
       <Loader visible={loading} />
+
       <FlatList
         key={`flatlist-${numColumns}-${orientation}`}
         data={filteredList}
@@ -207,6 +228,25 @@ const DoctorlistScreen = ({ navigation }) => {
         }
         numColumns={numColumns}
       />
+
+      {showSuggestions && suggestions.length > 0 && (
+        <View style={styles.suggestionContainer}>
+          {suggestions.map((item) => (
+            <Pressable
+              key={item.dr_id}
+              style={styles.suggestionItem}
+              onPress={() => handleSuggestionSelect(item?.dr_name)}
+            >
+              <SeachIcon
+                name="search"
+                color="#414141"
+                size={theme.moderateScale(26)}
+              />
+              <Text style={styles.doctorName}>{item.dr_name}</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
     </ScreenLayout>
   );
 };
