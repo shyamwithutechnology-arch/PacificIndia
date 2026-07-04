@@ -11,17 +11,24 @@ import { Images } from '../../../assets/images';
 import { Icons } from '../../../assets/icons';
 import { localStorage, storageKeys } from '../../../storage/storage';
 import { useRoute } from '@react-navigation/native';
+// import { loginSuccess } from 'src/redux/slices/authSlice';
+import { useAppDispatch } from '../../../redux/hooks';
+import { loginSuccess } from '../../../../src/redux/Slices/authSlice';
 
 const OtpRequestScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
+
   const route = useRoute();
   const { opt, phone } = route?.params || {};
 
   const handleOtpVerified = () => {
-    localStorage.setItem(storageKeys.fcm_token, '1234');
-    navigation.getParent().replace('AppDrawer');
+    // localStorage.setItem(storageKeys.fcm_token, '1234');
+    // navigation.getParent().replace('AppDrawer');
+    const fakeToken = 'static-token-123456';
+    dispatch(loginSuccess(fakeToken));
     // Alert.alert('success');
     // navigation.navigate('MainTab');
   };

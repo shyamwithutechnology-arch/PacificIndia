@@ -6,24 +6,15 @@ import { useAppTheme } from '../../../hooks/useAppTheme';
 import { createStyles } from './styles';
 import { useAuthBootstrap } from '../../../hooks/useAuthBootstrap';
 import { localStorage } from '../../../storage/storage';
+import { checkForUpdate } from '../../../../src/utils/inAppUpdate';
 
-const SplashScreen = ({ navigation }: any) => {
+const SplashScreen = () => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
-  const fcmToken = localStorage.getItem('fcm_token');
-  // const appState = useAuthBootstrap();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!fcmToken) {
-        navigation?.replace('AuthStack');
-      } else {
-        navigation?.replace('MainTab');
-      }
-    }, 3000); // 3 seconds
-
-    return () => clearTimeout(timer);
-  }, [fcmToken, navigation]);
+    checkForUpdate();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,6 +30,51 @@ const SplashScreen = ({ navigation }: any) => {
 };
 
 export default SplashScreen;
+// const SplashScreen = ({ navigation }: any) => {
+//   const theme = useAppTheme();
+//   const styles = createStyles(theme);
+//   const fcmToken = localStorage.getItem('fcm_token');
+//   // const appState = useAuthBootstrap();
+
+//   // useEffect(() => {
+//   //   const timer = setTimeout(() => {
+//   //     if (!fcmToken) {
+//   //       navigation?.replace('AuthStack');
+//   //     } else {
+//   //       navigation?.replace('MainTab');
+//   //     }
+//   //   }, 3000); // 3 seconds
+
+//   //   return () => clearTimeout(timer);
+//   // }, [fcmToken, navigation]);
+//   const appState = useAuthBootstrap();
+//   useEffect(() => {
+//     if (appState === 'auth') {
+//       navigation?.replace('AuthStack');
+//     }
+//     if (appState === 'app') {
+//       navigation?.replace('MainTab');
+//     }
+//   }, [appState]);
+
+//   useEffect(() => {
+//     checkForUpdate();
+//   }, []);
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <View style={styles.logoBox}>
+//         <Image
+//           source={Images.logo}
+//           style={styles.splashLogo}
+//           resizeMode="contain"
+//         />
+//       </View>
+//     </SafeAreaView>
+//   );
+// };
+
+// export default SplashScreen;
 
 // import { Image, ImageBackground, Text, View } from 'react-native';
 // import React from 'react';

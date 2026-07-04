@@ -81,8 +81,26 @@ const MainTabs = () => {
       <Tab.Screen
         name="SpecialityStack"
         component={SpecialityStack}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            // Prevent the default action
+            e.preventDefault();
+
+            // Reset the SpecialityStack to only contain the first screen
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'SpecialityStack',
+                  state: {
+                    routes: [{ name: 'Speciality' }],
+                  },
+                },
+              ],
+            });
+          },
+        })}
         options={{
-          popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}

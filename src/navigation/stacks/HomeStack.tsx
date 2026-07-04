@@ -8,7 +8,8 @@ import AppointMentsScreen from '../../screen/appointments/AppointMentsScreen';
 import AddAppointMentScreen from '../../screen/appointments/addAppointMent/AddAppointMentScreen';
 import AddDoctorScreen from '../../screen/doctorlist/addDoctor/AddDoctorScreen';
 import AppointMentDetailsScreen from '../../screen/appointments/appointMentDetails/AppointMentDetailsScreen';
-// import PdfPreviewScreen from '../../screen/mypdf/PDFPreviewScreen';
+import ReportScreen from '../../screen/report/ReportScreen';
+
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
@@ -25,6 +26,7 @@ const HomeStack = () => {
         name="AppointMentDetails"
         component={AppointMentDetailsScreen}
       />
+      <Stack.Screen name="Report" component={ReportScreen} />
     </Stack.Navigator>
   );
 };

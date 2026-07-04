@@ -7,6 +7,7 @@ import {
   ScreenLayout,
 } from '../../../component';
 import { Icons } from '../../../assets/icons';
+import DeviceInfo from 'react-native-device-info';
 import { useAppTheme } from '../../../hooks/useAppTheme';
 import { Images } from '../../../assets/images';
 import { createStyles } from './styles';
@@ -14,11 +15,16 @@ import { showToast } from '../../../utils/toast';
 import { POST_FORM } from '../../../api/request';
 import { ApiEndPoint } from '../../../api/endPoints';
 import { localStorage, storageKeys } from '../../../storage/storage';
+import { useAppDispatch } from '../../../redux/hooks';
+import { loginSuccess } from '../../../../src/redux/Slices/authSlice';
 
 const LoginScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const version = DeviceInfo.getVersion();
+
   const [errors, setErrors] = useState({
     number: '',
     password: '',
@@ -93,8 +99,9 @@ const LoginScreen = ({ navigation }) => {
           response?.result[0]?.member_id
         );
 
-        localStorage.setItem(storageKeys.fcm_token, '1234');
-        navigation.getParent().replace('AppDrawer');
+        // localStorage.setItem(storageKeys.fcm_token, '1234');
+        const fakeToken = 'static-token-123456';
+        dispatch(loginSuccess(fakeToken));
       } else {
         showToast('error', 'Error', response?.msg);
       }
@@ -156,7 +163,7 @@ const LoginScreen = ({ navigation }) => {
           onPress={handleLogin}
         />
       </View>
-      <Text style={styles.versionText}>Version 1.0</Text>
+      <Text style={styles.versionText}>Version {version}</Text>
     </ScreenLayout>
   );
 };

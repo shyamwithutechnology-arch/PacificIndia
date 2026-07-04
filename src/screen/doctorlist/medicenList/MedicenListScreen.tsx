@@ -79,22 +79,6 @@ const MedicenListScreen = ({ navigation }) => {
 
   const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
 
-  const specialityData = [
-    { id: 'all', title: 'All' },
-    { id: 'ortho', title: 'Ortho' },
-    { id: 'gynae', title: 'Gynaec' },
-    { id: 'paid', title: 'Paid' },
-    { id: 'general', title: 'General Physician' },
-  ];
-
-  const handleIdByList = useCallback(
-    (id) => {
-      setSelected(id);
-      medicineBySpecilityId(id);
-    },
-    [speciality]
-  );
-
   // Dynamic card width calculation
   const cardWidth = useMemo(() => {
     const spacing = theme.tokens.spacing.md;
@@ -333,12 +317,13 @@ const MedicenListScreen = ({ navigation }) => {
         doctor_id: id,
       };
 
-      Alert.alert('specialityDetailsListEES', JSON.stringify(params));
-      showToast('error', 'eRROR', JSON.stringify(params));
+      // Alert.alert('specialityDetailsListEES', JSON.stringify(params));
+      // showToast('error', 'eRROR', JSON.stringify(params));
       const response = await POST_FORM(ApiEndPoint.doctorMedicine, params);
       if (response?.status === '1') {
         setSpecialityDetailsList(response?.result || []);
       } else {
+        showToast('error', 'Error', response?.msg);
         setSpecialityDetailsList([]);
       }
     } catch (error) {
@@ -355,51 +340,11 @@ const MedicenListScreen = ({ navigation }) => {
     }
   }, []);
 
-  const handerItemRender = ({ item }) => {
-    const isSelected = selected === item?.ms_id;
-    return (
-      <Pressable
-        onPress={() => handleIdByList(item?.ms_id)}
-        style={[styles.headerItemBox, isSelected && styles.headerSelectBox]}
-      >
-        <Text
-          style={[
-            styles.headerTitleText,
-            isSelected && styles.headerSelectTitle,
-          ]}
-        >
-          {item?.ms_name}
-        </Text>
-      </Pressable>
-    );
-  };
-
-  const specialityList = async () => {
-    try {
-      setLoading(true);
-      const response = await GET(ApiEndPoint.listSpeciality);
-      if (response?.status === '1') {
-        setSpeciality(response?.result || []);
-      }
-    } catch (error) {
-      if (error?.offline) {
-        return;
-      }
-      showToast(
-        'error',
-        'Error',
-        error?.msg || 'Something went wrong. Please try again.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (dr_id) {
       medicineBySpecilityId(dr_id);
     }
-  }, [route?.params, medicineBySpecilityId]);
+  }, [dr_id, medicineBySpecilityId]);
 
   // Filter data based on search
   const filteredData = useMemo(() => {
@@ -415,19 +360,11 @@ const MedicenListScreen = ({ navigation }) => {
     []
   );
 
-  useEffect(() => {
-    specialityList();
-  }, []);
-
-  // useEffect(() => {
-  //   Alert.alert('dr_idddddd', JSON.stringify(dr_id));
-  // }, [dr_id]);
-
   return (
     <ScreenLayout
       header={
         <AppHeader
-          title="Medicine Detail"
+          title="Medicine"
           leftIcon={Icons.leftIcon}
           onPress={() => navigation.goBack()}
         />

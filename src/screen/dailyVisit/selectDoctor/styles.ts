@@ -252,8 +252,8 @@ export const createStyles = (theme: AppTheme) => {
     },
     submitBtn: {
       width: '60%',
-      marginTop: tokens.spacing.lg,
-      // marginBottom: tokens.spacing.md,
+      marginTop: tokens.spacing.xl,
+      // marginBottom: insets.bottom + tokens.spacing.xxl,
     },
     commentBox: {
       // height: verticalScale(60),
@@ -303,6 +303,11 @@ export const createStyles = (theme: AppTheme) => {
     },
     innerContainer: {
       paddingBottom: insets.bottom + tokens.spacing.xxxl,
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      paddingBottom: insets.bottom + tokens.spacing.xxl,
     },
   });
 };

@@ -1,261 +1,3 @@
-// import React, { useEffect, useMemo, useState } from 'react';
-// import {
-//   Alert,
-//   FlatList,
-//   Image,
-//   Pressable,
-//   Text,
-//   useWindowDimensions,
-//   View,
-// } from 'react-native';
-// import ImageView from 'react-native-image-viewing';
-// import { useRoute } from '@react-navigation/native';
-// import { createStyles } from './styles';
-// import { Images } from '../../../assets/images';
-// import { Loader, ScreenLayout, SearchList } from '../../../component';
-// import AppHeader from '../../../component/AppHeader/AppHeader';
-// import { useAppTheme } from '../../../hooks/useAppTheme';
-// import { Icons } from '../../../assets/icons';
-// import { showToast } from '../../../utils/toast';
-// import { ApiEndPoint } from '../../../api/endPoints';
-// import { POST_FORM } from '../../../api/request';
-// import { baseURL } from '../../../component/api/axios';
-
-// const SpecialityDetailsScreen = ({ navigation }) => {
-//   const theme = useAppTheme();
-//   const styles = createStyles(theme);
-//   const route = useRoute();
-//   const { medicine_id } = route?.params || {};
-//   const { width, height } = useWindowDimensions();
-//   const isLandscape = width > height;
-//   const numColumns = theme.isTablet
-//     ? isLandscape
-//       ? 5
-//       : 3
-//     : isLandscape
-//     ? 4
-//     : 2;
-//   const [search, setSearch] = useState('');
-//   const [selectedImages, setSelectedImages] = useState([]);
-//   const [previewImages, setPreviewImages] = useState([]);
-//   const [visible, setVisible] = useState(false);
-//   const [currentIndex, setCurrentIndex] = useState(0);
-//   const [loading, setLoading] = useState(false);
-//   const [specialityDetailsList, setSpecialityDetailsList] = useState([]);
-//   const [imageError, setImageError] = useState({});
-//   const DUMMY_IMAGE = `${baseURL}/uploads/doctor/consultant-physician126.png`;
-//   const cardWidth =
-//     (width - theme.tokens.spacing.lg * (numColumns + 1)) / numColumns;
-//   const category = [
-//     {
-//       id: 1,
-//       title: '1',
-//       img: Images.bannerImg,
-//     },
-//     {
-//       id: 2,
-//       title: '2',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 3,
-//       title: '3',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 4,
-//       title: '4',
-//       img: Images.madicinImg,
-//     },
-//     {
-//       id: 5,
-//       title: '5',
-//       img: Images.madicinImg,
-//     },
-//   ];
-
-//   // image select / unselect
-// const handleSelect = (item) => {
-//   const exists = selectedImages.some((image) => image.ms_id === item.ms_id);
-
-//   if (exists) {
-//     setSelectedImages((prev) =>
-//       prev.filter((image) => image.ms_id !== item.ms_id)
-//     );
-//   } else {
-//     setSelectedImages((prev) => [...prev, item]);
-//   }
-// };
-
-//   const handleOpenPreview = (item) => {
-//     const isSelected = selectedImages.some(
-//       (image) => image.mssub_id === item.mssub_id
-//     );
-
-//     const imagesToPreview = isSelected
-//       ? selectedImages
-//       : specialityDetailsList.filter(
-//           (image) =>
-//             !selectedImages.some(
-//               (selected) => selected.mssub_id === image.mssub_id
-//             )
-//         );
-
-//     const imageIndex = imagesToPreview.findIndex(
-//       (image) => image.mssub_id === item.mssub_id
-//     );
-
-//     setPreviewImages(
-//       imagesToPreview.map((image) => ({
-//         uri: image?.mssub_image
-//           ? `${baseURL}/uploads/medicine/${image.mssub_image}`
-//           : DUMMY_IMAGE,
-//       }))
-//     );
-
-//     setCurrentIndex(imageIndex >= 0 ? imageIndex : 0);
-//     setVisible(true);
-//   };
-
-//   const renderItem = ({ item, index }) => {
-//     const isSelected = selectedImages.some(
-//       (image) => image.mssub_id === item.mssub_id
-//     );
-//     const imageUrl = item?.mssub_image
-//       ? `${baseURL}/uploads/medicine/${item.mssub_image}`
-//       : DUMMY_IMAGE;
-
-//     return (
-//       <Pressable
-//         style={[
-//           styles.cart,
-//           { width: cardWidth },
-//           isSelected && styles.selectedBorder,
-//         ]}
-//         onPress={() => handleOpenPreview(item, index)}
-//       >
-//         <Image
-//           source={{
-//             uri: imageError[item.mssub_id] ? DUMMY_IMAGE : imageUrl,
-//           }}
-//           style={styles.categoryImg}
-//           resizeMode="cover"
-//           onError={() => {
-//             setImageError((prev) => ({
-//               ...prev,
-//               [item.mssub_id]: true,
-//             }));
-//           }}
-//         />
-
-//         {/* check icon */}
-//         <Pressable
-//           style={[styles.checkIconBox, isSelected && styles.selectedBox]}
-//           onPress={() => handleSelect(item)}
-//         >
-//           <Image source={Icons.checkIcon} style={styles.checkIcon} />
-//         </Pressable>
-
-//         <Text style={styles.itemNumberText}>{item.title}</Text>
-//       </Pressable>
-//     );
-//   };
-
-//   const medicineBySpecilityId = async (id) => {
-//     try {
-//       setLoading(true);
-//       const params = {
-//         ms_id: id,
-//       };
-//       const response = await POST_FORM(
-//         ApiEndPoint.medicineBySpecilityId,
-//         params
-//       );
-//       if (response?.status === '1') {
-//         setSpecialityDetailsList(response?.result || []);
-//       }
-//     } catch (error) {
-//       if (error?.offline) {
-//         return;
-//       }
-//       showToast(
-//         'error',
-//         'Error',
-//         error?.msg || 'Something went wrong. Please try again.'
-//       );
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     let get_id = async (medicine_id) => {
-//       await medicineBySpecilityId(medicine_id);
-//     };
-//     get_id(medicine_id);
-//   }, [medicine_id]);
-
-//   return (
-//     <ScreenLayout
-//       header={
-//         <AppHeader
-//           title="Speciality Detail"
-//           leftIcon={Icons.leftIcon}
-//           onPress={() => navigation.goBack()}
-//         />
-//       }
-//       paddingHorizontal={0}
-//       innerContainer={styles.innerContainer}
-//     >
-//       <Loader visible={loading} />
-
-//       <SearchList value={search} onChange={setSearch} />
-
-//       <FlatList
-//         key={`${width}-${height}`}
-//         data={specialityDetailsList}
-//         renderItem={renderItem}
-//         keyExtractor={(item) => item.ms_id.toString()}
-//         numColumns={numColumns}
-//         columnWrapperStyle={styles.row}
-//         contentContainerStyle={styles.listContainer}
-//         showVerticalScrollIndicator={false}
-//       />
-
-//       <ImageView
-//         images={previewImages}
-//         imageIndex={currentIndex}
-//         visible={visible}
-//         onRequestClose={() => setVisible(false)}
-//         swipeToCloseEnabled
-//         presentationStyle="fullScreen"
-//         backgroundColor="#000000EE"
-//         renderImage={({ source }) => (
-//           <Image source={source} style={styles.fullPreviewImage} />
-//         )}
-//         HeaderComponent={({ imageIndex }) => (
-//           <>
-//             <View style={styles.previewHeader}>
-//               <Text style={styles.previewCountText}>
-//                 {imageIndex + 1}/{previewImages.length}
-//               </Text>
-//             </View>
-
-//             <Pressable
-//               onPress={() => setVisible(false)}
-//               style={styles.previewCloseBox}
-//             >
-//               <Image source={Icons.leftIcon} style={styles.previewCloseIcon} />
-//             </Pressable>
-//           </>
-//         )}
-//       />
-//     </ScreenLayout>
-//   );
-// };
-
-// export default SpecialityDetailsScreen;
-
 import React, {
   useEffect,
   useMemo,
@@ -278,6 +20,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
+import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import FastImage from 'react-native-fast-image';
 import { useRoute } from '@react-navigation/native';
 import { createStyles } from './styles';
@@ -290,6 +33,10 @@ import { showToast } from '../../../utils/toast';
 import { ApiEndPoint } from '../../../api/endPoints';
 import { GET, POST_FORM } from '../../../api/request';
 import { baseURL } from '../../../component/api/axios';
+import {
+  gestureHandlerRootHOC,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 
 const SpecialityDetailsScreen = ({ navigation }) => {
   const theme = useAppTheme();
@@ -313,7 +60,7 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   const [speciality, setSpeciality] = useState([]);
   const [imageError, setImageError] = useState({});
   const [previewMode, setPreviewMode] = useState('all'); // 'selected' or 'unselected'
-
+  const [isZoomed, setIsZoomed] = useState(false);
   // Detect orientation changes
   useEffect(() => {
     const subscription = Dimensions.addEventListener('change', ({ window }) => {
@@ -699,6 +446,7 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   useEffect(() => {
     specialityList();
   }, []);
+
   return (
     <ScreenLayout
       header={
@@ -712,7 +460,6 @@ const SpecialityDetailsScreen = ({ navigation }) => {
       innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
-
       <FlatList
         key={`flatlist-${numColumns}-${orientation}`}
         data={filteredData}
@@ -737,7 +484,6 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         windowSize={10}
         removeClippedSubviews={false}
       />
-
       {/* Custom Full-Screen Image Viewer */}
       <Modal
         visible={visible}
@@ -752,63 +498,184 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         }}
       >
         <StatusBar hidden={true} />
-        <View style={styles.modalFullScreen}>
-          <View style={styles.imageContainer}>
-            <ImageViewerHeader imageIndex={currentIndex} />
 
-            <FlatList
-              data={previewImages}
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              initialScrollIndex={currentIndex}
-              getItemLayout={(data, index) => ({
-                length: Dimensions.get('window').width,
-                offset: Dimensions.get('window').width * index,
-                index,
-              })}
-              onScroll={(event) => {
-                const newIndex = Math.round(
-                  event.nativeEvent.contentOffset.x /
-                    Dimensions.get('window').width
-                );
-                if (newIndex !== currentIndex) {
-                  setCurrentIndex(newIndex);
-                  setControlsVisible(true);
-                  handleControlsAutoHide();
-                }
-              }}
-              renderItem={({ item }) => (
-                <TouchableWithoutFeedback onPress={toggleControls}>
-                  <View style={styles.fullScreenImageWrapper}>
-                    {
-                      // <Image
-                      //   source={{ uri: item.uri }}
-                      //   style={styles.fullScreenImage}
-                      //   resizeMode="contain"
-                      // />
-                    }
-                    <FastImage
-                      style={styles.fullScreenImage}
-                      source={{
-                        uri: item.uri,
-                        priority: FastImage.priority.normal,
-                        cache: FastImage.cacheControl.immutable,
+        {/* MODAL WRAPPER FIX: Poore modal content ko is view se wrap karein */}
+        <GestureHandlerRootView
+          style={{
+            width,
+            height,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <View style={styles.modalFullScreen}>
+            <View style={styles.imageContainer}>
+              <ImageViewerHeader imageIndex={currentIndex} />
+
+              <FlatList
+                data={previewImages}
+                horizontal
+                pagingEnabled
+                scrollEnabled={!isZoomed} // Zoom hone par horizontal scroll block hoga
+                showsHorizontalScrollIndicator={false}
+                initialScrollIndex={currentIndex}
+                getItemLayout={(data, index) => ({
+                  length: width,
+                  offset: width * index,
+                  index,
+                })}
+                onScroll={(event) => {
+                  const newIndex = Math.round(
+                    event.nativeEvent.contentOffset.x / width
+                  );
+                  if (newIndex !== currentIndex) {
+                    setCurrentIndex(newIndex);
+                    setControlsVisible(true);
+                    handleControlsAutoHide();
+                    setIsZoomed(false); // New page par zoom reset state
+                  }
+                }}
+                renderItem={({ item, index }) => {
+                  return (
+                    <View
+                      style={{
+                        width,
+                        height,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}
-                      resizeMode={FastImage.resizeMode.contain}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
+                    >
+                      <ImageZoom
+                        minScale={1}
+                        maxScale={5}
+                        doubleTapScale={2.5}
+                        isDoubleTapEnabled
+                        isPanEnabled
+                        isPinchEnabled
+                        onScaleChange={(scale) => {
+                          // Sirf current active image ka gesture state track hoga
+                          if (index === currentIndex) {
+                            setIsZoomed(scale > 1);
+                          }
+                        }}
+                        onResetAnimationEnd={() => {
+                          if (index === currentIndex) {
+                            setIsZoomed(false);
+                          }
+                        }}
+                        style={{
+                          width: width,
+                          height: height,
+                        }}
+                        source={{
+                          uri: item.uri,
+                        }}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  );
+                }}
+                keyExtractor={(item, index) => index.toString()}
+              />
 
-            <ImageViewerFooter imageIndex={currentIndex} />
+              <ImageViewerFooter imageIndex={currentIndex} />
+            </View>
           </View>
-        </View>
+        </GestureHandlerRootView>
       </Modal>
     </ScreenLayout>
   );
 };
 
 export default SpecialityDetailsScreen;
+
+//perfect modal
+// <Modal
+//         visible={visible}
+//         transparent={false}
+//         animationType="none"
+//         statusBarTranslucent={true}
+//         onRequestClose={() => {
+//           setVisible(false);
+//           if (controlsTimeoutRef.current) {
+//             clearTimeout(controlsTimeoutRef.current);
+//           }
+//         }}
+//       >
+//         <StatusBar hidden={true} />
+//         <View style={styles.modalFullScreen}>
+//           <View style={styles.imageContainer}>
+//             <ImageViewerHeader imageIndex={currentIndex} />
+
+//             <FlatList
+//               data={previewImages}
+//               horizontal
+//               pagingEnabled
+//               // Dynamically disable list scrolling only when the current image is zoomed in
+//               scrollEnabled={!isZoomed}
+//               showsHorizontalScrollIndicator={false}
+//               initialScrollIndex={currentIndex}
+//               getItemLayout={(data, index) => ({
+//                 length: width, // Use the dynamically structured width variable
+//                 offset: width * index,
+//                 index,
+//               })}
+//               onScroll={(event) => {
+//                 const newIndex = Math.round(
+//                   event.nativeEvent.contentOffset.x / width
+//                 );
+//                 if (newIndex !== currentIndex) {
+//                   setCurrentIndex(newIndex);
+//                   setControlsVisible(true);
+//                   handleControlsAutoHide();
+//                   setIsZoomed(false); // Reset zoom state when page changes
+//                 }
+//               }}
+//               renderItem={({ item, index }) => {
+//                 return (
+//                   <View
+//                     style={{
+//                       width,
+//                       height,
+//                       justifyContent: 'center',
+//                       alignItems: 'center',
+//                     }}
+//                   >
+//                     <ImageZoom
+//                       minScale={1}
+//                       maxScale={5}
+//                       doubleTapScale={2.5}
+//                       isDoubleTapEnabled
+//                       isPanEnabled
+//                       isPinchEnabled
+//                       // Track scale changes directly to manage FlatList scroll behavior
+//                       onScaleChange={(scale) => {
+//                         if (index === currentIndex) {
+//                           setIsZoomed(scale > 1);
+//                         }
+//                       }}
+//                       // Reset zoom tracking when the zoom returns back to normal
+//                       onResetAnimationEnd={() => {
+//                         if (index === currentIndex) {
+//                           setIsZoomed(false);
+//                         }
+//                       }}
+//                       style={{
+//                         width: width,
+//                         height: height,
+//                       }}
+//                       source={{
+//                         uri: item.uri,
+//                       }}
+//                       resizeMode="contain"
+//                     />
+//                   </View>
+//                 );
+//               }}
+//               keyExtractor={(item, index) => index.toString()}
+//             />
+
+//             <ImageViewerFooter imageIndex={currentIndex} />
+//           </View>
+//         </View>
+//       </Modal>
