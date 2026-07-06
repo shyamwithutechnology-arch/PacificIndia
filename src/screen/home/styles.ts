@@ -105,6 +105,33 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: tokens.spacing.smPlus,
       marginBottom: tokens.spacing.xxl,
     },
+    nefroBox: {
+      marginTop: theme.tokens.spacing.sm,
+      marginBottom: verticalScale(50),
+    },
+    nefroContainer: {
+      // borderWidth: 1,
+      borderColor: '#8ebdd1',
+      marginTop: tokens.spacing.xs,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    nefroText: {
+      fontSize: tokens.fontSize.md,
+      fontFamily: Fonts.ManropeBold,
+      color: tokens.colors.black,
+      marginTop: tokens.spacing.xxs,
+      marginBottom: tokens.spacing.xs,
+      alignSelf: 'flex-start',
+      borderBottomWidth: 1,
+    },
+    baseLine: {
+      height: 0.4,
+      backgroundColor: '#8ebdd1',
+      // backgroundColor: '#a6a3a3',
+      width: '100%',
+    },
   });
 };
 // export const styles = StyleSheet.create({

@@ -42,4 +42,6 @@ export const Icons = {
   privacyPolicyIcon: require('./privacy_policy_icon.png'),
   termAndConditionIcon: require('./term_And_condition_icon.png'),
   appointment_icon: require('./appointment_icon.png'),
+  nephrologyIcon: require('./nephrology_icon.png'),
+  reportIcon: require('./report_icon.png'),
 };

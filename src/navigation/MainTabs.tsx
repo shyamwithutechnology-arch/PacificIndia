@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Text, View } from 'react-native';
+import { Image, Keyboard, Text, View } from 'react-native';
 import HomeStack from './stacks/HomeStack';
 import { colors } from '../theme/color';
 import { Icons } from '../assets/icons';
@@ -15,6 +15,7 @@ import DoctorDetailsScreen from '../screen/doctorlist/doctorDetails/DoctorDetail
 import DoctorlistScreen from '../screen/doctorlist/DoctorlistScreen';
 import DoctorsStack from './stacks/DoctorsStack';
 import DailyVisitStack from './stacks/DailyVisitStack';
+import { useEffect, useState } from 'react';
 
 const Tab = createBottomTabNavigator();
 
@@ -59,6 +60,24 @@ const TabIcon = ({ focused, activeIcon, inactiveIcon, label, tint = true }) => {
 const MainTabs = () => {
   const theme = useAppTheme();
 
+  //keyboard disable
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showListener = Keyboard.addListener('keyboardDidShow', () =>
+      setKeyboardVisible(true)
+    );
+
+    const hideListener = Keyboard.addListener('keyboardDidHide', () =>
+      setKeyboardVisible(false)
+    );
+
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
+  }, []);
+
   return (
     <Tab.Navigator
       initialRouteName="HomeTab"
@@ -75,6 +94,7 @@ const MainTabs = () => {
           // borderColor:"#000",
           // alignSelf:"center"
           // borderTopColor: '#E5E5E5',
+          display: keyboardVisible ? 'none' : 'flex',
         },
       }}
     >

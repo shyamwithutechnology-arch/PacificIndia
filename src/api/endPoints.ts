@@ -20,4 +20,13 @@ export const ApiEndPoint = {
   support: 'support',
   supportMail: 'support-mail',
   notificationList: 'notification-list',
+
+  // report
+  hqList: 'hq-list',
+  listCity: 'list-city',
+  listTown: 'list-town',
+  listTeam: 'list-team',
+  listDoctorTownBase: 'new-list-doctor',
+  reportSubmit: 'report-submit',
+  listReport: 'list-report',
 };

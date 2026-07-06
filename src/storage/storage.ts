@@ -38,6 +38,8 @@ export const appMMKV = createMMKV({
 export const storageKeys = {
   fcm_token: 'fcm_token',
   member_id: 'member_id',
+  member_name: 'member_name',
+  empCode: 'emp_code',
 };
 
 export const localStorage = {
