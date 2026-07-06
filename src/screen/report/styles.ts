@@ -67,16 +67,26 @@ export const createStyles = (theme: AppTheme) => {
     remarkInputBox: {
       height: verticalScale(60),
     },
+    required: {
+      color: 'red',
+    },
     commentInput: {
       height: verticalScale(100),
       textAlignVertical: 'top',
       fontSize: tokens.fontSize.sm,
       color: tokens.colors.black,
       paddingHorizontal: tokens.spacing.sm,
+      lineHeight: moderateScale(20),
     },
     remarkInput: {
       marginTop: tokens.spacing.xs,
       marginBottom: tokens.spacing.md,
+    },
+    nameBox: {
+      width: '60%',
+      backgroundColor: '#E5F6FF',
+      borderWidth: 1,
+      borderColor: '#D9D9D9',
     },
     inputBgColor: {
       backgroundColor: '#E5F6FF',
@@ -94,6 +104,10 @@ export const createStyles = (theme: AppTheme) => {
     },
     hqDropDown: {
       marginBottom: verticalScale(14),
+    },
+    hqDoctorDropDown: {
+      marginBottom: verticalScale(14),
+      height: verticalScale(46),
     },
     placeholderTextStyle: {
       fontSize: tokens.fontSize.xs,
@@ -130,7 +144,6 @@ export const createStyles = (theme: AppTheme) => {
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: tokens.spacing.xs,
-      marginBottom: verticalScale(14),
     },
     dateIcon: {
       height: moderateScale(23),
@@ -156,6 +169,19 @@ export const createStyles = (theme: AppTheme) => {
     empCodeField: {
       width: '36%',
       // borderWidth: 1,
+    },
+    //error
+    errorText: {
+      color: 'red',
+      fontSize: tokens.fontSize.xs,
+      marginTop: tokens.spacing.xxs,
+      marginBottom: verticalScale(14),
+      // marginLeft: tokens.spacing.lg,
+    },
+    hqRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
   });
 };

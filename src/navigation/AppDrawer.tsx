@@ -12,6 +12,8 @@ import AppointMentDetailsScreen from '../screen/appointments/appointMentDetails/
 import SupportTicketScreen from '../screen/support/SupportTicketScreen';
 import NotificationScreen from '../screen/notification/NotificationScreen';
 import PrivacyPolicyScreen from '../screen/privacyPolicy/PrivacyPolicyScreen';
+import ReportScreen from '../../src/screen/report/ReportScreen';
+import ReportListScreen from '../../src/screen/report/reportList/ReportListScreen';
 // import PrivacyPolicyScreen from '../screen/privacyPolicy/PrivacyPolicyScreen';
 
 const Drawer = createDrawerNavigator();
@@ -38,6 +40,9 @@ const AppDrawer = () => {
         name="AppointMentDetails"
         component={AppointMentDetailsScreen}
       />
+
+      <Drawer.Screen name="Report" component={ReportScreen} />
+      <Drawer.Screen name="ReportList" component={ReportListScreen} />
 
       <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Drawer.Screen

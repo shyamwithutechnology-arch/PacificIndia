@@ -177,16 +177,17 @@ const HomeScreen = ({ navigation }) => {
               Explore Our Wide Range of Speciality
             </Text>
           </Pressable>
-
-          <Pressable style={styles.cart} onPress={reportNavigate}>
-            <View style={styles.categoryBox}>
-              <Image source={Icons.reportIcon} style={styles.categoryImg} />
-            </View>
-            <Text style={styles.titleText}>Report</Text>
-            <Text style={styles.titledDecText}>
-              Explore Our Wide Range of Speciality
-            </Text>
-          </Pressable>
+          {
+            // <Pressable style={styles.cart} onPress={reportNavigate}>
+            //   <View style={styles.categoryBox}>
+            //     <Image source={Icons.reportIcon} style={styles.categoryImg} />
+            //   </View>
+            //   <Text style={styles.titleText}>Report</Text>
+            //   <Text style={styles.titledDecText}>
+            //     Explore Our Wide Range of Speciality
+            //   </Text>
+            // </Pressable>
+          }
         </View>
       </View>
     );

@@ -80,19 +80,13 @@ const DoctorlistScreen = ({ navigation }) => {
         <View style={styles.mainCardInner}>
           <View>
             <View style={styles.mapRow}>
-              <Text style={styles.titleText}>{item?.dr_name}</Text>
-              <View style={styles.verificationBox}>
-                <Image
-                  source={Icons.verificationIcon}
-                  style={styles.verificationImg}
-                  resizeMode="contain"
-                />
-                <Text style={styles.verifiedText}>Verified</Text>
-              </View>
+              <Text style={styles.titleText} numberOfLines={1}>
+                {item?.dr_name}
+              </Text>
             </View>
 
             <Text style={[styles.titleDecText, styles.decLength]}>
-              {item?.dr_speciality_name}
+              {item?.dr_specality}
             </Text>
           </View>
 
@@ -104,7 +98,8 @@ const DoctorlistScreen = ({ navigation }) => {
                 resizeMode="contain"
               />
               <Text style={[styles.titleDecText, styles.locationText]}>
-                {item?.dr_address}
+                {item?.dr_town_name}, {item?.dr_city_name},{' '}
+                {item?.dr_state_name}
               </Text>
             </View>
 

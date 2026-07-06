@@ -39,6 +39,17 @@ const menuItems = [
     icon: Icons.appointment_icon,
     route: 'AppointMents',
   },
+
+  {
+    title: 'Report',
+    icon: Icons.reportIcon,
+    route: 'Report',
+  },
+  {
+    title: 'Report History',
+    icon: Icons.reportIcon,
+    route: 'ReportList',
+  },
   // { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
   {
     title: 'Notifications',
@@ -226,7 +237,11 @@ const CustomDrawerContent = ({ navigation }: any) => {
                 source={item?.icon}
                 style={styles.drawerIcon}
                 resizeMode="contain"
-                tintColor={theme.tokens.colors.primary}
+                tintColor={
+                  item.icon !== Icons.reportIcon
+                    ? theme.tokens.colors.primary
+                    : undefined
+                }
               />
               <Text style={styles.menuText}>{item.title}</Text>
             </View>
@@ -283,22 +298,3 @@ const CustomDrawerContent = ({ navigation }: any) => {
 };
 
 export default CustomDrawerContent;
-
-// <View style={styles.header}>
-// <Image
-//   source={Images.profileImg} // change path
-//   style={styles.avatar}
-// />
-// <View>
-//   <Text style={styles.name}>Manoj Deshmukh</Text>
-//   <Text style={styles.role}>User</Text>
-// </View>
-
-// {/* CLOSE BUTTON */}
-// <TouchableOpacity
-//   style={styles.closeBtn}
-//   onPress={() => navigation.closeDrawer()}
-// >
-//   <Icon name="close" size={20} color="#000" />
-// </TouchableOpacity>
-// </View>

@@ -45,7 +45,8 @@ export const createStyles = (theme: AppTheme) => {
       backgroundColor: tokens.colors.primary,
     },
     containerDropdown: {
-      backgroundColor: '#e1e1e1',
+      backgroundColor: '#ecebeb',
+      // backgroundColor: '#e1e1e1',
     },
     itemText: {
       fontSize: tokens.fontSize.sm,

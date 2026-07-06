@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { AppTheme } from '../../hooks/useAppTheme';
-import { Fonts } from '../../theme';
+import { AppTheme } from '../../../hooks/useAppTheme';
+import { Fonts } from '../../../theme';
 
 export const createStyles = (theme: AppTheme) => {
   const { verticalScale, scale, tokens, moderateScale, normalize, isTablet } =
@@ -31,22 +31,23 @@ export const createStyles = (theme: AppTheme) => {
       borderColor: '#DEDEDE',
       borderRadius: tokens.radius.md,
       borderWidth: 1,
-      paddingHorizontal: scale(1),
+      paddingHorizontal: tokens.spacing.md,
       paddingVertical: tokens.spacing.sm,
       marginBottom: tokens.spacing.md,
-      flexDirection: 'row',
-      justifyContent: 'space-around',
+      borderLeftWidth: 3.5,
+      borderLeftColor: tokens.colors.primary,
     },
     cartBox: {
       width: !isTablet ? '49%' : 'auto',
     },
+
     titleText: {
       fontSize: tokens.fontSize.xs,
       color: tokens.colors.headingColor,
       fontFamily: Fonts.ManropeExtraBold,
       // textAlign: 'center',
       marginBottom: tokens.spacing.xs,
-      width: '100%',
+      width: scale(118),
     },
     titledDecText: {
       fontSize: normalize(9),
@@ -61,20 +62,15 @@ export const createStyles = (theme: AppTheme) => {
       marginLeft: tokens.spacing.sm,
     },
     row: {
-      justifyContent: 'space-between',
-      marginBottom: tokens.spacing.sm,
-    },
-    categoryBox: {
       alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'center',
-      borderRadius: tokens.radius.xxl,
-      backgroundColor: tokens.colors.white,
-      marginBottom: tokens.spacing.sm,
-      height: moderateScale(150),
-      width: moderateScale(150),
-      elevation: 10,
-      shadowColor: '#fff',
+      // justifyContent: 'space-between',
+      flexDirection: 'row',
+      marginBottom: tokens.spacing.xs,
+    },
+    innerRowBox: {
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexDirection: 'row',
     },
     listContainer: {
       paddingBottom: tokens.spacing.sm,
@@ -87,70 +83,6 @@ export const createStyles = (theme: AppTheme) => {
       marginTop: 0,
       width: isTablet ? '83.5%' : '75.5%',
       // marginBottom: tokens.spacing.xs,
-    },
-
-    verificationBox: {
-      paddingHorizontal: verticalScale(10),
-      paddingVertical: verticalScale(3),
-      backgroundColor: tokens.colors.green,
-      borderRadius: tokens.radius.md,
-      alignSelf: 'center',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      marginLeft: tokens.spacing.md,
-    },
-    verificationImg: {
-      width: moderateScale(14),
-      height: moderateScale(14),
-    },
-    verifiedText: {
-      fontSize: tokens.fontSize.xxs,
-      color: tokens.colors.white,
-      fontFamily: Fonts.ManropeMedium,
-      marginLeft: tokens.spacing.xs,
-    },
-    titleDecText: {
-      fontSize: normalize(11),
-      color: '#505050',
-      fontFamily: Fonts.ManropeMedium,
-    },
-    locationText: {
-      color: '#999999',
-      marginLeft: tokens.spacing.sm,
-      width: '100%',
-    },
-    rightArrowBox: {
-      height: moderateScale(30),
-      width: moderateScale(30),
-      borderRadius: tokens.radius.lg,
-      backgroundColor: tokens.colors.primary,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    rightArrowImg: {
-      height: moderateScale(18),
-      width: moderateScale(18),
-    },
-    mapRow: {
-      flexDirection: 'row',
-      // borderWidth: 1,
-      alignItems: 'center',
-    },
-    doctorImgRow: {
-      justifyContent: 'space-between',
-      marginRight: tokens.spacing.md,
-      marginTop: tokens.spacing.xs,
-    },
-    mainCardInner: {
-      // marginHorizontal: 0,
-      marginHorizontal: tokens.spacing.sm,
-      // borderWidth: 1,
-    },
-    decLength: {
-      width: scale(160),
-      // borderWidth: 1,
-      marginTop: tokens.spacing.xxs,
     },
 
     addBox: {
@@ -179,28 +111,37 @@ export const createStyles = (theme: AppTheme) => {
       width: moderateScale(16),
     },
 
-    //serach
-    suggestionContainer: {
-      backgroundColor: '#fff',
-      borderRadius: moderateScale(10),
-      elevation: 5,
-      // marginHorizontal: scale(10),
-      marginTop: verticalScale(4),
-      marginBottom: verticalScale(20),
-    },
-
-    suggestionItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: moderateScale(14),
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: '#ddd',
-    },
-    doctorName: {
+    hqNameLabel: {
       fontSize: tokens.fontSize.sm,
       color: tokens.colors.black,
+      fontFamily: Fonts.ManropeBold,
+    },
+
+    hqNameValue: {
+      fontSize: tokens.fontSize.xs,
+      color: tokens.colors.black,
       fontFamily: Fonts.ManropeMedium,
-      marginLeft: tokens.spacing.sm,
+
+      marginLeft: tokens.spacing.xs,
+    },
+    doctorName: {
+      // borderWidth: 1,
+    },
+    spandIconBox: {
+      marginRight: tokens.spacing.sm,
+    },
+    contentBox: {
+      // borderTopWidth: 1,
+      borderColor: '#9cb7c2',
+      marginTop: tokens.spacing.sm,
+      // paddingTop: tokens.spacing.sm,
+    },
+    baseLine: {
+      backgroundColor: '#9cb7c2',
+      height: 1,
+      width: '100%',
+      marginTop: tokens.spacing.xs,
+      marginBottom: tokens.spacing.xsPlus,
     },
   });
 };

@@ -90,16 +90,25 @@ const LoginScreen = ({ navigation }) => {
 
       setLoading(true);
       const response = await POST_FORM(ApiEndPoint?.LoGIN, params);
-      // Alert.alert('response', JSON.stringify(response));
       if (response?.status === '1') {
         showToast('success', 'Success', response?.msg || 'Login successful');
         localStorage.setItem(storageKeys.fcm_token, '1234');
-        localStorage.setItem(
+
+        await localStorage.setItem(
+          storageKeys.member_name,
+          response?.result[0]?.member_name
+        );
+        await localStorage.setItem(
+          storageKeys.empCode,
+          response?.result[0]?.member_uniqueid
+        );
+
+        await localStorage.setItem(
           storageKeys.member_id,
           response?.result[0]?.member_id
         );
 
-        // localStorage.setItem(storageKeys.fcm_token, '1234');
+        localStorage.setItem(storageKeys.fcm_token, '1234');
         const fakeToken = 'static-token-123456';
         dispatch(loginSuccess(fakeToken));
       } else {

@@ -106,8 +106,8 @@ export const createStyles = (theme: AppTheme) => {
       marginBottom: tokens.spacing.xxl,
     },
     nefroBox: {
-      marginTop: theme.tokens.spacing.mdPlus,
-      marginBottom: verticalScale(40),
+      marginTop: theme.tokens.spacing.sm,
+      marginBottom: verticalScale(50),
     },
     nefroContainer: {
       // borderWidth: 1,
@@ -122,7 +122,9 @@ export const createStyles = (theme: AppTheme) => {
       fontFamily: Fonts.ManropeBold,
       color: tokens.colors.black,
       marginTop: tokens.spacing.xxs,
+      marginBottom: tokens.spacing.xs,
       alignSelf: 'flex-start',
+      borderBottomWidth: 1,
     },
     baseLine: {
       height: 0.4,

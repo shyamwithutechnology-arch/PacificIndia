@@ -52,11 +52,15 @@ const AddDoctorScreen = ({ navigation }) => {
   const [dateVisible, setDateVisible] = useState(false);
   const [date, setDate] = useState('');
   const [city, setCity] = useState('');
+  const [town, setTown] = useState('');
   const [userData, setuserData] = useState({});
   const [speciality, setSpeciality] = useState([]);
+  console.log('speciality', speciality);
+
   const [doctorDetails, setDoctorDetails] = useState({});
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
+  const [townList, setTownList] = useState([]);
   const formatedDate = formatDateDayMonthShortYear(date);
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
@@ -67,7 +71,6 @@ const AddDoctorScreen = ({ navigation }) => {
     email: '',
     maritalStatus: '',
     address: '',
-    locality: '',
     hospitalName: '',
   });
   // Alert.alert('name', JSON.stringify(input?.name));
@@ -87,8 +90,9 @@ const AddDoctorScreen = ({ navigation }) => {
     mobileNumber: '',
     email: '',
     hospitalName: '',
+    speciality: '',
     address: '',
-    locality: '',
+    town: '',
     maritalStatus: '',
     state: '',
     city: '',
@@ -107,8 +111,9 @@ const AddDoctorScreen = ({ navigation }) => {
 
   const handleSpecility = async (val) => {
     setSelectedSpecility(val);
-    setErrors((prev) => ({ ...prev, speciality: '' }));
+    setErrors((prev) => ({ ...prev, segment: '' }));
   };
+
   const handleVisibleDate = () => {
     setDateVisible(true);
   };
@@ -126,14 +131,20 @@ const AddDoctorScreen = ({ navigation }) => {
     }));
   };
 
-  const handleCity = (val) => {
+  const handleCity = async (val) => {
     if (!state) {
       showToast('error', 'Error', 'Please select state first');
     } else {
       setErrors((prev) => ({ ...prev, city: '' }));
       setCity(val);
+      await townListApi(val);
     }
   };
+  const handleTown = (val) => {
+    setTown(val);
+    setErrors((prev) => ({ ...prev, town: '' }));
+  };
+
   const handleMaritalSelect = (val) => {
     setSingle(val);
     setErrors((prev) => ({ ...prev, maritalStatus: '' }));
@@ -187,13 +198,17 @@ const AddDoctorScreen = ({ navigation }) => {
     const newErrors = {};
 
     if (!input.name?.trim()) {
-      newErrors.name = 'Please enter doctor name';
+      newErrors.name = 'Please enter name';
+    }
+
+    if (!input.speciality?.trim()) {
+      newErrors.speciality = 'Please enter speciality';
     }
 
     if (!input.mobileNumber?.trim()) {
-      newErrors.mobileNumber = 'Please enter mobile number';
+      newErrors.mobileNumber = 'Please enter number';
     } else if (!/^\d{10}$/.test(input.mobileNumber)) {
-      newErrors.mobileNumber = 'Please enter valid mobile number';
+      newErrors.mobileNumber = 'Please enter valid  number';
     }
 
     if (!input.email?.trim()) {
@@ -209,16 +224,13 @@ const AddDoctorScreen = ({ navigation }) => {
     if (!input.address?.trim()) {
       newErrors.address = 'Please enter address';
     }
-    if (!input.locality?.trim()) {
-      newErrors.locality = 'Please enter locality';
-    }
 
     if (!single) {
       newErrors.maritalStatus = 'Please select marital status';
     }
 
     if (!selectedSpecility) {
-      newErrors.speciality = 'Please select speciality';
+      newErrors.segment = 'Please select segment';
     }
 
     if (!state) {
@@ -227,6 +239,10 @@ const AddDoctorScreen = ({ navigation }) => {
 
     if (!city) {
       newErrors.city = 'Please select city';
+    }
+
+    if (!town) {
+      newErrors.town = 'Please select town';
     }
 
     if (!image || (typeof image === 'object' && !image?.uri)) {
@@ -250,7 +266,7 @@ const AddDoctorScreen = ({ navigation }) => {
         dr_speciality_id: selectedSpecility,
         dr_state_id: state,
         dr_city_id: city,
-        dr_locality: input?.locality,
+        dr_locality: town,
         dr_name: input?.name,
         dr_address: input?.address,
         dr_email: input?.email,
@@ -299,10 +315,11 @@ const AddDoctorScreen = ({ navigation }) => {
       const params = {
         dr_id: doctorId,
         dr_name: input?.name,
-        dr_locality: input?.locality,
+        dr_specality: input?.speciality,
+        dr_locality: town,
         dr_phone: input?.mobileNumber,
         dr_email: input?.email,
-        dr_speciality: speciality,
+        dr_speciality_id: speciality,
         dr_dob: date,
         dr_marital: single !== 1 ? 'Married' : 'Single',
         dr_address: input?.address,
@@ -386,16 +403,42 @@ const AddDoctorScreen = ({ navigation }) => {
     }
   };
 
+  const townListApi = async (id) => {
+    try {
+      setLoading(true);
+      const res = await POST_FORM(`${ApiEndPoint.listTown}`, {
+        city_id: id,
+      });
+      if (res?.status === '1') {
+        const formattedCities = res.result.map((item) => ({
+          label: item.tw_name,
+          value: item.tw_id,
+        }));
+        setTownList(formattedCities);
+      }
+    } catch (error) {
+      showToast(
+        'error',
+        'Error',
+        error?.msg || 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const specialityList = async () => {
     try {
       setLoading(true);
       const response = await GET(ApiEndPoint.listSpeciality);
       if (response?.status === '1') {
         // setSpeciality(response?.result || []);
+
         const formatedData = response?.result?.map((item) => ({
           label: item?.ms_name,
           value: item?.ms_id,
         }));
+
         setSpeciality(formatedData || []);
       }
     } catch (error) {
@@ -467,7 +510,6 @@ const AddDoctorScreen = ({ navigation }) => {
       email: doctorDetails?.dr_email || '',
       maritalStatus: '',
       address: doctorDetails?.dr_address,
-      locality: doctorDetails?.dr_locality,
       hospitalName: doctorDetails?.dr_hospital_name || '',
     });
 
@@ -480,6 +522,9 @@ const AddDoctorScreen = ({ navigation }) => {
     }
     if (doctorDetails?.dr_city_id) {
       setCity(doctorDetails?.dr_city_id);
+    }
+    if (doctorDetails?.dr_locality) {
+      setTown(doctorDetails?.dr_locality);
     }
 
     if (doctorDetails?.dr_image) {
@@ -576,35 +621,51 @@ const AddDoctorScreen = ({ navigation }) => {
             <View style={styles.bottomSpace} />
           )}
         </View>
-
-        <View
-          style={
-            isTablet
-              ? styles.halfField
-              : isLandscape
-              ? styles.halfField
-              : undefined
-          }
-        >
-          <Text style={styles.addressText1}>Mobile Number </Text>
-          <AppInput
-            placeholderText={'Please enter mobile number'}
-            leftIconStyle={styles.passIcon}
-            inputBoxStyle={styles.inputBoxStyle}
-            value={input.mobileNumber}
-            leftIcon={Icons.callIcon}
-            leftIcontintColor={theme.tokens.colors.primary}
-            handleChange={(value) => handleChange('mobileNumber', value)}
-            keyboardType={'number-pad'}
-            maxLength={10}
-          />
-          {errors.mobileNumber ? (
-            <Text style={styles.nameError}>{errors.mobileNumber}</Text>
-          ) : (
-            <View style={styles.bottomSpace} />
-          )}
-        </View>
+        <Text style={styles.addressText1}>Speciality </Text>
+        <AppInput
+          placeholderText={'Please enter speciality'}
+          leftIconStyle={styles.passIcon}
+          leftIcon={Icons.userProfileIcon}
+          inputBoxStyle={styles.inputBoxStyle}
+          leftIcontintColor={theme.tokens.colors.primary}
+          value={input.speciality}
+          handleChange={(value) => handleChange('speciality', value)}
+        />
+        {errors.speciality ? (
+          <Text style={styles.nameError}>{errors.speciality}</Text>
+        ) : (
+          <View style={styles.bottomSpace} />
+        )}
       </View>
+
+      <View
+        style={
+          isTablet
+            ? styles.halfField
+            : isLandscape
+            ? styles.halfField
+            : undefined
+        }
+      >
+        <Text style={styles.addressText1}>Mobile Number </Text>
+        <AppInput
+          placeholderText={'Please enter mobile number'}
+          leftIconStyle={styles.passIcon}
+          inputBoxStyle={styles.inputBoxStyle}
+          value={input.mobileNumber}
+          leftIcon={Icons.callIcon}
+          leftIcontintColor={theme.tokens.colors.primary}
+          handleChange={(value) => handleChange('mobileNumber', value)}
+          keyboardType={'number-pad'}
+          maxLength={10}
+        />
+        {errors.mobileNumber ? (
+          <Text style={styles.nameError}>{errors.mobileNumber}</Text>
+        ) : (
+          <View style={styles.bottomSpace} />
+        )}
+      </View>
+
       <View style={isTablet ? styles.formRow : undefined}>
         <View style={isTablet ? styles.halfField : undefined}>
           <Text style={styles.addressText1}>Email </Text>
@@ -695,23 +756,6 @@ const AddDoctorScreen = ({ navigation }) => {
             <View style={styles.bottomSpace} />
           )}
         </View>
-        <View style={isTablet ? styles.halfField : undefined}>
-          <Text style={styles.addressText1}>Locality </Text>
-          <AppInput
-            placeholderText={'Please enter locality'}
-            leftIconStyle={styles.passIcon}
-            inputBoxStyle={styles.inputBoxStyle}
-            value={input.locality}
-            leftIcontintColor={theme.tokens.colors.primary}
-            leftIcon={Icons.mapIcon}
-            handleChange={(value) => handleChange('locality', value)}
-          />
-          {errors.locality ? (
-            <Text style={styles.nameError}>{errors.locality}</Text>
-          ) : (
-            <View style={styles.bottomSpace} />
-          )}
-        </View>
       </View>
 
       <Text style={styles.addressText1}>Address </Text>
@@ -785,16 +829,16 @@ const AddDoctorScreen = ({ navigation }) => {
         </View>
 
         <View style={isTablet ? styles.halfField : undefined}>
-          <Text style={styles.addressText1}>Select Speciality </Text>
+          <Text style={styles.addressText1}>Select Segment </Text>
           <CustomDropDown
             data={speciality}
             onChange={handleSpecility}
             value={selectedSpecility}
-            placeholder={'Select Speciality'}
+            placeholder={'Select Segment'}
             dropDownContainer={styles.stateDropDown}
           />
-          {errors.speciality ? (
-            <Text style={styles.nameError}>{errors.speciality}</Text>
+          {errors.segment ? (
+            <Text style={styles.nameError}>{errors.segment}</Text>
           ) : undefined}
         </View>
       </View>
@@ -816,7 +860,7 @@ const AddDoctorScreen = ({ navigation }) => {
 
         <View style={isTablet ? styles.halfField : undefined}>
           <Text style={[styles.addressText1, !errors.state && styles.cityText]}>
-            City{' '}
+            City
           </Text>
 
           <CustomDropDown
@@ -832,6 +876,23 @@ const AddDoctorScreen = ({ navigation }) => {
           ) : undefined}
         </View>
       </View>
+
+      <Text style={[styles.addressText1, !errors.state && styles.cityText]}>
+        Town
+      </Text>
+
+      <CustomDropDown
+        data={townList}
+        onChange={handleTown}
+        value={town}
+        placeholder={'Select Town'}
+        dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
+        dropdownPosition={'top'}
+      />
+      {errors.town ? (
+        <Text style={styles.nameError}>{errors.town}</Text>
+      ) : undefined}
+
       <CustomButton
         title="Submit"
         style={styles.btnStyle}
