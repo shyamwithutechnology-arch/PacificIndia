@@ -21,7 +21,9 @@ type AppHeaderProp = {
   leftIcon: Image;
 
   cartCount: number;
+  rightIcon: Image;
   notificationPress: () => void;
+  rightIconPress: () => void;
   questionMarkPress?: ImageSourcePropType;
   search?: string;
   setSearch?: () => void;
@@ -32,6 +34,8 @@ const AppHeader = ({
   onPress,
   headerContainer,
   notificationPress,
+  rightIcon,
+  rightIconPress,
   questionMarkPress,
   search,
   setSearch,
@@ -81,6 +85,16 @@ const AppHeader = ({
               />
             </Pressable>
           </View>
+        )}
+
+        {rightIcon && (
+          <Pressable onPress={rightIconPress} style={styles.rightIconBox}>
+            <Image
+              source={rightIcon}
+              style={styles.rightIcon}
+              resizeMode="contain"
+            />
+          </Pressable>
         )}
       </View>
 

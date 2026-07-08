@@ -16,6 +16,8 @@ import DoctorlistScreen from '../screen/doctorlist/DoctorlistScreen';
 import DoctorsStack from './stacks/DoctorsStack';
 import DailyVisitStack from './stacks/DailyVisitStack';
 import { useEffect, useState } from 'react';
+import ReportStack from './stacks/ReportStack';
+import ProfileStack from './stacks/ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -124,7 +126,7 @@ const MainTabs = () => {
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              label="Speciality"
+              label="Products"
               activeIcon={Icons.specialityIcon}
               inactiveIcon={Icons.specialityIcon}
             />
@@ -133,16 +135,16 @@ const MainTabs = () => {
       />
 
       <Tab.Screen
-        name="DailyVisitStack"
-        component={DailyVisitStack}
+        name="Doctorlist"
+        component={DoctorsStack}
         options={{
           popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              activeIcon={Icons.healthcareIcon}
-              inactiveIcon={Icons.healthcareIcon}
-              label="Visit"
+              activeIcon={Icons.doctorListIcon}
+              inactiveIcon={Icons.doctorListIcon}
+              label="Doctor"
             />
           ),
         }}
@@ -163,24 +165,26 @@ const MainTabs = () => {
           ),
         }}
       />
+
       <Tab.Screen
-        name="Doctorlist"
-        component={DoctorsStack}
+        name="ReportStack"
+        component={ReportStack}
         options={{
           popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={focused}
-              activeIcon={Icons.doctorListIcon}
-              inactiveIcon={Icons.doctorListIcon}
-              label="Doctor"
+              activeIcon={Icons.reportTabIcon}
+              inactiveIcon={Icons.reportTabIcon}
+              label="Report"
             />
           ),
         }}
       />
+
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="ProfileStack"
+        component={ProfileStack}
         options={{
           popToTopOnBlur: true,
           tabBarIcon: ({ focused }) => (
@@ -197,3 +201,37 @@ const MainTabs = () => {
   );
 };
 export default MainTabs;
+
+{
+  // <Tab.Screen
+  //   name="Doctorlist"
+  //   component={DoctorsStack}
+  //   options={{
+  //    popToTopOnBlur: true,
+  //     tabBarIcon: ({ focused }) => (
+  //       <TabIcon
+  //         focused={focused}
+  //         activeIcon={Icons.doctorListIcon}
+  //         inactiveIcon={Icons.doctorListIcon}
+  //         label="Doctor"
+  //       />
+  //     ),
+  //   }}
+  // />
+}
+
+//  <Tab.Screen
+//         name="DailyVisitStack"
+//         component={DailyVisitStack}
+//         options={{
+//           popToTopOnBlur: true,
+//           tabBarIcon: ({ focused }) => (
+//             <TabIcon
+//               focused={focused}
+//               activeIcon={Icons.healthcareIcon}
+//               inactiveIcon={Icons.healthcareIcon}
+//               label="Visit"
+//             />
+//           ),
+//         }}
+//       />

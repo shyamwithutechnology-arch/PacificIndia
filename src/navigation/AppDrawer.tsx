@@ -1,7 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MainTabs from './MainTabs';
 import { Dimensions } from 'react-native';
-import ProfileScreen from '../screen/profile/ProfileScreen';
 import TermandconditionScreen from '../screen/termandcondition/TermandconditionScreen';
 import AboutUsScreen from '../screen/aboutus/AboutUsScreen';
 import SubscriptionScreen from '../screen/subscription/SubscriptionScreen';
@@ -13,8 +12,7 @@ import SupportTicketScreen from '../screen/support/SupportTicketScreen';
 import NotificationScreen from '../screen/notification/NotificationScreen';
 import PrivacyPolicyScreen from '../screen/privacyPolicy/PrivacyPolicyScreen';
 import ReportScreen from '../../src/screen/report/ReportScreen';
-import ReportListScreen from '../../src/screen/report/reportList/ReportListScreen';
-// import PrivacyPolicyScreen from '../screen/privacyPolicy/PrivacyPolicyScreen';
+import ReportListScreen from '../screen/report/reportHistory/ReportHistoryScreen';
 
 const Drawer = createDrawerNavigator();
 const { width } = Dimensions.get('window');
@@ -33,13 +31,6 @@ const AppDrawer = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="MainTabs" component={MainTabs} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
-      <Drawer.Screen name="AppointMents" component={AppointMentsScreen} />
-      <Drawer.Screen name="AddAppointMent" component={AddAppointMentScreen} />
-      <Drawer.Screen
-        name="AppointMentDetails"
-        component={AppointMentDetailsScreen}
-      />
 
       <Drawer.Screen name="Report" component={ReportScreen} />
       <Drawer.Screen name="ReportList" component={ReportListScreen} />
@@ -57,4 +48,10 @@ const AppDrawer = () => {
   );
 };
 export default AppDrawer;
-// <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+
+// <Drawer.Screen name="AppointMents" component={AppointMentsScreen} />
+// <Drawer.Screen name="AddAppointMent" component={AddAppointMentScreen} />
+// <Drawer.Screen
+//   name="AppointMentDetails"
+//   component={AppointMentDetailsScreen}
+// />

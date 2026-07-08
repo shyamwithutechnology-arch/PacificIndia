@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  Alert,
   Dimensions,
   FlatList,
-  Image,
   Pressable,
-  StyleSheet,
   Text,
   useWindowDimensions,
   View,
@@ -19,11 +16,10 @@ import { POST_FORM } from '../../../api/request';
 import { ApiEndPoint } from '../../../api/endPoints';
 import { showToast } from '../../../utils/toast';
 import { localStorage, storageKeys } from '../../../storage/storage';
-import AppBackHandler from '../../../component/backhandler/AppBackHandler';
-import SeachIcon from 'react-native-vector-icons/EvilIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import NoDataFound from '../../../component/NoDataFound';
 
-const ReportListScreen = ({ navigation }) => {
+const ReportHistoryScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
   const [loading, setLoading] = useState(false);
@@ -40,6 +36,12 @@ const ReportListScreen = ({ navigation }) => {
   const handleGoback = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const handleNavigate = () => {
+    navigation.navigate('Report', {
+      reportToNavigate: 'ReportHistory',
+    });
+  };
 
   const renderItem = ({ item }) => {
     return (
@@ -161,7 +163,6 @@ const ReportListScreen = ({ navigation }) => {
     getId();
   }, []);
 
-  // Dynamic column calculation based on orientation and device
   const numColumns = useMemo(() => {
     if (theme.isTablet) {
       return isLandscape ? 3 : 1;
@@ -188,6 +189,8 @@ const ReportListScreen = ({ navigation }) => {
           title="Report History"
           leftIcon={Icons.leftIcon}
           onPress={handleGoback}
+          rightIcon={Icons.addIconReport}
+          rightIconPress={handleNavigate}
         />
       }
     >
@@ -195,7 +198,7 @@ const ReportListScreen = ({ navigation }) => {
 
       <FlatList
         key={`flatlist-${numColumns}-${orientation}`}
-        data={reportList}
+        data={reportList ?? []}
         renderItem={renderItem}
         keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
@@ -204,52 +207,10 @@ const ReportListScreen = ({ navigation }) => {
           numColumns > 1 ? styles.columnWrapperStyle : undefined
         }
         numColumns={numColumns}
+        ListEmptyComponent={<NoDataFound />}
       />
     </ScreenLayout>
   );
 };
 
-export default ReportListScreen;
-
-// <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>HQ</Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_hq_name}</Text>
-//       </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>Work Type</Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_work_type}</Text>
-//       </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>Work Name</Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_work_with_name}</Text>
-//       </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>City</Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_city_name}</Text>
-//       </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>Town Name</Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_town_name}</Text>
-//       </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>Doctor Name</Text>
-//         <Text style={[styles.hqNameValue, styles.doctorName]}>
-//           {item?.trp_doctor_name}
-//         </Text>
-//       </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>Doctor Place Name</Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_place_work_name}</Text>
-//       </View>
-// <View style={styles.row}>
-//   <Text style={styles.hqNameLabel}>Reporting Date </Text>
-//   <Text style={styles.hqNameValue}>{item?.trp_reporting_date}</Text>
-// </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>Remark </Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_remark_area}</Text>
-//       </View>
-//       <View style={styles.row}>
-//         <Text style={styles.hqNameLabel}>Comment </Text>
-//         <Text style={styles.hqNameValue}>{item?.trp_comment}</Text>
-//       </View>
+export default ReportHistoryScreen;
