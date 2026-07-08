@@ -106,6 +106,7 @@ const DoctorDetailsScreen = ({ navigation }) => {
       const response = await POST_FORM(ApiEndPoint.detailsDoctor, {
         dr_id: id,
       });
+
       if (response?.status === '1') {
         setDoctorList(response?.result[0] || []);
       }

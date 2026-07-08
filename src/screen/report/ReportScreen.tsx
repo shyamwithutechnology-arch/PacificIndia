@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -16,12 +16,14 @@ import {
   CustomDropDown,
   CustomButton,
   Loader,
+  AppBackHandler,
 } from '../../component';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import AppDatePicker from '../../component/appDatePicker/AppDatePicker';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { createStyles } from './styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { formatDateDayMonthShortYear } from '../../../src/utils/date';
 import { Icons } from '../../assets/icons';
 import { showToast } from '../../../src/utils/toast';
@@ -32,10 +34,13 @@ import { localStorage, storageKeys } from '../../../src/storage/storage';
 const ReportScreen = ({ navigation }) => {
   const theme = useAppTheme();
   const styles = createStyles(theme);
+  const route = useRoute();
+  const { reportToNavigate = null } = route?.params || {};
+
+  const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState('');
   const [workType, setWorkType] = useState('');
   const [workWith, setWorkWith] = useState('');
-  const [loading, setLoading] = useState(false);
   const [hqType, setHqType] = useState('');
   const [memberName, setMemberName] = useState('');
   const [memberId, setMemberId] = useState('');
@@ -45,21 +50,24 @@ const ReportScreen = ({ navigation }) => {
   const [team, setTeam] = useState('');
   const [doctor, setDoctor] = useState('');
   const [placeOfWork, setPlaceOfWork] = useState('');
-  const [date, setDate] = useState(null);
 
+  const [date, setDate] = useState(null);
   const [dateVisible, setDateVisible] = useState(false);
   const [show, setShow] = useState(false);
+
   const [hqList, setHqList] = useState([]);
   const [cityList, setCityList] = useState([]);
   const [townList, setTownList] = useState([]);
   const [doctorList, setDoctorList] = useState([]);
   const [teamList, setTeamList] = useState([]);
+
   const formatedDate = formatDateDayMonthShortYear(date);
   const isTablet = theme.isTablet;
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
-  const today = new Date();
 
+  // today date before three days date
+  const today = new Date();
   const threeDaysAgo = new Date();
   threeDaysAgo.setDate(today.getDate() - 3);
 
@@ -95,7 +103,6 @@ const ReportScreen = ({ navigation }) => {
       ...prevInput,
       [field]: updatedValue,
     }));
-
     setErrors((prevInput) => ({ ...prevInput, [field]: '' }));
   };
 
@@ -107,7 +114,13 @@ const ReportScreen = ({ navigation }) => {
   };
 
   const handleGoBack = () => {
-    navigation.goBack();
+    if (reportToNavigate === 'ReportHistory') {
+      navigation.goBack();
+    } else {
+      navigation.navigate('HomeTab', {
+        screen: 'Home',
+      });
+    }
   };
 
   const handleVisibleDate = () => {
@@ -160,36 +173,10 @@ const ReportScreen = ({ navigation }) => {
     clearError('doctor');
   };
 
-  const placeOfWorkData = [
-    { value: '1', label: 'Place of Work 1' },
-    { value: '2', label: 'Place of Work 2' },
-    { value: '3', label: 'Place of Work 3' },
-  ];
-
-  const doctorData = [
-    { value: '1', label: 'Doctor 1' },
-    { value: '2', label: 'Doctor 2' },
-    { value: '3', label: 'Doctor 3' },
-  ];
-  const townData = [
-    { value: '1', label: 'Town 1' },
-    { value: '2', label: 'Town 2' },
-    { value: '3', label: 'Town 3' },
-  ];
-  const cityData = [
-    { value: '1', label: 'City 1' },
-    { value: '2', label: 'City 2' },
-    { value: '3', label: 'City 3' },
-  ];
   const workTypeData = [
     { value: 'Field', label: 'Field' },
     { value: 'Meeting', label: 'Meeting' },
     { value: 'Visit', label: 'Visit' },
-  ];
-  const HQTypeData = [
-    { value: '1', label: 'Work Type 1' },
-    { value: '2', label: 'Work Type 2' },
-    { value: '3', label: 'Work Type 3' },
   ];
 
   const fetchHqList = async () => {
@@ -346,11 +333,9 @@ const ReportScreen = ({ navigation }) => {
       trp_remark_area: input.remark,
       trp_comment: input.comment,
     };
-    // console.log('pramaparams', params);
 
     try {
       const res = await POST_FORM(ApiEndPoint.reportSubmit, params);
-
       if (res?.status === '1') {
         showToast('success', 'Success', res.msg);
         navigation.navigate('ReportList');
@@ -358,8 +343,6 @@ const ReportScreen = ({ navigation }) => {
         showToast('error', 'Error', res.msg);
       }
     } catch (error) {
-      console.log('errrrrqqqqqq', error);
-
       if (error?.offline) {
         return;
       }
@@ -411,10 +394,50 @@ const ReportScreen = ({ navigation }) => {
     label: item.doctor_name,
   }));
 
-  useEffect(() => {
-    fetchHqList();
-    fetchTeamList();
-  }, []);
+  const resetForm = () => {
+    setInput({
+      name: '',
+      empCode: '',
+      workType: '',
+      visitOrder: '',
+      comment: '',
+      remark: '',
+    });
+
+    setHqType('');
+    setWorkType('');
+    setCity('');
+    setTown('');
+    setDoctor('');
+    setTeam('');
+    setDate(null);
+    setPlaceOfWork('');
+
+    setCityList([]);
+    setTownList([]);
+    setDoctorList([]);
+
+    setErrors({
+      hqType: '',
+      workType: '',
+      city: '',
+      town: '',
+      placeOfWork: '',
+      doctor: '',
+      reportingDate: '',
+      visitOrder: '',
+      remark: '',
+      comment: '',
+    });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      resetForm();
+      fetchHqList();
+      fetchTeamList();
+    }, [])
+  );
 
   useEffect(() => {
     const getMemberName = async () => {
@@ -431,7 +454,6 @@ const ReportScreen = ({ navigation }) => {
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={'#0093D3'} />
-
       {/* Header */}
       <SafeAreaView edges={['top']} style={{ backgroundColor: '#0093D3' }}>
         <AppHeader
@@ -445,6 +467,11 @@ const ReportScreen = ({ navigation }) => {
       </SafeAreaView>
 
       <Loader visible={loading} />
+
+      {reportToNavigate !== 'ReportHistory' ? (
+        <AppBackHandler screenName="HomeTab" nestedScreen="Home" />
+      ) : null}
+
       <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.card}>
         <KeyboardAwareScrollView
           enableOnAndroid
@@ -458,7 +485,6 @@ const ReportScreen = ({ navigation }) => {
           resetScrollToCoords={{ x: 0, y: 0 }}
         >
           <Text style={styles.label}>Name</Text>
-
           <AppInput
             value={`${memberName} - ${empCode}`}
             inputBoxStyle={[styles.remarkInput, styles.inputBgColor]}
@@ -482,14 +508,14 @@ const ReportScreen = ({ navigation }) => {
                 placeholder="Select HQ"
                 placeholderTextStyle={styles.placeholderTextStyle}
               />
-              {errors.workType ? (
+              {errors.hqType ? (
                 <Text
                   style={[
                     styles.errorText,
                     { marginBottom: theme.verticalScale(14) },
                   ]}
                 >
-                  {errors.workType}
+                  {errors.hqType}
                 </Text>
               ) : null}
             </View>
@@ -509,14 +535,15 @@ const ReportScreen = ({ navigation }) => {
                 ]}
                 placeholderTextStyle={styles.placeholderTextStyle}
               />
-              {errors.hqType ? (
+
+              {errors.workType ? (
                 <Text
                   style={[
                     styles.errorText,
                     { marginBottom: theme.verticalScale(14) },
                   ]}
                 >
-                  {errors.hqType}
+                  {errors.workType}
                 </Text>
               ) : null}
             </View>
@@ -549,6 +576,7 @@ const ReportScreen = ({ navigation }) => {
                 </Text>
               ) : null}
             </View>
+
             <View style={{ width: '48%' }}>
               <Text style={styles.label}>
                 Town <Text style={styles.required}>*</Text>

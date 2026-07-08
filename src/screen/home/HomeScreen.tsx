@@ -57,6 +57,7 @@ const HomeScreen = ({ navigation }) => {
       params: {
         medicine_id: 21,
         specialityName: 'Nephrologist',
+        navigateToHome: 'Home',
       },
     });
   };
@@ -67,7 +68,7 @@ const HomeScreen = ({ navigation }) => {
   const category = [
     {
       id: 1,
-      title: 'Specility',
+      title: 'Products',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.speciality,
       tab: 'SpecialityStack',
@@ -78,10 +79,18 @@ const HomeScreen = ({ navigation }) => {
       title: 'Doctors',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.doctor,
-      screen: 'Doctorlist',
+      tab: 'Doctorlist',
+      screen: 'DoctorlistScreen',
     },
     {
       id: 3,
+      title: 'Report',
+      dec: 'Explore Our Wide Range of Speciality',
+      img: Icons.reportIcon,
+      screen: 'Report',
+    },
+    {
+      id: 4,
       title: 'Appointments',
       dec: 'Explore Our Wide Range of Speciality',
       img: Images.apppointments,
@@ -94,13 +103,6 @@ const HomeScreen = ({ navigation }) => {
     //   img: Images.dailyVisit,
     //   screen: 'DailyVisitStack',
     // },
-    {
-      id: 5,
-      title: 'Report',
-      dec: 'Explore Our Wide Range of Speciality',
-      img: Icons.reportIcon,
-      screen: 'Report',
-    },
   ];
 
   const handleNavigate = (item) => {

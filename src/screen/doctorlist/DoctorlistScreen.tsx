@@ -53,9 +53,18 @@ const DoctorlistScreen = ({ navigation }) => {
     );
   }, [doctorList, search]);
 
-  const handleGoback = useCallback(() => {
-    navigation.navigate('HomeTab', 'Home');
-  }, [navigation]);
+  // const handleGoBack = () => {
+  //   navigation.goBack();
+  //   // navigation.navigate('HomeTab', {
+  //   //   screen: 'Home',
+  //   // });
+  // };
+
+  const handleGoBack = () => {
+    navigation.getParent()?.navigate('HomeTab', {
+      screen: 'HomeScreen',
+    });
+  };
 
   const handleSeachChange = (text) => {
     setSearch(text);
@@ -184,7 +193,7 @@ const DoctorlistScreen = ({ navigation }) => {
         <AppHeader
           title="Doctors List"
           leftIcon={Icons.leftIcon}
-          onPress={handleGoback}
+          onPress={handleGoBack}
         />
       }
     >

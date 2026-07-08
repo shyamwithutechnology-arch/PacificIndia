@@ -21,7 +21,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { useRoute } from '@react-navigation/native';
 import { createStyles } from './styles';
-import { Loader, ScreenLayout } from '../../../component';
+import { AppBackHandler, Loader, ScreenLayout } from '../../../component';
 import AppHeader from '../../../component/AppHeader/AppHeader';
 import { useAppTheme } from '../../../hooks/useAppTheme';
 import { Icons } from '../../../assets/icons';
@@ -37,7 +37,11 @@ const SpecialityDetailsScreen = ({ navigation }) => {
   const styles = createStyles(theme);
   const route = useRoute();
   const headerFlatListRef = useRef<FlatList>(null);
-  const { medicine_id, specialityName } = route?.params || {};
+  const {
+    medicine_id,
+    specialityName,
+    navigateToHome = null,
+  } = route?.params || {};
 
   const { width, height } = useWindowDimensions();
   const [orientation, setOrientation] = useState('PORTRAIT');
@@ -89,6 +93,19 @@ const SpecialityDetailsScreen = ({ navigation }) => {
     setSelected(id);
     medicineBySpecilityId(id);
   }, []);
+
+  const handleGoBack = () => {
+    if (navigateToHome === 'Home') {
+      navigation.navigate('MainTabs', {
+        screen: 'HomeTab',
+        params: {
+          screen: 'Home',
+        },
+      });
+    } else {
+      navigation.goBack();
+    }
+  };
 
   const cardWidth = useMemo(() => {
     const spacing = theme.tokens.spacing.md;
@@ -384,13 +401,18 @@ const SpecialityDetailsScreen = ({ navigation }) => {
         <AppHeader
           title={`${specialityName}`}
           leftIcon={Icons.leftIcon}
-          onPress={() => navigation.goBack()}
+          onPress={handleGoBack}
         />
       }
       paddingHorizontal={0}
       innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
+
+      {navigateToHome === 'Home' ? (
+        <AppBackHandler screenName="MainTabs" nestedScreen="HomeTab" />
+      ) : undefined}
+
       <FlatList
         key={`flatlist-${numColumns}-${orientation}`}
         data={filteredData}

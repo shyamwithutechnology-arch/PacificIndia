@@ -6,6 +6,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useAppTheme } from '../../../hooks/useAppTheme';
@@ -45,9 +46,10 @@ const AddAppointMentScreen = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [dateVisible, setDateVisible] = useState(false);
   const formatedDate = formatDateDayMonthShortYear(date);
-  console.log('time', time);
+  const { width, height } = useWindowDimensions();
 
   const isTablet = theme.isTablet;
+  const isLandscape = width > height;
 
   const [input, setInput] = useState({
     name: '',
@@ -291,8 +293,8 @@ const AddAppointMentScreen = ({ navigation }) => {
       <AppBackHandler goBack={true} />
       <Loader visible={loading} />
 
-      <View style={isTablet ? styles.formRow : undefined}>
-        <View style={isTablet ? styles.halfField : undefined}>
+      <View style={isTablet || isLandscape ? styles.formRow : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={styles.doctorName}>Doctor Name</Text>
 
           <AppInput
@@ -306,7 +308,7 @@ const AddAppointMentScreen = ({ navigation }) => {
           )}
         </View>
 
-        <View style={isTablet ? styles.halfField : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={styles.doctorName}>Doctor Mobile Number</Text>
           <AppInput
             inputBoxStyle={styles.inputBoxStyle}
@@ -321,8 +323,8 @@ const AddAppointMentScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View style={isTablet ? styles.formRow : undefined}>
-        <View style={isTablet ? styles.halfField : undefined}>
+      <View style={isTablet || isLandscape ? styles.formRow : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={styles.doctorName}>Doctor Email</Text>
           <AppInput
             inputBoxStyle={styles.inputBoxStyle}
@@ -335,7 +337,8 @@ const AddAppointMentScreen = ({ navigation }) => {
             <Text style={[styles.nameError]}>{errors?.email}</Text>
           )}
         </View>
-        <View style={isTablet ? styles.halfField : undefined}>
+
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={styles.doctorName}>Appointment Date</Text>
           <Pressable style={styles.dateSelectBox} onPress={handleVisibleDate}>
             {
@@ -363,8 +366,8 @@ const AddAppointMentScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View style={isTablet ? styles.formRow : undefined}>
-        <View style={isTablet ? styles.halfField : undefined}>
+      <View style={isTablet || isLandscape ? styles.formRow : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={[styles.doctorName]}>Appointment Time</Text>
           <Pressable onPress={handleShowTime}>
             <AppInput
@@ -378,7 +381,7 @@ const AddAppointMentScreen = ({ navigation }) => {
             <Text style={[styles.nameError]}>{errors?.time}</Text>
           )}
         </View>
-        <View style={isTablet ? styles.halfField : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={styles.doctorName}>Hospital Name</Text>
           <AppInput
             inputBoxStyle={styles.inputBoxStyle}
@@ -392,8 +395,8 @@ const AddAppointMentScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View style={isTablet ? styles.formRow : undefined}>
-        <View style={isTablet ? styles.halfField : undefined}>
+      <View style={isTablet || isLandscape ? styles.formRow : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={styles.doctorName}>Hospital locality</Text>
           <AppInput
             inputBoxStyle={styles.inputBoxStyle}
@@ -405,7 +408,7 @@ const AddAppointMentScreen = ({ navigation }) => {
             <Text style={[styles.nameError]}>{errors?.hospitalLocality}</Text>
           )}
         </View>
-        <View style={isTablet ? styles.halfField : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={styles.doctorName}>Hospital address</Text>
           <AppInput
             inputBoxStyle={styles.inputBoxStyle}
@@ -419,8 +422,8 @@ const AddAppointMentScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View style={isTablet ? styles.formRow : undefined}>
-        <View style={isTablet ? styles.halfField : undefined}>
+      <View style={isTablet || isLandscape ? styles.formRow : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={[styles.addressText1, styles.stateText]}>State </Text>
 
           <CustomDropDown
@@ -435,7 +438,7 @@ const AddAppointMentScreen = ({ navigation }) => {
             <Text style={[styles.nameError]}>{errors?.state}</Text>
           )}
         </View>
-        <View style={isTablet ? styles.halfField : undefined}>
+        <View style={isTablet || isLandscape ? styles.halfField : undefined}>
           <Text style={[styles.addressText1, styles.cityText]}>City </Text>
           <CustomDropDown
             data={cityList}
@@ -443,6 +446,7 @@ const AddAppointMentScreen = ({ navigation }) => {
             value={city}
             placeholder={'Select City'}
             placeholderTextStyle={styles.cityPlaceholderText}
+            dropdownPosition={'top'}
             dropDownContainer={[styles.stateDropDown, styles.cityDropDown]}
           />
           {errors?.city && (

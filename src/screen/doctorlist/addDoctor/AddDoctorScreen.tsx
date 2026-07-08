@@ -41,6 +41,7 @@ const AddDoctorScreen = ({ navigation }) => {
   // Alert.alert('isTablet', JSON.stringify(isTablet));
   // const { title, doctorId } = route?.params;
   const { title = 'Add Doctor', doctorId = '' } = route?.params || {};
+
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
@@ -140,6 +141,7 @@ const AddDoctorScreen = ({ navigation }) => {
       await townListApi(val);
     }
   };
+
   const handleTown = (val) => {
     setTown(val);
     setErrors((prev) => ({ ...prev, town: '' }));
@@ -284,6 +286,7 @@ const AddDoctorScreen = ({ navigation }) => {
       const res = await POST_FORM(ApiEndPoint.addDoctor, params);
       if (res?.status === '1') {
         showToast('success', 'Success', res?.msg || 'Doctor Add Successfully');
+        navigation.navigate('Doctorlist');
       }
     } catch (error) {
       if (error?.offline) {
@@ -301,14 +304,11 @@ const AddDoctorScreen = ({ navigation }) => {
   };
 
   const updateDoctor = async () => {
-    console.log('updateDoctor called');
-
     const isValid = validateForm();
+
     if (!isValid) {
-      console.log('validation failed');
       return;
     }
-    console.log('validation passed');
 
     setLoading(true);
     try {
@@ -331,17 +331,13 @@ const AddDoctorScreen = ({ navigation }) => {
           name: image?.fileName || 'hospital.jpg',
         },
       };
-      // Alert.alert('ffffffffff', JSON.stringify(params));
-      console.log('params2222', params);
       const res = await POST_FORM(ApiEndPoint.updateDoctor, params);
-      console.log('resssssss', res);
 
       if (res?.status === '1') {
         showToast('success', 'Success', res?.msg || 'Doctor Edit Successfully');
+        navigation.navigate('Doctorlist');
       }
     } catch (error) {
-      console.log('errrrqqqqqqqqq', error);
-
       if (error?.offline) {
         return;
       }
@@ -366,7 +362,6 @@ const AddDoctorScreen = ({ navigation }) => {
           value: item.state_id,
         }));
         setStateList(formattedStates);
-        // Alert.alert('stateList', JSON.stringify(res?.result || []));
       }
     } catch (error) {
       showToast(
@@ -410,11 +405,11 @@ const AddDoctorScreen = ({ navigation }) => {
         city_id: id,
       });
       if (res?.status === '1') {
-        const formattedCities = res.result.map((item) => ({
+        const formattedTown = res.result.map((item) => ({
           label: item.tw_name,
           value: item.tw_id,
         }));
-        setTownList(formattedCities);
+        setTownList(formattedTown);
       }
     } catch (error) {
       showToast(
@@ -502,41 +497,47 @@ const AddDoctorScreen = ({ navigation }) => {
   }, [doctorId]);
 
   useEffect(() => {
-    if (!doctorDetails) return;
+    const setDoctorData = async () => {
+      if (!doctorDetails) return;
 
-    setInput({
-      name: doctorDetails?.dr_name || '',
-      mobileNumber: doctorDetails?.dr_phone || '',
-      email: doctorDetails?.dr_email || '',
-      maritalStatus: '',
-      address: doctorDetails?.dr_address,
-      hospitalName: doctorDetails?.dr_hospital_name || '',
-    });
+      setInput({
+        name: doctorDetails?.dr_name || '',
+        mobileNumber: doctorDetails?.dr_phone || '',
+        email: doctorDetails?.dr_email || '',
+        maritalStatus: '',
+        address: doctorDetails?.dr_address,
+        hospitalName: doctorDetails?.dr_hospital_name || '',
+      });
 
-    if (doctorDetails?.dr_dob) {
-      const [day, month, year] = doctorDetails?.dr_dob.split('-');
-      setDate(new Date(year, month - 1, day));
-    }
-    if (doctorDetails?.dr_state_id) {
-      handleState(doctorDetails?.dr_state_id);
-    }
-    if (doctorDetails?.dr_city_id) {
-      setCity(doctorDetails?.dr_city_id);
-    }
-    if (doctorDetails?.dr_locality) {
-      setTown(doctorDetails?.dr_locality);
-    }
+      if (doctorDetails?.dr_dob) {
+        const [day, month, year] = doctorDetails?.dr_dob.split('-');
+        setDate(new Date(year, month - 1, day));
+      }
+      if (doctorDetails?.dr_state_id) {
+        handleState(doctorDetails?.dr_state_id);
+      }
+      if (doctorDetails?.dr_city_id) {
+        setCity(doctorDetails?.dr_city_id);
 
-    if (doctorDetails?.dr_image) {
-      setImage(doctorDetails?.dr_image);
-    }
+        // Load towns for this city
+        await townListApi(doctorDetails.dr_city_id);
+      }
+      if (doctorDetails?.dr_locality) {
+        setTown(doctorDetails?.dr_locality);
+      }
 
-    if (doctorDetails?.dr_marital) {
-      setSingle(doctorDetails?.dr_marital === 'married' ? 2 : 1);
-    }
-    if (doctorDetails?.dr_speciality_id) {
-      setSelectedSpecility(doctorDetails?.dr_speciality_id);
-    }
+      if (doctorDetails?.dr_image) {
+        setImage(doctorDetails?.dr_image);
+      }
+
+      if (doctorDetails?.dr_marital) {
+        setSingle(doctorDetails?.dr_marital === 'married' ? 2 : 1);
+      }
+      if (doctorDetails?.dr_speciality_id) {
+        setSelectedSpecility(doctorDetails?.dr_speciality_id);
+      }
+    };
+    setDoctorData();
   }, [doctorDetails]);
 
   return (
