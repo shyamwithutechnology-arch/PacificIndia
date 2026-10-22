@@ -31,25 +31,22 @@ const menuItems = [
     icon: Icons.userProfileIcon,
     route: 'Profile',
   },
-  { title: 'Speciality', icon: Icons.specialityIcon, route: 'Speciality' },
-
-  { title: 'Daily Visit', icon: Icons.healthcareIcon, route: 'DailyVisit' },
-  {
-    title: 'Appointments',
-    icon: Icons.appointment_icon,
-    route: 'AppointMents',
-  },
+  { title: 'Products', icon: Icons.specialityIcon, route: 'Speciality' },
 
   {
     title: 'Report',
     icon: Icons.reportIcon,
-    route: 'Report',
-  },
-  {
-    title: 'Report History',
-    icon: Icons.reportIcon,
     route: 'ReportList',
   },
+
+  {
+    title: 'Appointments',
+    icon: Icons.appointment_icon,
+    route: 'Home',
+  },
+
+  // { title: 'Daily Visit', icon: Icons.healthcareIcon, route: 'DailyVisit' },
+
   // { title: 'Reports', icon: 'medkit-outline', route: 'Reports' },
   {
     title: 'Notifications',
@@ -89,6 +86,8 @@ const nestedRoutes = {
   Speciality: { screen: 'SpecialityStack', inner: 'Speciality' },
   Services: { screen: 'Services', inner: 'Services' },
   Bookings: { screen: 'Bookings', inner: 'Bookings' },
+  Profile: { screen: 'ProfileStack', inner: 'Profile' },
+  Home: { screen: 'HomeTab', inner: 'AppointMents' },
 };
 
 //

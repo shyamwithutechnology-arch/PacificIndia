@@ -33,6 +33,7 @@ export const Icons = {
   checkIcon: require('./check.png'),
   clockIcon: require('./clock.png'),
   addIcon: require('./add_icon.png'),
+  addIconReport: require('./add_icon_report.png'),
   hospitalIcon: require('./hospital_icon.png'),
   calendarIcon: require('./calendar_icon.png'),
   branchIcon: require('./branch_icon.png'),
@@ -44,4 +45,5 @@ export const Icons = {
   appointment_icon: require('./appointment_icon.png'),
   nephrologyIcon: require('./nephrology_icon.png'),
   reportIcon: require('./report_icon.png'),
+  reportTabIcon: require('./report_tab_icon.png'),
 };

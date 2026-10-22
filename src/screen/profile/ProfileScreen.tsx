@@ -44,9 +44,6 @@ const ProfileScreen = ({ navigation }) => {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
 
-  // Alert.alert('stateList', JSON.stringify(stateList));
-  console.log('userData', userData);
-
   const [cityList, setCityList] = useState([]);
   // Alert.alert('userData', JSON.stringify(userData));
   // const [input, setInput] = useState({
@@ -163,6 +160,7 @@ const ProfileScreen = ({ navigation }) => {
     setState(val);
     await cityListApi(val);
   };
+
   const handleCity = (val) => {
     if (!state) {
       showToast('error', 'Error', 'Please select state first');
@@ -176,17 +174,21 @@ const ProfileScreen = ({ navigation }) => {
       city: '',
     }));
   };
+
   const handleMaritalSelect = (val) => {
     setSingle(val);
     setErrors((pre) => ({ ...pre, maritalStatus: '' }));
   };
+
   const handleImgChange = (img) => {
     setImage(img);
     setErrors((pre) => ({ ...pre, image: '' }));
   };
+
   const handleImgClose = () => {
     setVisible(false);
   };
+
   const handleImgOpen = () => {
     setVisible(true);
   };
@@ -359,15 +361,6 @@ const ProfileScreen = ({ navigation }) => {
       if (userData?.member_marital_status) {
         setSingle(userData?.member_marital_status === 'Unmarried' ? 1 : 2);
       }
-      // setInput({
-      //   name: userData?.member_name || '',
-      //   fatherName: userData?.member_father_name || '',
-      //   motherName: userData?.member_mother_name || '',
-      //   mobileNumber: userData?.member_phone || '',
-      //   email: userData?.member_email || '',
-      //   maritalStatus: userData?.member_marital_status || '',
-      //   address: userData?.member_address || '',
-      // });
     };
     loadProfileData();
   }, [userData]);
@@ -385,7 +378,9 @@ const ProfileScreen = ({ navigation }) => {
       innerContainer={styles.innerContainer}
     >
       <Loader visible={loading} />
+
       <AppBackHandler screenName="HomeTab" nestedScreen="Home" />
+
       <Pressable style={styles.logoBox} onPress={handleImgOpen}>
         {image?.uri ? (
           <Image
@@ -415,6 +410,7 @@ const ProfileScreen = ({ navigation }) => {
           {errors.image}
         </Text>
       ) : undefined}
+
       <View
         style={
           isTablet ? styles.formRow : isLandscape ? styles.formRow : undefined

@@ -14,7 +14,7 @@ const CustomDropDown = ({
   dropDownContainer,
   leftIconStyle,
   optionStyle,
-  dropdownPosition,
+  dropdownPosition = 'bottom',
   placeholderTextStyle,
 }) => {
   const theme = useAppTheme();

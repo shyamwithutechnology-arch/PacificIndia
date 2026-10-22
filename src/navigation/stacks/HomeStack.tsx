@@ -17,9 +17,6 @@ const HomeStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
-      <Stack.Screen name="Doctorlist" component={DoctorlistScreen} />
-      <Stack.Screen name="DoctorDetails" component={DoctorDetailsScreen} />
-      <Stack.Screen name="AddDoctor" component={AddDoctorScreen} />
       <Stack.Screen name="AppointMents" component={AppointMentsScreen} />
       <Stack.Screen name="AddAppointMent" component={AddAppointMentScreen} />
       <Stack.Screen

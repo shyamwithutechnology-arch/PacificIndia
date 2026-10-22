@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 const DoctorsStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Doctorlist" component={DoctorlistScreen} />
+      <Stack.Screen name="DoctorlistScreen" component={DoctorlistScreen} />
       <Stack.Screen name="DoctorDetails" component={DoctorDetailsScreen} />
       <Stack.Screen name="MedicenList" component={MedicenListScreen} />
       <Stack.Screen name="AddDoctor" component={AddDoctorScreen} />
@@ -19,3 +19,7 @@ const DoctorsStack = () => {
 };
 
 export default DoctorsStack;
+
+// <Stack.Screen name="Doctorlist" component={DoctorlistScreen} />
+// <Stack.Screen name="DoctorDetails" component={DoctorDetailsScreen} />
+// <Stack.Screen name="AddDoctor" component={AddDoctorScreen} />

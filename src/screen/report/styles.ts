@@ -125,7 +125,7 @@ export const createStyles = (theme: AppTheme) => {
     },
     Contentcontainer: {
       flexGrow: 1,
-      paddingBottom: 0, // or a small value like 10
+      paddingBottom: 0,
     },
     commentText: {
       marginTop: tokens.spacing.smPlus,
@@ -136,14 +136,14 @@ export const createStyles = (theme: AppTheme) => {
       fontFamily: Fonts.ManropeRegular,
     },
     dateSelectBox: {
-      paddingVertical: tokens.spacing.sm,
+      paddingVertical: verticalScale(9.8),
       borderWidth: 0.5,
-      borderRadius: tokens.radius.sm,
+      borderRadius: scale(7),
       paddingHorizontal: tokens.spacing.sm,
       borderColor: tokens.colors.primary,
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: tokens.spacing.xs,
+      marginTop: tokens.spacing.xsPlus,
     },
     dateIcon: {
       height: moderateScale(23),
@@ -160,35 +160,36 @@ export const createStyles = (theme: AppTheme) => {
     },
     halfField: {
       width: '48%',
-      // borderWidth: 1,
     },
     nameField: {
       width: '60%',
-      // borderWidth: 1,
     },
     empCodeField: {
       width: '36%',
-      // borderWidth: 1,
     },
     //error
     errorText: {
       color: 'red',
       fontSize: tokens.fontSize.xs,
-      marginTop: tokens.spacing.xxs,
-      marginBottom: verticalScale(14),
-      // marginLeft: tokens.spacing.lg,
+      // marginTop: tokens.spacing.xxs,
+      minHeight: theme.verticalScale(18), // Reserve space even when no error
+      marginTop: theme.verticalScale(4),
     },
     hqRow: {
       flexDirection: 'row',
-      alignItems: 'center',
+      // alignItems: 'center',
       justifyContent: 'space-between',
+      // borderWidth: 1,
+    },
+    workBoxMargin: {
+      marginTop: verticalScale(0),
+    },
+    marginBottom: {
+      marginBottom: verticalScale(14),
+    },
+    hqWidthBox: {
+      width: '48%',
+      flexWrap: 'wrap',
     },
   });
 };
-// export const styles = StyleSheet.create({
-//   drawerIcon: {
-//     height: moderateScale(20),
-//     width: moderateScale(20),
-//   },
-//   categoryBox: {},
-// });

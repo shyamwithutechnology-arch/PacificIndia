@@ -120,7 +120,7 @@ export const createStyles = (theme: AppTheme) => {
       fontSize: tokens.fontSize.xs,
       color: tokens.colors.black,
       fontFamily: Fonts.ManropeBold,
-      marginBottom: tokens.spacing.xxs,
+      marginBottom: tokens.spacing.xs,
       // marginLeft: tokens.spacing.xs,
     },
   });
